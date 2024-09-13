@@ -15,6 +15,7 @@ public:
 	static void FixChatPosHook();
 	static void CRCBypass();
 	static void NoPassword();
+	static void MoreHook();
 	static const int m_nIGCipherHash = 0XC65053F2;
 	static int m_nGameHeight;
 	static int m_nGameWidth;
@@ -42,4 +43,7 @@ public:
 	static bool canInjected;
 	static bool injected;
 	static bool ijl15hook;
+	static int serverIP_Port;
+	static bool talkRepeat;
+	static int talkTime;
 };

@@ -30,6 +30,10 @@ bool Client::ijl15hook = false;
 float Client::climbSpeed = 1.0;
 unsigned char Client::imeType = 1;
 std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
+int Client::serverIP_Port = 8484;
+bool Client::talkRepeat = false;
+int Client::talkTime = 2000;
+
 
 void Client::UpdateGameStartup() {
 	//Memory::CodeCave(cc0x0044E550, dw0x0044E550, dw0x0044E550Nops); //run from packed client //skip //sub_44E546
@@ -130,31 +134,51 @@ void Client::UpdateGameStartup() {
 	//Memory::WriteByte(0x0049D398 + 1, 0x01);//remove elevation requests	//still not working unfortunately
 
 	////optional non-resolution related stuff
-	//if (useTubi) { Memory::FillBytes(0x00485C32, 0x90, 2); }
+	if(useTubi) { Memory::FillBytes(0x00485173, 0x90, 2); }
 
-	//Memory::WriteInt(0x0077E055 + 1, 2147483646); // 物攻PAD 相关具体不明，默认值1999，int 4字节
-	//Memory::WriteInt(0x0077E12F + 1, 2147483646); // 技能 相关具体不明，默认值1999，int 4字节
-	//Memory::WriteInt(0x008C3304 + 1, setDamageCap); // 物攻面板，默认值199999，int 4字节
-	//Memory::WriteInt(0x0077E215 + 1, setMAtkCap); // 魔攻面板，int 4字节
-	//Memory::WriteInt(0x00780620 + 1, setMAtkCap); // 魔攻面板，int 4字节
-	//Memory::WriteInt(0x007806D0 + 1, setAccCap); // 命中，默认999
-	//Memory::WriteInt(0x00780702 + 1, setAvdCap); // 回避，默认999
-	//Memory::WriteInt(0x0078FF5F + 1, 2147483646); // 计算物理伤害相关，意义不明，默认1999，int 4字节
-	//Memory::WriteInt(0x0079166C + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改的话，打怪输出计算的魔法伤害就是按1999计算的
-	//Memory::WriteInt(0x00791CD5 + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改似乎也不影响输出计算
-	//Memory::WriteInt(0x0078E061 + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
-	//Memory::WriteInt(0x0078E67D + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
-	//Memory::WriteInt(0x007918FC + 1, 2147483646); //CalcDamage::MDamage 999，意义不明，int 4字节
+	Memory::WriteInt(0x007868CF + 1, 2147483646); // 物攻PAD 相关具体不明，默认值1999，int 4字节
+	Memory::WriteInt(0x007869A9 + 1, 2147483646); // 技能 相关具体不明，默认值1999，int 4字节
+	Memory::WriteInt(0x008C8BAE + 1, setDamageCap); // 物攻面板，默认值199999，int 4字节
+	Memory::WriteInt(0x00786A8F + 1, setMAtkCap); // 魔攻面板，int 4字节
+	Memory::WriteInt(0x0078876B + 1, setMAtkCap); // 魔攻面板，int 4字节
+	Memory::WriteInt(0x0078881B + 1, setAccCap); // 命中，默认999
+	Memory::WriteInt(0x0078884D + 1, setAvdCap); // 回避，默认999
+	Memory::WriteInt(0x0079617F + 1, 2147483646); // 计算物理伤害相关，意义不明，默认1999，int 4字节
+	Memory::WriteInt(0x00796BF2 + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改的话，打怪输出计算的魔法伤害就是按1999计算的
+	Memory::WriteInt(0x007971CC + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改似乎也不影响输出计算
+	Memory::WriteInt(0x007942B1 + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
+	Memory::WriteInt(0x007948AF + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
+	Memory::WriteInt(0x00796DE6 + 1, 2147483646); //CalcDamage::MDamage 999，意义不明，int 4字节
 
-	//Memory::WriteDouble(0x00AFE8A0, setAtkOutCap);	// 输出显示上限，默认199999，double 8字节
+	Memory::WriteDouble(0x00B064B8, setAtkOutCap);	// 输出显示上限，默认199999，double 8字节
 
 
-	//Memory::WriteInt(0x00780743 + 3, speedMovementCap); //set speed cap //ty ronan
-	//Memory::WriteInt(0x008C4286 + 1, speedMovementCap); //set speed cap //ty ronan
-	//Memory::WriteInt(0x0094D91E + 1, speedMovementCap); //set speed cap //ty ronan
+	Memory::WriteInt(0x0078888E + 3, speedMovementCap); //set speed cap //ty ronan
+	Memory::WriteInt(0x008C9B1A + 1, speedMovementCap); //set speed cap //ty ronan
+	Memory::WriteInt(0x008C9900 + 1, speedMovementCap); //set speed cap //ty ronan
+
+	Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
+	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp remove exit ads
+	Memory::CodeCave(unlockPacket, 0x007DADB8, 5);
 }
 
 void Client::UpdateResolution() {
+
+	if (m_nGameWidth <= 800) {
+		Memory::WriteInt(dwQuickSlotInitHPos + 1, 580); //push 647 //hd800
+		Memory::WriteInt(dwQuickSlotHPos + 1, 580); //push 647 //hd800
+		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -580); //lea ebx,[eax-647]
+		Memory::WriteInt(0x008E4448 + 1, 587);  //装备按鈕寬度
+		Memory::WriteInt(0x008E53FB + 1, 587);  //装备闪烁寬度
+		Memory::WriteInt(0x008E44C5 + 1, 621);  //背包按鈕寬度
+		Memory::WriteInt(0x008E549E + 1, 621);  //背包闪烁寬度
+		Memory::WriteInt(0x008E4542 + 1, 587);  //能力值按鈕寬度
+		Memory::WriteInt(0x008E5358 + 1, 587);  //能力值闪烁图标宽度
+		Memory::WriteInt(0x008E45BF + 1, 621);  //技能按鈕寬度
+		Memory::WriteInt(0x008E5157 + 1, 621);  //技能按鈕寬度
+		return;
+	}
+
 	nStatusBarY = Client::m_nGameHeight - 578;
 
 	Memory::CodeCave(AdjustStatusBar, dwStatusBarVPos, 5);
@@ -186,8 +210,6 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwTempStatCoolTimeVPos + 2, (m_nGameHeight / 2) - 23);	//sub ebx,277 ; Skill icon cooltime y-pos
 	Memory::WriteInt(dwTempStatCoolTimeHPos + 3, (m_nGameWidth / 2) - 3);	//lea eax,[eax+esi+397] ; Skill icon cooltime x-pos
 
-	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp remove exit ads
-
 	int slotXPos = m_nGameWidth - 540;
 	if (m_nGameWidth < 1366) {
 		slotXPos = m_nGameWidth > 1024 ? 815 : 805;
@@ -196,7 +218,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwQuickSlotInitHPos + 1, slotXPos); //push 647 //hd800
 	Memory::WriteInt(dwQuickSlotVPos + 2, m_nGameHeight + 1);//add esi,533
 	Memory::WriteInt(dwQuickSlotHPos + 1, slotXPos); //push 647 //hd800
-	Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]
+	Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]6
 	Memory::WriteInt(dwQuickSlotCWndHPos + 2, -slotXPos); //lea ebx,[eax-647]
 	Memory::WriteInt(0x008D6547 + 1, 540); //快捷面板宽度
 	//4个快捷按钮位置
@@ -364,6 +386,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x004FD494 + 1, m_nGameWidth);
 	Memory::WriteInt(0x004FD483 + 1, m_nGameHeight);                          // CreateWnd
 	Memory::WriteInt(0x004FD3E3 + 1, m_nGameWidth);
+	Memory::WriteInt(0x004FD3CA + 1, m_nGameHeight);
 	Memory::WriteInt(0x009FFF02, m_nGameHeight);
 	Memory::WriteInt(0x009FFF07, m_nGameWidth);
 	Memory::WriteInt(0x00BD1788, floor(m_nGameWidth / 2));
@@ -399,11 +422,16 @@ void Client::UpdateResolution() {
 	//Memory::WriteInt(0x00992BA7 + 1, (unsigned int)floor(m_nGameWidth / 2));//??unknown cwnd function, possibly related to cutildlg
 	//Memory::WriteInt(0x00992BAC + 1, (unsigned int)floor(m_nGameHeight / 2));//??unknown cwnd function, possibly related to cutildlg
 
-	//Memory::WriteInt(0x007E1E07 + 2, m_nGameWidth);//??related to displaying server message at top of screen
-	//Memory::WriteInt(0x007E19CA + 2, m_nGameWidth);//??related to displaying server message at top of screen
+	Memory::WriteInt(0x007F8357 + 2, m_nGameWidth);//related to displaying server message at top of screen
+	Memory::WriteInt(0x007F7F1A + 2, m_nGameWidth);//related to displaying server message at top of screen
 
-	//Memory::WriteInt(0x005362B2 + 1, (m_nGameWidth / 2) - 129);//??related to boss bar
+	Memory::WriteInt(0x005462B2 + 1, (m_nGameWidth / 2) - 129);//related to boss bar
 	//Memory::WriteInt(0x005364AA + 2, (m_nGameWidth / 2) - 128);//??related to boss bar
+	Memory::WriteInt(0x00A2E4F9 + 1, (m_nGameWidth / 2) - 129); //??
+	Memory::WriteByte(0x005434BA, 0xB8);	//boss bar extend to window
+	Memory::WriteInt(0x005434BA + 1, m_nGameWidth - 2);	//boss bar	extend to window
+	Memory::WriteByte(0x00543D27, 0xB9);	//boss bar	extend to window
+	Memory::WriteInt(0x00543D27 + 1, m_nGameWidth - 9);	//boss bar	extend to window
 
 	//Memory::WriteInt(0x00592A08 + 1, (m_nGameWidth / 2) - 125);//??likely related to mouse pos
 
@@ -418,49 +446,114 @@ void Client::UpdateResolution() {
 	//Memory::WriteInt(0x00BE273C, 128);//??
 	//Memory::WriteByte(0x00A5FC2B, 0x05);//??
 	////Memory::WriteByte(0x008D1790 + 2, 0x01); //related to quickslots area presence		 originally 1U but changed because unsigned int crashes it after char select
-	//Memory::WriteByte(0x0089B636 + 2, 0x01); //related to exp gain/item pick up msg, seems to affect msg height ! originally 1U but changed because unsigned int crashes it after char select
 	//Memory::WriteByte(0x00592A06 + 1, 0x01);//???likely related to mouse pos
 
-	//Memory::WriteInt(0x00744EB4 + 1, m_nGameWidth);//??related to in-game taking screenshot functionality
-	//Memory::WriteInt(0x00744EB9 + 1, m_nGameHeight);//??related to in-game taking screenshot functionality
-	//Memory::WriteInt(0x00744E2A + 1, 3 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
-	//Memory::WriteInt(0x00744E43 + 1, m_nGameWidth* m_nGameHeight);//??related to in-game taking screenshot functionality
-	//Memory::WriteInt(0x00744DA6 + 1, 4 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x007518B2 + 1, m_nGameWidth);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x007518B7 + 1, m_nGameHeight);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x00751828 + 1, 3 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x00751841 + 1, m_nGameWidth* m_nGameHeight);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x007517A4 + 1, 4 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
 
-	//Memory::WriteInt(0x00897BB4 + 1, (m_nGameWidth / 2) - 143);//??related to exp gain/item pick up msg
+	//Memory::WriteInt(0x008A8FA9 + 1, (m_nGameWidth / 2) - 143);//??related to exp gain/item pick up msg
 
-	//if (WindowedMode) {
-	//	unsigned char forced_window[] = { 0xb8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
-	//	Memory::WriteByteArray(0x009F7A9B, forced_window, sizeof(forced_window));//force window mode
-	//}
+	if (WindowedMode) {
+		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
+		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode
+	}
 	//if (RemoveLogos) {
 	//	Memory::FillBytes(0x0062EE54, 0x90, 21);	//no Logo @launch //Thanks Denki!!
 	//}
 
-	//int msgAmntOffset, msgAmnt; msgAmnt = MsgAmount; msgAmntOffset = msgAmnt * 14;
+	int msgAmntOffset, msgAmnt; msgAmnt = MsgAmount; msgAmntOffset = msgAmnt * 14;
 
-	//Memory::WriteInt(0x0089B639 + 1, m_nGameHeight - 6 - msgAmntOffset - 80);//inventory/exp gain y axis //####hd100 //90
-	//Memory::WriteInt(0x0089B6F7 + 1, m_nGameWidth - 405);//inventory/exp gain x axis //310 //####hd415 //405
+	Memory::WriteInt(0x008AC830 + 1, m_nGameHeight - 6 - msgAmntOffset);//inventory/exp gain y axis //####hd100 //90
+	Memory::WriteInt(0x008AC8EE + 1, m_nGameWidth - 405);//inventory/exp gain x axis //310 //####hd415 //405
+	Memory::WriteInt(0x008AC98D + 1, m_nGameHeight - 6 - msgAmntOffset); //related to quickslots area presence
+	Memory::WriteInt(0x008ACBFA + 1, m_nGameWidth - 405);
 
-	//Memory::WriteInt(0x0089AF33 + 1, 400);//length of pick up and exp gain message canvas //found with help from Davi
-	//Memory::WriteInt(0x0089B2C6 + 1, 400);//address to move the message in the canvas adjusted above to the center of the new canvas  //thanks chris
+	Memory::WriteInt(0x008AC12A + 1, 400);//length of pick up and exp gain message canvas //found with help from Davi
+	Memory::WriteInt(0x008AC4BD + 1, 400);//address to move the message in the canvas adjusted above to the center of the new canvas  //thanks chris
 
-	//Memory::WriteInt(0x0089AEE2 + 3, msgAmnt);//moregainmsgs part 1
-	//MoreGainMsgsOffset = msgAmnt;	//param for ccmoregainmssgs
-	//Memory::CodeCave(ccMoreGainMsgs, dwMoreGainMsgs, MoreGainMsgsNOPs); //moregainmsgs part 2
-	//MoreGainMsgsFadeOffset = 15000;	//param for ccmoregainmssgsFade
-	//Memory::CodeCave(ccMoreGainMsgsFade, dwMoreGainMsgsFade, MoreGainMsgsFadeNOPs); //moregainmsgsFade
-	//MoreGainMsgsFade1Offset = 255 * 4 / 3;	//param for ccmoregainmssgsFade
-	//Memory::CodeCave(ccMoreGainMsgsFade1, dwMoreGainMsgsFade1, MoreGainMsgsFade1NOPs); //moregainmsgsFade1
+	Memory::WriteInt(0x008AC0D9 + 3, msgAmnt);//moregainmsgs part 1
+	MoreGainMsgsOffset = msgAmnt;	//param for ccmoregainmssgs
+	Memory::CodeCave(ccMoreGainMsgs, dwMoreGainMsgs, MoreGainMsgsNOPs); //moregainmsgs part 2
+	MoreGainMsgsFadeOffset = 15000;	//param for ccmoregainmssgsFade
+	Memory::CodeCave(ccMoreGainMsgsFade, dwMoreGainMsgsFade, MoreGainMsgsFadeNOPs); //moregainmsgsFade
+	MoreGainMsgsFade1Offset = 255 * 4 / 3;	//param for ccmoregainmssgsFade
+	Memory::CodeCave(ccMoreGainMsgsFade1, dwMoreGainMsgsFade1, MoreGainMsgsFade1NOPs); //moregainmsgsFade1
 
 	//Memory::WriteInt(0x0045B337 + 1, m_nGameWidth);//related to smega display  //likely screen area where pop up starts for smega
 	//Memory::WriteInt(0x0045B417 + 1, m_nGameWidth - 225);//smega with avatar x axis for duration on screen
 
 	//Memory::WriteInt(0x007C2531 + 1, m_nGameHeight - 80);//??
 
+	Memory::WriteInt(0x0066D6A4 + 2, m_nGameWidth);
+	Memory::WriteInt(0x0066D69D + 2, m_nGameHeight);
+
+	Memory::WriteInt(0x005DDAAF + 1, m_nGameWidth);
+	Memory::WriteInt(0x005DDA9F + 1, m_nGameHeight);
+
+	Memory::WriteInt(0x0061FA6F + 1, m_nGameWidth);
+	Memory::WriteInt(0x0061FA65 + 1, m_nGameHeight);
+
+	Memory::WriteInt(0x007EC157 + 1, m_nGameWidth);
+	Memory::WriteInt(0x007EC146 + 1, m_nGameHeight);
+
+	Memory::WriteInt(0x00804E8F + 1, m_nGameWidth);
+	Memory::WriteInt(0x00804E7E + 1, m_nGameHeight);
+
+	Memory::WriteInt(0x007F7AD5 + 1, m_nGameWidth);
+
+	Memory::WriteInt(0x0065A8E8 + 1, m_nGameWidth);   //未知
+	Memory::WriteInt(0x0065A8E3 + 1, m_nGameHeight);
+
+	Memory::WriteInt(0x005B7123 + 1, m_nGameWidth);  //喇叭位置
+	Memory::WriteInt(0x0099EBBC + 1, m_nGameWidth / 2 - 133); //蓝色提示框
+	Memory::WriteInt(0x0099EBA9 + 1, m_nGameHeight);
+	Memory::WriteInt(0x005BBAE8 + 1, m_nGameWidth); //顶部通知
+	Memory::WriteInt(0x005BBAE3 + 1, m_nGameHeight);
+	Memory::WriteInt(0x005EE9E7 + 1, m_nGameWidth / 2); //地图指示
+	Memory::WriteInt(0x005449E2 + 1, 230);
 
 	Memory::WriteInt(0x008581D3 + 1, m_nGameHeight - 198); //system menu pop up
 	Memory::WriteInt(0x008589E8 + 1, m_nGameHeight - 281); //shortcuts pop up	//0x84A5BD -  System Options "X" Position. if needed
+
+	//各种气泡
+	Memory::WriteInt(0x0052D694 + 1, m_nGameHeight - 92 - 10);// ??various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052D886 + 1, m_nGameHeight - 92 - 10); // ??various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052DA9F + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052DD77 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052DFB3 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up //quest complete y axis
+	Memory::WriteInt(0x0052E1A9 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052E39B + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052E5CF + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052E7C3 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052E9C1 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052EDF9 + 1, m_nGameHeight - 92 - 10);// various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052F0E1 + 1, m_nGameHeight - 102 - 10);//?? various requests like party, guild, friend, family, invites that pop up
+	Memory::WriteInt(0x0052EBAA + 1, m_nGameHeight - 102 - 10);//party quest available pop-up y axis
+
+	Memory::WriteInt(0x0052D6A8 + 1, 582);
+	Memory::WriteInt(0x0052D89A + 1, 582);//various requests like party, guild, friend, family, invites that pop up //Party Invite
+	Memory::WriteInt(0x0052DAB3 + 1, 582);//various requests like party, guild, friend, family, invites that pop up //friend request
+	Memory::WriteInt(0x0052DD8B + 1, 582);//various requests like party, guild, friend, family, invites that pop up	// Guild Invite
+	Memory::WriteInt(0x0052DFC7 + 1, 582);//various requests like party, guild, friend, family, invites that pop up//??
+	Memory::WriteInt(0x0052DAB3 + 1, 582);//various requests like party, guild, friend, family, invites that pop up/??
+	Memory::WriteInt(0x0052E1BD + 1, 582);//various requests like party, guild, friend, family, invites that pop up/??
+	Memory::WriteInt(0x0052E3AF + 1, 582);//various requests like party, guild, friend, family, invites that pop up// ??
+	Memory::WriteInt(0x0052E5E3 + 1, 582);//various requests like party, guild, friend, family, invites that pop up// ??
+	Memory::WriteInt(0x0052E7E3 + 1, 582);//various requests like party, guild, friend, family, invites that pop up//??
+	Memory::WriteInt(0x0052E9D5 + 1, 582);
+	Memory::WriteInt(0x0052EBBE + 1, 582);
+	Memory::WriteInt(0x0052EE0D + 1, 582);
+	Memory::WriteInt(0x0052F0F5 + 1, 582);
+
+
+	darkCircleX = m_nGameWidth / 2 - 163;
+	darkCircleY = m_nGameHeight / 2 - 190;
+	Memory::CodeCave(darkMap1cc, 0x00576456, 9);
+	Memory::CodeCave(darkMap2cc, 0x005765EF, 12);
+	Memory::CodeCave(darkMap3cc, 0x00576735, 13);
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is
@@ -599,7 +692,7 @@ void Client::LongQuickSlot() {
 	//Memory::CodeCave(sub_9FA0CB_cave, 0x9FA0DB, 5);                          //??
 	//Memory::CodeCave(sDefaultQuickslotKeyMap_cave, 0x72B7BC, 5);             //??
 	//Memory::CodeCave(DefaultQuickslotKeyMap_cave, 0x72B8E6, 5);              //??
-	//Memory::CodeCave(Restore_Array_Expanded, 0x008CFDFD, 6); //restores the skill array to 0s  ??
+	Memory::CodeCave(Restore_Array_Expanded, 0x006282FC, 6); //restores the skill array to 0s
 	Memory::CodeCave(DefaultQuickslotKeyMap79_cave, 0x005BA1C6, 7);
 }
 
@@ -622,20 +715,19 @@ void Client::FixItemType() {
 }
 
 DWORD Client::jumpCap = 123;
-
+static float climbSpeedSave = 0;
 void Client::JumpCap() {
-	Memory::CodeCave(customJumpCapHook1, 0x00780797, 10);
-	Memory::CodeCave(customJumpCapHook2, 0x008C42A3, 10);
-	Memory::CodeCave(customJumpCapHook3, 0x0094D942, 5);
+	Memory::CodeCave(customJumpCapHook1, 0x007888E2, 10);
+	Memory::CodeCave(customJumpCapHook2, 0x008C9B37, 10);
+	Memory::CodeCave(customJumpCapHook3, 0x009541B9, 5);
 
-
-	Memory::WriteInt(0x009CC6F9 + 2, 0x00C1CF80);
+	Memory::WriteInt(0x009D8158 + 2, (DWORD)&climbSpeedSave);
 	if (climbSpeedAuto)
 	{
-		Memory::CodeCave(calcSpeedHook, 0x0094D93C, 6);
+		Memory::CodeCave(calcSpeedHook, 0x009541B3, 6);
 	}
 	else {
-		Memory::WriteDouble(0x00C1CF80, climbSpeed * 3.0);
+		Memory::WriteDouble((DWORD)&climbSpeedSave, climbSpeed * 3.0);
 	}
 }
 
@@ -660,12 +752,37 @@ void Client::CRCBypass() {
 }
 
 void Client::NoPassword() {
-	//if (noPassword && debug)
-	//{
+	if (noPassword && debug)
+	{
+		Memory::WriteInt(0x0064C529 + 2, 0);
+	}
+}
 
-		//Memory::WriteInt(1987638317, 1797760184);
-		//Memory::WriteInt(2001066480, 1797783736);
-	unsigned char CA_009F62E2[] = { 0xEB, 0xCC }; //CWvsApp::Run: nop?
-	Memory::WriteByteArray(0x0097642E, CA_009F62E2, sizeof(CA_009F62E2));
-	//}
+void Client::MoreHook() {
+
+	Memory::WriteInt(0x009AFEEE + 1, 480);
+
+	Memory::CodeCave(faceHairCave, 0x005FCEFF, 10);
+	Memory::CodeCave(canSendPkgTimeCave, 0x00485169, 10);
+
+	if (talkRepeat)
+	{
+		Memory::WriteByte(0x004900C9 + 1, 5);
+	}
+	Memory::WriteInt(0x00490127 + 2, talkTime);
+
+	if (setAtkOutCap > 999999)
+	{
+		Memory::WriteInt(0x008CA0C2 + 1, 192); // 面板关闭按钮x
+		Memory::WriteInt(0x008CA226 + 1, 210); // 面板宽度
+		Memory::WriteInt(0x008CA780 + 1, 218); // 详情面板宽度
+		Memory::WriteInt(0x00815A5E + 1, 210); // 详情面板初始x
+		Memory::WriteInt(0x00816786 + 1, 210); // 详情面板切换x
+		Memory::WriteInt(0x008CD155 + 1, 185); // 加属性按钮x
+		Memory::WriteInt(0x008C7FCF + 1, 195); // 详情面板关闭按钮x
+		Memory::WriteInt(0x008CC2F5 + 1, 210); // 移动时详情面板x
+		Memory::CodeCave(apDetailBtn, 0x008CA489, 7); // 详情按钮
+	}
+	//// 喇叭
+	Memory::WriteInt(0x00459F0E + 1, 9999);
 }

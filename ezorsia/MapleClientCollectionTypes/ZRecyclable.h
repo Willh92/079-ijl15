@@ -1,6 +1,5 @@
 #pragma once
-#include "ZRecyclableAvBuffer.h"
-//credits to the creators of https://github.com/MapleStory-Archive/MapleClientEditTemplate
+
 template <typename Type, size_t Size, typename Value>
 class ZRecyclable : protected ZAllocBase
 {
@@ -30,4 +29,4 @@ protected:
 	}
 };
 
-//assert_size(sizeof(ZRecyclable<long, 16, long>), 0x4);
+assert_size(sizeof(ZRecyclable<long, 16, long>), 0x4);

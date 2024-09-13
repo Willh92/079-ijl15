@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "BossHP.h"
 
-const DWORD dw_TSingleton_CUIMiniMap___ms_pInstance = 0x00BED788;
-const DWORD dwCField__ShowMobHpTag = 0x005336CA;
-const DWORD dwCField__Init = 0x00528DBC; // CField::CField
-const DWORD dwCField__Dispose = 0x00529035; // CField::~CField
-const DWORD dwCUIToolTip__SetToolTip_String = 0x008E6E7D;
-const DWORD dwCUIToolTip__ClearToolTip = 0x008E6E23;
-const DWORD dwCUIToolTip__DisposeToolTip = 0x008E6BA3; // CUIToolTip::~CUIToolTip
-const DWORD dwCUIToolTip__CreateToolTip = 0x008E49B5; // CUIToolTip::CUIToolTip
-const DWORD dwCUserLocal__Update = 0x0094A144;
+const DWORD dw_TSingleton_CUIMiniMap___ms_pInstance = 0x00BDEB50;
+const DWORD dwCField__ShowMobHpTag = 0x0054308E;
+const DWORD dwCField__Init = 0x00533AA1; // CField::CField
+const DWORD dwCField__Dispose = 0x00533CD5; // CField::~CField
+const DWORD dwCUIToolTip__SetToolTip_String = 0x008EE9E7;
+const DWORD dwCUIToolTip__ClearToolTip = 0x008EE966;
+const DWORD dwCUIToolTip__DisposeToolTip = 0x008EE6F6; // CUIToolTip::~CUIToolTip
+const DWORD dwCUIToolTip__CreateToolTip = 0x008ECB15; // CUIToolTip::CUIToolTip
+const DWORD dwCUserLocal__Update = 0x00951470;
 
 char BossHP::aBossHpUIToolTip[1304];
 double BossHP::dBossHpPercentage = 0;
@@ -143,5 +143,5 @@ int ReadInt(const DWORD dwAddress) {
 }
 
 int BossHP::GetMiniMapWidth() {
-	return ReadInt(ReadInt(dw_TSingleton_CUIMiniMap___ms_pInstance) + 0x24); // 
+	return ReadInt(ReadInt(dw_TSingleton_CUIMiniMap___ms_pInstance) + 0x1C); // 
 }

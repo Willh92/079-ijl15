@@ -84,16 +84,16 @@ const DWORD dwLoginDescriptorFix = 0x0060D85B;
 const DWORD dwLoginDescriptorFixRetn = 0x0060D88E;
 const int LoginDescriptorFixNOPs = 51;
 
-const DWORD dwMoreGainMsgs = 0x0089B185;
-const DWORD dwMoreGainMsgsRetn = 0x0089B18B;
+const DWORD dwMoreGainMsgs = 0x008AC37C;
+const DWORD dwMoreGainMsgsRetn = 0x008AC382;
 const int MoreGainMsgsNOPs = 6;
 
-const DWORD dwMoreGainMsgsFade = 0x0089B563;
-const DWORD dwMoreGainMsgsFadeRetn = 0x0089B56A;
+const DWORD dwMoreGainMsgsFade = 0x008AC75A;
+const DWORD dwMoreGainMsgsFadeRetn = 0x008AC761;
 const int MoreGainMsgsFadeNOPs = 7;
 
-const DWORD dwMoreGainMsgsFade1 = 0x0089B4E6;
-const DWORD dwMoreGainMsgsFade1Retn = 0x0089B4EB;
+const DWORD dwMoreGainMsgsFade1 = 0x008AC6DD;
+const DWORD dwMoreGainMsgsFade1Retn = 0x008AC6E2;
 const int MoreGainMsgsFade1NOPs = 5;
 
 const DWORD dwMuruengraidPlayer = 0x00554041;

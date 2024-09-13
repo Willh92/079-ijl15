@@ -21,9 +21,9 @@ __declspec(naked) void AdjustStatusBarBG() {
 __declspec(naked) void AdjustStatusBarInput() {
 	__asm {
 		push nStatusBarY
-		xor edi,edi
+		xor edi, edi
 		push edi
-		lea ecx, ds:[esi+0xC74]
+		lea ecx, ds: [esi + 0xC74]
 		jmp dword ptr[dwStatusBarInputPosRetn]
 	}
 }
@@ -323,8 +323,8 @@ __declspec(naked) void AlwaysViewRestoreFix() {
 		jmp dword ptr[dwAlwaysViewRestorerFixRtm]
 		C_Dest:
 		mov ecx, DWORD PTR[eax]
-		push eax
-		jmp dword ptr[dwAlwaysViewRestorerFixRtm]
+			push eax
+			jmp dword ptr[dwAlwaysViewRestorerFixRtm]
 	}
 }
 
@@ -388,11 +388,11 @@ __declspec(naked) void ccLoginBackBtnFix() {	//un used
 	}
 }
 
-int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0; 
+int a1x = 0; int a2x = 0; int a2y = 0; int a3 = 0; int a1y = 0;
 
 __declspec(naked) void ccLoginDescriptorFix() {
 	__asm {
-		and	edx, 0x3f
+		and edx, 0x3f
 		add    edx, 0x21
 		add    edx, a2y
 		cmp     ecx, edi
@@ -433,7 +433,7 @@ int MoreGainMsgsFadeOffset = 0;
 
 __declspec(naked) void ccMoreGainMsgsFade() {
 	__asm {
-		add eax,MoreGainMsgsFadeOffset
+		add eax, MoreGainMsgsFadeOffset
 		push 3
 		jmp dword ptr[dwMoreGainMsgsFadeRetn]
 	}
@@ -483,7 +483,7 @@ __declspec(naked) void ccMuruengraidMonster() {
 
 int yOffsetOfMuruengraidMonster1 = 32; int xOffsetOfMuruengraidMonster1 = 317;
 
-__declspec(naked) void ccMuruengraidMonster1() {	
+__declspec(naked) void ccMuruengraidMonster1() {
 	__asm {
 		push yOffsetOfMuruengraidMonster1
 		push xOffsetOfMuruengraidMonster1
@@ -594,7 +594,7 @@ int xOffsetOfMuruengraidMonster1_2 = 318;
 
 __declspec(naked) void ccMuruengraidMonster1_2() {
 	__asm {
-		mov    edx,xOffsetOfMuruengraidMonster1_2
+		mov    edx, xOffsetOfMuruengraidMonster1_2
 		jmp dword ptr[dwMuruengraidMonster1_2Retn]
 	}
 }
@@ -925,7 +925,7 @@ __declspec(naked) void cc0x00A4BE47() {
 const char myWzFile[] = "TamingMob";
 const char* ptrmyWzFile = myWzFile;
 
-int MINT = 51+1;
+int MINT = 51 + 1;
 const DWORD dwTesting = 0x009F74D2;
 const DWORD dwTestingRetn = 0x009F74EA;
 const int TestingNOPs = 24;
@@ -968,7 +968,7 @@ const DWORD dwTesting4Retn = 0x005556EC;
 const int Testing4NOPs = 6;
 __declspec(naked) void testingCodeCave4() {
 	__asm {
-		mov ecx,esi
+		mov ecx, esi
 		push edx
 		push 80//0
 		push 318//68
@@ -1028,7 +1028,7 @@ unsigned char Array_aDefaultQKM[] = {
 };
 
 // 0x00BE2DB0 confirmed, s_ptShortKeyPos
-unsigned char Array_ptShortKeyPos[] = { 
+unsigned char Array_ptShortKeyPos[] = {
 	82, 0, 0, 0,           //7+75
 	8, 0, 0, 0,
 	117, 0, 0, 0,
@@ -1168,7 +1168,7 @@ unsigned char Array_aDefaultQKM_0[] = {
 	29, 0, 0, 0,
 };
 
-unsigned char Array_Expanded[312] = { 
+unsigned char Array_Expanded[312] = {
 	4, 4, 0, 0,
 	0, 0, 0, 0,
 	0, 0, 0, 0,
@@ -1353,7 +1353,7 @@ _declspec(naked) void DefaultQuickslotKeyMap_cave()
 _declspec(naked) void Restore_Array_Expanded() //Thank you Max
 {
 	_asm {
-		lea eax, [esi + 0D7Ch]
+		lea eax, [esi + 0344h]
 		push esi
 		push edi
 		push ecx
@@ -1364,7 +1364,7 @@ _declspec(naked) void Restore_Array_Expanded() //Thank you Max
 		pop ecx
 		pop edi
 		pop esi
-		push 0x008CFE03;
+		push 0x00628302;
 		ret;
 	}
 }
@@ -1405,12 +1405,12 @@ __declspec(naked) void DefaultQuickslotKeyMap79_cave()
 		cmp eax, 26
 		push ebx
 		ja label_return
-		lea ebx,Array_keyMap_offset
+		lea ebx, Array_keyMap_offset
 		mov eax, [eax * 4 + ebx]
 		lea eax, [ecx + eax]
-	label_return :
+		label_return :
 		pop ebx
-		jmp keyMap79Rtn
+			jmp keyMap79Rtn
 	}
 }
 // ³¤¼üÅÌ½áÊø
@@ -1483,25 +1483,25 @@ __declspec(naked) void getItemType2() {
 		dec eax
 		jz label_cash
 		jmp getItemType2ErrRtnAddr
-	label_cash:
+		label_cash :
 		push 0x159C
-		jmp getItemType2RtnAddr
-	label_etc:
+			jmp getItemType2RtnAddr
+			label_etc :
 		push 0x6DD
-		jmp getItemType2RtnAddr
-	label_ins:
+			jmp getItemType2RtnAddr
+			label_ins :
 		push 0x0B
-		jmp getItemType2RtnAddr
-	label_use:
+			jmp getItemType2RtnAddr
+			label_use :
 		push 0x6E3
-		jmp getItemType2RtnAddr
-	label_eqp:
+			jmp getItemType2RtnAddr
+			label_eqp :
 		push 0x6D9
-		jmp getItemType2RtnAddr
+			jmp getItemType2RtnAddr
 	}
 }
 
-const DWORD back1 = 0x007807A1;
+const DWORD back1 = 0x007888EC;
 __declspec(naked) void customJumpCapHook1()
 {
 	__asm {
@@ -1509,15 +1509,15 @@ __declspec(naked) void customJumpCapHook1()
 		jl label
 		push Client::jumpCap
 		pop eax
-	label:
+		label :
 		mov edx, edi
-		jmp[back1]
+			jmp[back1]
 	}
 }
 
 
-const DWORD back2 = 0x008C42AD;
-const DWORD back3 = 0x008C42AF;
+const DWORD back2 = 0x008C9B41;
+const DWORD back3 = 0x008C9B43;
 __declspec(naked) void customJumpCapHook2()
 {
 	__asm {
@@ -1531,7 +1531,7 @@ __declspec(naked) void customJumpCapHook2()
 	}
 }
 
-const DWORD back4 = 0x0094D947;
+const DWORD back4 = 0x009541BE;
 __declspec(naked) void customJumpCapHook3()
 {
 	__asm {
@@ -1554,16 +1554,16 @@ __declspec(naked) void chatTextPos()
 
 		label_type1 :        // ×´Ì¬1 ÊÕËõ
 		sub eax, 1
+			jmp label_rtn
+
+			label_type2 :        // ×´Ì¬2 ÊÕËõ + ÊäÈë
 		jmp label_rtn
 
-		label_type2 :        // ×´Ì¬2 ÊÕËõ + ÊäÈë
-		jmp label_rtn
-
-		label_type3 :        // ×´Ì¬3 Õ¹¿ª
+			label_type3 :        // ×´Ì¬3 Õ¹¿ª
 		sub eax, 2
 
-		label_rtn :
-		jmp chatTextPosRtn
+			label_rtn :
+			jmp chatTextPosRtn
 	}
 }
 
@@ -1579,7 +1579,7 @@ void calcClimbSpeed() {
 	Memory::WriteDouble(0x00C1CF80, curClimbSpeed);
 }
 
-DWORD calcSpeedHookRtn = 0x0094D942;
+DWORD calcSpeedHookRtn = 0x009541B9;
 __declspec(naked) void calcSpeedHook()
 {
 	__asm {
@@ -1594,5 +1594,105 @@ __declspec(naked) void calcSpeedHook()
 
 		label_return :
 		jmp calcSpeedHookRtn
+	}
+}
+
+DWORD faceRtn = 0x005FCF6C;
+DWORD hairRtn = 0x005FCF3F;
+DWORD faceHairCaveRtn = 0x005FCF09;
+__declspec(naked) void faceHairCave()
+{
+	__asm {
+		cmp  eax, 2
+		jz label_face
+		cmp  eax, 3
+		jz label_hair
+		cmp  eax, 4
+		jz label_hair
+		cmp  eax, 5
+		jz label_face
+		cmp  eax, 6
+		jz label_hair
+
+		jmp faceHairCaveRtn
+
+		label_face :
+		jmp faceRtn
+
+		label_hair :
+		jmp hairRtn
+	}
+}
+
+DWORD canSendPkgTimeCaveRtn = 0x00485173;
+__declspec(naked) void canSendPkgTimeCave()
+{
+	__asm {
+		sub eax, [esi + 208Ch]
+		cmp eax, 200
+		jmp canSendPkgTimeCaveRtn
+	}
+}
+
+DWORD apDetailBtnRtn = 0x008CA490;
+__declspec(naked) void apDetailBtn()
+{
+	__asm {
+		push    134h
+		push    99h
+		jmp apDetailBtnRtn
+
+	}
+}
+
+int darkCircleX;
+int darkCircleY;
+constexpr DWORD darkMap1ccRtn = 0x0057645F;
+__declspec(naked) void darkMap1cc() {
+	__asm {
+		add edx, darkCircleX
+		add ecx, darkCircleY
+		jmp darkMap1ccRtn
+	}
+}
+constexpr DWORD darkMap2ccRtn = 0x005765FB;
+__declspec(naked) void darkMap2cc() {
+	__asm {
+		add eax, darkCircleY
+		push eax
+		mov eax, [ebp - 3Ch]
+		add eax, darkCircleX
+		jmp darkMap2ccRtn
+	}
+}
+constexpr DWORD darkMap3ccRtn = 0x00576742;
+__declspec(naked) void darkMap3cc() {
+	__asm {
+		add eax, darkCircleY
+		push edi
+		push eax
+		mov eax, [ebp - 3Ch]
+		add eax, darkCircleX
+		jmp darkMap3ccRtn
+	}
+}
+
+VOID __fastcall sentOutPacket(COutPacket* c) {
+	try {
+		CClientSocket::GetInstance()->SendPacket(c);
+	}
+	catch (...) {
+	}
+}
+
+VOID __fastcall  sentUnlockPacket() {
+	auto cOutPacket = COutPacket(0x104);
+	sentOutPacket(&cOutPacket);
+}
+
+__declspec(naked) void unlockPacket() {
+	__asm {
+		call sentUnlockPacket
+		ret
 	}
 }

@@ -1,6 +1,5 @@
 #pragma once
-#include "ZAllocEx.h"
-//credits to the creators of https://github.com/MapleStory-Archive/MapleClientEditTemplate
+
 template <typename T>
 class ZArray
 {
@@ -48,7 +47,7 @@ public:
 		if (uCount)
 		{
 			/* Allocate new memory for array copy */
-			PVOID pAlloc = ZAllocEx<ZAllocAnonSelector>::Alloc(sizeof(T) * uCount + sizeof(T));
+			PVOID pAlloc = ZAllocEx<ZAllocStrSelector<T>>::GetInstance()->Alloc(sizeof(T) * uCount + sizeof(T));
 
 			/* Assign array count to head address */
 			*(DWORD*)pAlloc = uCount;
@@ -279,21 +278,23 @@ public:
 	/// </summary>
 	void RemoveAll()
 	{
-		if (this->a)
-		{
-			/* Get pointer to allocation base  (array base - 4 bytes) */
-			DWORD* pAllocationBasePointer = &reinterpret_cast<DWORD*>(this->a)[-1];
-			size_t nMaxIndex = *pAllocationBasePointer - 1;
-
-			/* Call destructor  */
-			T* start = this->a;
-			T* end = reinterpret_cast<T*>(&this->a[nMaxIndex]);
-			this->Destroy(start, end);
-
-			/* Free array allocation */
-			delete pAllocationBasePointer;
-			this->a = nullptr;
-		}
+        ((VOID(_fastcall * )(ZArray<T> * , PVOID))
+        0x00429F38)(this, NULL);   //0x00428CF1
+//		if (this->a)
+//		{
+//			/* Get pointer to allocation base  (array base - 4 bytes) */
+//			DWORD* pAllocationBasePointer = &reinterpret_cast<DWORD*>(this->a)[-1];
+//			size_t nMaxIndex = *pAllocationBasePointer - 1;
+//
+//			/* Call destructor  */
+//			T* start = this->a;
+//			T* end = reinterpret_cast<T*>(&this->a[nMaxIndex]);
+//			this->Destroy(start, end);
+//
+//			/* Free array allocation */
+//			delete pAllocationBasePointer;
+//			this->a = nullptr;
+//		}
 	}
 
 private:
@@ -444,4 +445,4 @@ private:
 	}
 };
 
-//assert_size(sizeof(ZArray<int>), 0x04)
+assert_size(sizeof(ZArray<int>), 0x04)

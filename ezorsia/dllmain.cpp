@@ -51,25 +51,22 @@ void Injected() {
 	////Hook_get_resource_object(true); //helper function hooks  //ty teto for helping me get started
 	////Hook_com_ptr_t_IWzProperty__ctor(true);
 	////Hook_com_ptr_t_IWzProperty__dtor(true);
-
-	Client::UpdateGameStartup();
-
 	//std::cout << "Applying resolution " << Client::m_nGameWidth << "x" << Client::m_nGameHeight << std::endl;
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
-	if (Client::m_nGameWidth > 800) {
-		Client::UpdateResolution();
-		Client::LongQuickSlot();
-	}
+	Client::UpdateGameStartup();
+	Client::UpdateResolution();
+	Client::LongQuickSlot();
 	//Client::FixMouseWheel();
 	//Client::Chinese();
 	//Client::FixDateFormat();
 	//Client::FixItemType();
-	//Client::JumpCap();
+	Client::JumpCap();
 	//Client::FixChatPosHook();
 	Client::NoPassword();
-	//BossHP::Hook();
+	BossHP::Hook();
+	Client::MoreHook();
 
 	std::cout << "GetModuleFileName hook created" << std::endl;
 	ijl15::CreateHook(); //NMCO::CreateHook();
@@ -112,6 +109,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::ServerIP_Address_hook = reader.GetBoolean("general", "ServerIP_Address_hook", true);
 			Client::climbSpeedAuto = reader.GetBoolean("optional", "climbSpeedAuto", false);
 			Client::climbSpeed = reader.GetFloat("optional", "climbSpeed", 1.0);
+			Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", 8484);
+			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
+			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
 		}
 		if(Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want

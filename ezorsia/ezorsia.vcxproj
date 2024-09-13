@@ -138,7 +138,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;EZORSIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\MapleClientCollectionTypes;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -170,6 +170,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\gms-83-dll\common\ZRefCounted.h" />
     <ClInclude Include="AddyLocations.h">
       <FileType>CppHeader</FileType>
     </ClInclude>
@@ -179,13 +180,19 @@
     <ClInclude Include="FixIme.h" />
     <ClInclude Include="ijl.h" />
     <ClInclude Include="ijl15.h" />
+    <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
+    <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h" />
+    <ClInclude Include="MapleClientCollectionTypes\CInPacket.h" />
+    <ClInclude Include="MapleClientCollectionTypes\COutPacket.h" />
+    <ClInclude Include="MapleClientCollectionTypes\framework.h" />
     <ClInclude Include="MapleClientCollectionTypes\TSecType.h" />
+    <ClInclude Include="MapleClientCollectionTypes\TSingleton.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZAllocAnonSelector.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZAllocBase.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZAllocEx.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZAllocStrSelector.h" />
-    <ClInclude Include="MapleClientCollectionTypes\ZArray.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZFatalSection.h" />
+    <ClInclude Include="MapleClientCollectionTypes\ZInetAddr.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZList.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZMap.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZRecyclable.h" />
@@ -195,6 +202,8 @@
     <ClInclude Include="MapleClientCollectionTypes\ZRefCounted.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZRefCountedAccessor.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZRefCountedDummy.h" />
+    <ClInclude Include="MapleClientCollectionTypes\ZSocketBase.h" />
+    <ClInclude Include="MapleClientCollectionTypes\ZSocketBuffer.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZtlSecure.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZXString.h" />
     <ClInclude Include="detours.h" />
@@ -215,6 +224,8 @@
     <ClCompile Include="BossHP.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ijl15.cpp" />
+    <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
+    <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Memory.cpp" />

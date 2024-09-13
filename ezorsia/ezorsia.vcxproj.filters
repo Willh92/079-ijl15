@@ -117,16 +117,10 @@
     <ClInclude Include="MapleClientCollectionTypes\TSecType.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="MapleClientCollectionTypes\ZArray.h">
-      <Filter>Header Files\MapleTypes</Filter>
-    </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\ZFatalSection.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\ZList.h">
-      <Filter>Header Files\MapleTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="MapleClientCollectionTypes\ZMap.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
     <ClInclude Include="MapleClientCollectionTypes\ZtlSecure.h">
@@ -153,6 +147,39 @@
     <ClInclude Include="ReplacementFuncs.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\COutPacket.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\framework.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gms-83-dll\common\ZRefCounted.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\asserts.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\ZSocketBase.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\ZSocketBuffer.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\CInPacket.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\ZInetAddr.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\TSingleton.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\ZMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -178,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="BossHP.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp">
+      <Filter>Header Files\MapleTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
