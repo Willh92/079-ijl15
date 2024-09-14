@@ -266,7 +266,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x009AFFC0 + 1, m_nGameWidth);    // CreateDlg //->079 009AFFC0 800
 	Memory::WriteInt(0x0045B0C0 + 1, m_nGameHeight - 25);                //->079 0045B0C0 575
 	Memory::WriteInt(0x0045B1A6 + 1, m_nGameWidth);    // RelMove? //->079 0045B1A6 900
-	Memory::WriteInt(0x004E7AF7 + 1, m_nGameWidth);                        //->079 004E7AF7 800
+	//Memory::WriteInt(0x004E7AF7 + 1, m_nGameWidth);                        //->079 004E7AF7 800   会导致商城选项卡点击失效
 
 
 	Memory::WriteInt(0x00575D78 + 1, m_nGameHeight);                     //->079 00575D78 600
@@ -398,13 +398,11 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x006BF359 + 1, floor(-m_nGameWidth / 2));
 	Memory::WriteInt(0x009EC61A + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x009EC620 + 1, floor(-m_nGameWidth / 2));
-	Memory::WriteInt(0x0062A7DE + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x0093B675 + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x0095DBA3 + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x0098EE27 + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x0098F84C + 2, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x00A4EAC9 + 2, floor(-m_nGameHeight / 2));              // CWvsPhysicalSpace2D::Load          //->079 00A4EAC9 || 00A55A79 -300
-	Memory::WriteInt(0x0062A922 + 1, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x00669275 + 2, floor(-m_nGameWidth / 2));
 	Memory::WriteInt(0x009CFD87 + 3, floor(-m_nGameHeight / 2));
 	Memory::WriteInt(0x009CFD95 + 3, floor(m_nGameHeight / 2));
@@ -456,13 +454,30 @@ void Client::UpdateResolution() {
 
 	//Memory::WriteInt(0x008A8FA9 + 1, (m_nGameWidth / 2) - 143);//??related to exp gain/item pick up msg
 
+	Memory::WriteInt(0x0062A7DE + 1, (unsigned int)floor(-m_nGameHeight / 2));	//push -300 ;
+	Memory::WriteInt(0x0062A922 + 1, (unsigned int)floor(-m_nGameHeight / 2));	//push -300 ;
+	Memory::WriteInt(0x00628EFB + 1, (unsigned int)floor(m_nGameWidth / 2));//??related to login game frame
+
+	//Memory::WriteInt(0x0060411C + 1, m_nGameHeight);//push 600
+	//Memory::WriteInt(0x00604126 + 1, floor(-m_nGameWidth / 2));	//push -300 //moves characters side to side on char select //unnecessary atm
+	Memory::WriteInt(0x0063C5B4 + 1, (m_nGameHeight / 2) - 201);//??possibly related to login utildlg
+	Memory::WriteInt(0x0063C5BD + 1, (m_nGameHeight / 2) - 181);//??possibly related to login utildlg
+	Memory::WriteInt(0x0063C5C5 + 1, (m_nGameWidth / 2) - 201);//??possibly related to login utildlg
+	Memory::WriteInt(0x0063C5CE + 1, (m_nGameWidth / 2) - 181);//??possibly related to login utildlg
+	//Memory::WriteInt(0x00613093 + 1, (m_nGameHeight / 2) - 200);//??likely related to login pop-up msg
+	//Memory::WriteInt(0x00613099 + 1, (m_nGameWidth / 2) - 45);//??likely related to login pop-up msg
+	//Memory::WriteInt(0x0061DAFF + 1, (m_nGameHeight / 2) - 150);//??likely related to login pop-up msg
+	//Memory::WriteInt(0x0061DB08 + 1, (m_nGameHeight / 2) - 130);//??likely related to login pop-up msg
+	//Memory::WriteInt(0x0061DB10 + 1, (m_nGameWidth / 2) - 201);//??likely related to login pop-up msg
+	//Memory::WriteInt(0x0061DB19 + 1, (m_nGameWidth / 2) - 181);//??likely related to login pop-up msg
+
 	if (WindowedMode) {
 		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
 		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode
 	}
-	//if (RemoveLogos) {
-	//	Memory::FillBytes(0x0062EE54, 0x90, 21);	//no Logo @launch //Thanks Denki!!
-	//}
+	if (RemoveLogos) {
+		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
+	}
 
 	int msgAmntOffset, msgAmnt; msgAmnt = MsgAmount; msgAmntOffset = msgAmnt * 14;
 
@@ -549,6 +564,119 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x0052F0F5 + 1, 582);
 
 
+	myHeight = (Client::m_nGameHeight - 600) / 2;//cash shop fix for frame area	//recalc offsets
+	myWidth = (Client::m_nGameWidth - 800) / 2;//cash shop fix for frame area		//recalc offsets
+
+	// 现金商城居中
+	nHeightOfsetted1 = 316; nWidthOfsetted1 = 256; nTopOfsetted1 = 0 + myHeight; nLeftOfsetted1 = 0 + myWidth; //parameters for fix1
+	Memory::CodeCave(CashShopFix1, dwCashFix1, dwCashFix1NOPs);
+	nHeightOfsetted2 = 104; nWidthOfsetted2 = 256; nTopOfsetted2 = 318 + myHeight; nLeftOfsetted2 = -1 + myWidth; //parameters for fix2
+	Memory::CodeCave(CashShopFix2, dwCashFix2, dwCashFix2NOPs);
+	nHeightOfsetted3 = 163; nWidthOfsetted3 = 246; nTopOfsetted3 = 426 + myHeight; nLeftOfsetted3 = 0 + myWidth; //parameters for fix3
+	Memory::CodeCave(CashShopFix3, dwCashFix3, dwCashFix3NOPs);
+	nHeightOfsetted4 = 78; nWidthOfsetted4 = 508; nTopOfsetted4 = 17 + myHeight; nLeftOfsetted4 = 272 + myWidth; //parameters for fix4   top
+	Memory::CodeCave(CashShopFix4, dwCashFix4, dwCashFix4NOPs);
+	nHeightOfsetted5 = 430; nWidthOfsetted5 = 412; nTopOfsetted5 = 95 + myHeight; nLeftOfsetted5 = 275 + myWidth; //parameters for fix5
+	Memory::CodeCave(CashShopFix5, dwCashFix5, dwCashFix5NOPs);	//main part of shop, item listings	//thanks angel for stuff that helped
+	Memory::CodeCave(CashShopFix9, dwCashFix9, dwCashFix9NOPs);	//main part of shop 2
+	nHeightOfsetted6 = 358; nWidthOfsetted6 = 90; nTopOfsetted6 = 157 + myHeight; //parameters for fix6
+	Memory::CodeCave(CashShopFix6, dwCashFix6, dwCashFix6NOPs);//code cave 6 //best sellers
+	Memory::WriteInt(0x00468F7F + 1, myWidth + 690);//nleft, actual drawn part	//best sellers
+	nHeightOfsetted7 = 56; nWidthOfsetted7 = 545; nTopOfsetted7 = 536 + myHeight; nLeftOfsetted7 = 254 + myWidth; //parameters for fix7   bottom exit
+	Memory::CodeCave(CashShopFix7, dwCashFix7, dwCashFix7NOPs);
+	nHeightOfsetted8 = 22; nWidthOfsetted8 = 89; nTopOfsetted8 = 97 + myHeight; nLeftOfsetted8 = 690 + myWidth; //parameters for fix8
+	Memory::CodeCave(CashShopFix8, dwCashFix8, dwCashFix8NOPs);
+	Memory::CodeCave(CashShopFixOnOff, dwCashFixOnOff, dwCashFixOnOffNOPs);	//fix for preview On/Off button not being accurate on entering cash shop //thanks windyboy
+
+	nHeightOfsettedPrev = 165 + myHeight; nWidthOfsettedPrev = 212 + myWidth; nTopOfsettedPrev = 40 + myHeight; nLeftOfsettedPrev = 24 + myWidth; //parameters for fix cash preview
+	Memory::CodeCave(CashShopFixPrev, dwCashFixPrev, dwCashFixPrevNOPs); //cash shop preview fix
+
+	// 交易中心居中
+	iHeightOfsetted1 = 200; iWidthOfsetted1 = 256; iTopOfsetted1 = 0 + myHeight; iLeftOfsetted1 = 0 + myWidth;
+	Memory::CodeCave(ITCFix1, 0x005D40F9, 12);
+	iHeightOfsetted2 = 110; iWidthOfsetted2 = 256; iTopOfsetted2 = 200 + myHeight; iLeftOfsetted2 = -1 + myWidth;
+	Memory::CodeCave(ITCFix2, 0x005D4111, 13);
+	iHeightOfsetted3 = 108; iWidthOfsetted3 = 256; iTopOfsetted3 = 310 + myHeight; iLeftOfsetted3 = 0 + myWidth;
+	Memory::CodeCave(ITCFix3, 0x005D412D, 13);
+	iHeightOfsetted4 = 180; iWidthOfsetted4 = 256; iTopOfsetted4 = 418 + myHeight; iLeftOfsetted4 = 0 + myWidth;
+	Memory::CodeCave(ITCFix4, 0x005D4149, 16);
+	iHeightOfsetted5 = 78; iWidthOfsetted5 = 509; iTopOfsetted5 = 17 + myHeight; iLeftOfsetted5 = 272 + myWidth;
+	Memory::CodeCave(ITCFix5, 0x005D4167, 16);	//main part of shop, item listings	//thanks angel for stuff that helped
+	iHeightOfsetted6 = 48; iWidthOfsetted6 = 509; iTopOfsetted6 = 98 + myHeight; iLeftOfsetted6 = 273 + myWidth;
+	Memory::CodeCave(ITCFix6, 0x005D4186, 14);//code cave 6 //best sellers
+	iHeightOfsetted7 = 365; iWidthOfsetted7 = 509; iTopOfsetted7 = 145 + myHeight; iLeftOfsetted7 = 273 + myWidth;
+	Memory::CodeCave(ITCFix7, 0x005D41A3, 20);
+	iHeightOfsetted8 = 56; iWidthOfsetted8 = 545; iTopOfsetted8 = 531 + myHeight; iLeftOfsetted8 = 255 + myWidth;
+	Memory::CodeCave(ITCFix8, 0x005D41C6, 17);
+
+	//Memory::WriteInt(0x0066E6DC + 2, (unsigned int)floor(m_nGameWidth / 2));	//mov ebc,400 ;  VRright		//camera movement	//crashes
+	Memory::WriteInt(0x0066E73C + 1, (unsigned int)floor(m_nGameHeight / 2));	//add eax,300  ; VRbottom //camera movement //not working for most maps
+
+	myAlwaysViewRestoreFixOffset = myHeight; //parameters for fix view restore all maps number ?????working????!!!
+	Memory::CodeCave(AlwaysViewRestoreFix, dwAlwaysViewRestoreFix, dwAlwaysViewRestoreFixNOPs);
+
+	if (CustomLoginFrame) {
+		Memory::WriteInt(0x00629120 + 1, (unsigned int)floor(-m_nGameHeight / 2));//push -300				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
+		Memory::WriteInt(0x0062912F + 1, (unsigned int)floor(-m_nGameWidth / 2));	//push -400 ; RelMove?				!!game login frame!! turn this on if you edit UI.wz and use a frame that matches your res
+	}
+
+	if (bigLoginFrame) {
+		Memory::WriteInt(0x00628EFB + 1, m_nGameWidth - 145);	// 145?? mov eax,800 ; RelMove?	//game version number for login frames that hug the side of the screen //you will still need to offset ntop, and that may require a code cave if your height resolution is too big
+	}
+	else {
+		nTopOfsettedVerFix = 10 + myHeight; nLeftOfsettedVerFix = 665 + myWidth; //parameters for fix version number
+		Memory::CodeCave(VersionNumberFix, dwVersionNumberFix, dwVersionNumberFixNOPs);	//game version number fix //use this if you use no frame or default client frame
+	}
+
+	if (!bigLoginFrame) {
+		nHeightOfsettedLoginBackCanvasFix = 122 + myHeight; nWidthOfsettedLoginBackCanvasFix = 85 + myWidth;//para for world select buttonsViewRec
+		nTopOfsettedLoginBackCanvasFix = 452 + myHeight; nLeftOfsettedLoginBackCanvasFix = 76 + myWidth;
+		Memory::CodeCave(ccLoginBackCanvasFix, dwLoginBackCanvasFix, LoginBackCanvasFixNOPs);	//world select buttons fix		//thank you teto for pointing out my error in finding the constructor
+
+		//yOffsetOfLoginBackBtnFix = 300 + myHeight; xOffsetOfLoginBackBtnFix = 0 + myWidth;	//para for back button
+		//Memory::CodeCave(ccLoginBackBtnFix, dwLoginBackBtnFix, LoginBackBtnFixNOPs); //back button on world select //unnecessary as buttons move with canvas
+
+		nHeightOfsettedLoginViewRecFix = 122 + myHeight; nWidthOfsettedLoginViewRecFix = 85 + myWidth;//para for ViewRec fix
+		nTopOfsettedLoginViewRecFix = 452 + myHeight; nLeftOfsettedLoginViewRecFix = 76 + myWidth;
+		Memory::CodeCave(ccLoginViewRecFix, dwLoginViewRecFix, LoginViewRecFixNOPs);	//world ViewRec fix	
+
+		a1x = 0 + myWidth; a2x = -149 + myWidth; a2y = 0 + myHeight; a3 = 25; a1y = -250; //a4 = 0;	//LoginDescriptor params
+		Memory::WriteInt(0x0063ABC4 + 1, 300 + a1y); //speed 1	//temporary fix by increasing the speed of display until i get good enough at procedural programming 
+		//and memory management and reverse engineering to use nexon's own functions to put a black layer with greater z value to cover the tabs being shown off screen at origin
+		Memory::CodeCave(ccLoginDescriptorFix, dwLoginDescriptorFix, LoginDescriptorFixNOPs);	//world LoginDescriptor fix	
+	}
+
+	int customEngY = -62, customEngX = -22, dojangYoffset = 0;	//myHeight //-55-35 (myHeight*250/100)	-(myWidth*53/100) 140 -130
+	yOffsetOfMuruengraidPlayer = 50 + dojangYoffset; xOffsetOfMuruengraidPlayer = 169 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidPlayer, dwMuruengraidPlayer, MuruengraidPlayerNOPs);	//muruengraid scaling	
+	yOffsetOfMuruengraidClock = 26 + dojangYoffset; xOffsetOfMuruengraidClock = 400 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidClock, dwMuruengraidClock, MuruengraidClockNOPs);	//muruengraid scaling
+	yOffsetOfMuruengraidMonster = 50 + dojangYoffset; xOffsetOfMuruengraidMonster = 631 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidMonster, dwMuruengraidMonster, MuruengraidMonsterNOPs);	//muruengraid scaling
+	yOffsetOfMuruengraidMonster1 = 32 + dojangYoffset; xOffsetOfMuruengraidMonster1 = 317 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidMonster1, dwMuruengraidMonster1, MuruengraidMonster1NOPs);	//muruengraid scaling	
+	yOffsetOfMuruengraidMonster2 = 32 + dojangYoffset; xOffsetOfMuruengraidMonster2 = 482 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidMonster2, dwMuruengraidMonster2, MuruengraidMonster2NOPs);	//muruengraid scaling
+	yOffsetOfMuruengraidEngBar = 86 + dojangYoffset + customEngY; xOffsetOfMuruengraidEngBar = 17 + myWidth + customEngX; //params
+	Memory::CodeCave(ccMuruengraidEngBar, dwMuruengraidEngBar, MuruengraidEngBarNOPs);	//muruengraid scaling	
+	yOffsetOfMuruengraidEngBar1 = 130 + dojangYoffset + customEngY; xOffsetOfMuruengraidEngBar1 = 20 + myWidth + customEngX; //params
+	Memory::CodeCave(ccMuruengraidEngBar1, dwMuruengraidEngBar1, MuruengraidEngBar1NOPs);	//muruengraid scaling	
+	yOffsetOfMuruengraidEngBar2 = 80 + dojangYoffset + customEngY; xOffsetOfMuruengraidEngBar2 = 9 + myWidth + customEngX; //params
+	Memory::CodeCave(ccMuruengraidEngBar2, dwMuruengraidEngBar2, MuruengraidEngBar2NOPs);	//muruengraid scaling	
+	yOffsetOfMuruengraidClearRoundUI = 260 + myHeight; xOffsetOfMuruengraidClearRoundUI = 400 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidClearRoundUI, dwMuruengraidClearRoundUI, MuruengraidClearRoundUINOPs);	//muruengraid scaling
+	//yOffsetOfMuruengraidTimerCanvas = 28 + dojangYoffset; xOffsetOfMuruengraidTimerCanvas = 112 + myWidth; //params
+	//Memory::CodeCave(ccMuruengraidTimerCanvas, dwMuruengraidTimerCanvas, MuruengraidTimerCanvasNOPs);	//muruengraid scaling	
+	//yOffsetOfMuruengraidTimerMinutes = 0 + dojangYoffset; xOffsetOfMuruengraidTimerMinutes = 0 + myWidth; //params	//not needed, bar moves all, kept for referrence or if change are needed
+	//Memory::CodeCave(ccMuruengraidTimerMinutes, dwMuruengraidTimerMinutes, MuruengraidTimerMinutesNOPs);	//muruengraid scaling	
+	//yOffsetOfMuruengraidTimerSeconds = 0 + dojangYoffset; xOffsetOfMuruengraidTimerSeconds = 68 + myWidth; //params
+	//Memory::CodeCave(ccMuruengraidTimerSeconds, dwMuruengraidTimerSeconds, MuruengraidTimerSecondsNOPs);	//muruengraid scaling
+	yOffsetOfMuruengraidTimerBar = 16 + dojangYoffset; xOffsetOfMuruengraidTimerBar = 345 + myWidth; //params
+	Memory::CodeCave(ccMuruengraidTimerBar, dwMuruengraidTimerBar, MuruengraidTimerBarNOPs);	//muruengraid scaling
+	xOffsetOfMuruengraidMonster1_2 = 318 + myWidth; //params	//finally fixed this bugger
+	Memory::CodeCave(ccMuruengraidMonster1_2, dwMuruengraidMonster1_2, MuruengraidMonster1_2NOPs);
+
+	//黑暗地图
 	darkCircleX = m_nGameWidth / 2 - 163;
 	darkCircleY = m_nGameHeight / 2 - 190;
 	Memory::CodeCave(darkMap1cc, 0x00576456, 9);

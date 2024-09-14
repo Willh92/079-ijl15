@@ -187,6 +187,16 @@ __declspec(naked) void CashShopFix8() {
 	}
 }
 
+__declspec(naked) void CashShopFix9() {
+	__asm {
+		push	nHeightOfsetted5
+		push	nWidthOfsetted5
+		push	nTopOfsetted5
+		push	nLeftOfsetted5
+		jmp dword ptr[dwCashFix9Rtm]
+	}
+}
+
 __declspec(naked) void CashShopFixOnOff() {	//could be improved upon because idk if it's the right way to do it or if it might cause issues
 	__asm {
 		pop	ebx
@@ -301,7 +311,7 @@ __declspec(naked) void ITCFix8() {
 	}
 }
 
-int nTopOfsettedVerFix = 0; int nLeftOfsettedVerFix = 0;
+int nTopOfsettedVerFix = 2; int nLeftOfsettedVerFix = 0;
 
 __declspec(naked) void VersionNumberFix() {
 	__asm {
@@ -560,7 +570,7 @@ int yOffsetOfMuruengraidTimerMinutes = 0; int xOffsetOfMuruengraidTimerMinutes =
 
 __declspec(naked) void ccMuruengraidTimerMinutes() {
 	__asm {
-		mov    DWORD PTR[esi + 0x848], edi
+		mov    DWORD PTR[esi + 7C8h], edi
 		push eax
 		push yOffsetOfMuruengraidTimerMinutes
 		push xOffsetOfMuruengraidTimerMinutes

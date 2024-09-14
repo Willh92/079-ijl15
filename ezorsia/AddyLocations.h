@@ -55,24 +55,24 @@ const DWORD dwBossBarRetn = 0x00533B15;
 const DWORD dwBossBarRetn2 = 0x007E16A1;
 const DWORD dwCashFix = 0x00469348;
 const DWORD dwCashFixRtm = 0x0046934E;
-const DWORD dwVersionNumberFix = 0x005F464D;
-const DWORD dwVersionNumberFixRtm = 0x005F4657;
-const int dwVersionNumberFixNOPs = 10;
-const DWORD dwAlwaysViewRestoreFix = 0x00642105;
-const DWORD dwAlwaysViewRestorerFixRtm = 0x0064210C;
+const DWORD dwVersionNumberFix = 0x00628EFB;
+const DWORD dwVersionNumberFixRtm = 0x00628F04;
+const int dwVersionNumberFixNOPs = 9;
+const DWORD dwAlwaysViewRestoreFix = 0x0066E8A8;
+const DWORD dwAlwaysViewRestorerFixRtm = 0x0066E8AF;
 const int dwAlwaysViewRestoreFixNOPs = 7;
 
 //const DWORD dwloginFrameFix = 0x005F4C11;
 //const DWORD dwloginFrameFixCall = 0x009DE4D2;
 //const int loginFrameFixNOPs = 5;
 
-const DWORD dwLoginBackCanvasFix = 0x0060E1BF;
-const DWORD dwLoginBackCanvasFixRetn = 0x0060E1CA;
+const DWORD dwLoginBackCanvasFix = 0x0063B46B;
+const DWORD dwLoginBackCanvasFixRetn = 0x0063B476;
 const int LoginBackCanvasFixNOPs = 11;
 
-const DWORD dwLoginViewRecFix = 0x0062B334;
-const DWORD dwLoginViewRecFixRetn = 0x0062B345;
-const int LoginViewRecFixNOPs = 17;
+const DWORD dwLoginViewRecFix = 0x0064C799;
+const DWORD dwLoginViewRecFixRetn = 0x0064C7A4;
+const int LoginViewRecFixNOPs = 11;
 
 const DWORD dwLoginBackBtnFix = 0x0060E69D;	//not used, kept for referrence
 const DWORD dwLoginBackBtnFixRetn = 0x0060E6A4;
@@ -80,8 +80,8 @@ const int LoginBackBtnFixNOPs = 7;
 
 const DWORD dwInitialLoginScreenBackXY = 0x005F4B48;	//not used, kept for referrence, resets on back step from next step
 
-const DWORD dwLoginDescriptorFix = 0x0060D85B;
-const DWORD dwLoginDescriptorFixRetn = 0x0060D88E;
+const DWORD dwLoginDescriptorFix = 0x0063ABD6;
+const DWORD dwLoginDescriptorFixRetn = 0x0063AC09;
 const int LoginDescriptorFixNOPs = 51;
 
 const DWORD dwMoreGainMsgs = 0x008AC37C;
@@ -96,64 +96,64 @@ const DWORD dwMoreGainMsgsFade1 = 0x008AC6DD;
 const DWORD dwMoreGainMsgsFade1Retn = 0x008AC6E2;
 const int MoreGainMsgsFade1NOPs = 5;
 
-const DWORD dwMuruengraidPlayer = 0x00554041;
-const DWORD dwMuruengraidPlayerRetn = 0x00554049;
+const DWORD dwMuruengraidPlayer = 0x0056BE27;
+const DWORD dwMuruengraidPlayerRetn = 0x0056BE2F;
 const int MuruengraidPlayerNOPs = 8;
 
-const DWORD dwMuruengraidClock = 0x005540C9;
-const DWORD dwMuruengraidClockRetn = 0x005540D1;
+const DWORD dwMuruengraidClock = 0x0056BEAF;
+const DWORD dwMuruengraidClockRetn = 0x0056BEB7;
 const int MuruengraidClockNOPs = 8;
 
-const DWORD dwMuruengraidMonster = 0x0055414F;
-const DWORD dwMuruengraidMonsterRetn = 0x00554157;
+const DWORD dwMuruengraidMonster = 0x0056BF35;
+const DWORD dwMuruengraidMonsterRetn = 0x0056BF3D;
 const int MuruengraidMonsterNOPs = 8;
 
-const DWORD dwMuruengraidMonster1 = 0x005543F1;
-const DWORD dwMuruengraidMonster1Retn = 0x005543F8;
+const DWORD dwMuruengraidMonster1 = 0x0056C1D7;
+const DWORD dwMuruengraidMonster1Retn = 0x0056C1DE;
 const int MuruengraidMonster1NOPs = 7;
 
-const DWORD dwMuruengraidMonster2 = 0x0055447C;
-const DWORD dwMuruengraidMonster2Retn = 0x00554483;
+const DWORD dwMuruengraidMonster2 = 0x0056C262;
+const DWORD dwMuruengraidMonster2Retn = 0x0056C269;
 const int MuruengraidMonster2NOPs = 7;
 
-const DWORD dwMuruengraidEngBar = 0x00554507;
-const DWORD dwMuruengraidEngBarRetn = 0x0055450C;
+const DWORD dwMuruengraidEngBar = 0x0056C2ED;
+const DWORD dwMuruengraidEngBarRetn = 0x0056C2F2;
 const int MuruengraidEngBarNOPs = 5;
 
-const DWORD dwMuruengraidEngBar1 = 0x005541DA;
-const DWORD dwMuruengraidEngBar1Retn = 0x005541E2;
+const DWORD dwMuruengraidEngBar1 = 0x0056BFC0;
+const DWORD dwMuruengraidEngBar1Retn = 0x0056BFC8;
 const int MuruengraidEngBar1NOPs = 8;
 
-const DWORD dwMuruengraidEngBar2 = 0x00554265;
-const DWORD dwMuruengraidEngBar2Retn = 0x0055426A;
+const DWORD dwMuruengraidEngBar2 = 0x0056C04B;
+const DWORD dwMuruengraidEngBar2Retn = 0x0056C050;
 const int MuruengraidEngBar2NOPs = 5;
 
-const DWORD dwMuruengraidClearRoundUI = 0x0053500A;	//; int __cdecl sub_43E86F(int, wchar_t *, int, int, int, int, int, int, int, int)
-const DWORD dwMuruengraidClearRoundUIRetn = 0x00535014;	//may be used to fix other cases of pop-up UI misallignment
+const DWORD dwMuruengraidClearRoundUI = 0x0043CBC8;	//; int __cdecl sub_43E86F(int, wchar_t *, int, int, int, int, int, int, int, int)
+const DWORD dwMuruengraidClearRoundUIRetn = 0x0043CBD2;	//may be used to fix other cases of pop-up UI misallignment
 const int MuruengraidClearRoundUINOPs = 10;
 
-const DWORD dwMuruengraidTimerCanvas = 0x00555314;
-const DWORD dwMuruengraidTimerCanvasRetn = 0x00555319;
+const DWORD dwMuruengraidTimerCanvas = 0x0056D0FA;
+const DWORD dwMuruengraidTimerCanvasRetn = 0x0056D0FF;
 const int MuruengraidTimerCanvasNOPs = 5;
 
-const DWORD dwMuruengraidTimerMinutes = 0x005556CC;
-const DWORD dwMuruengraidTimerMinutesRetn = 0x005556D5;
+const DWORD dwMuruengraidTimerMinutes = 0x0056D4B2;
+const DWORD dwMuruengraidTimerMinutesRetn = 0x0056D4BB;
 const int MuruengraidTimerMinutesNOPs = 9;
 
-const DWORD dwMuruengraidTimerSeconds = 0x005556E6;
-const DWORD dwMuruengraidTimerSecondsRetn = 0x005556EC;
+const DWORD dwMuruengraidTimerSeconds = 0x0056D4CC;
+const DWORD dwMuruengraidTimerSecondsRetn = 0x0056D4D2;
 const int MuruengraidTimerSecondsNOPs = 6;
 
-const DWORD dwMuruengraidTimerBar = 0x00555541;
-const DWORD dwMuruengraidTimerBarRetn = 0x00555548;
+const DWORD dwMuruengraidTimerBar = 0x0056D327;
+const DWORD dwMuruengraidTimerBarRetn = 0x0056D32E;
 const int MuruengraidTimerBarNOPs = 7;
 
-const DWORD dwMuruengraidMonster1_2 = 0x00554BA3;
-const DWORD dwMuruengraidMonster1_2Retn = 0x00554BA8;
+const DWORD dwMuruengraidMonster1_2 = 0x0056C989;
+const DWORD dwMuruengraidMonster1_2Retn = 0x0056C98E;
 const int MuruengraidMonster1_2NOPs = 5;
 
-const DWORD dwStatsSubMov = 0x008C5112;
-const DWORD dwStatsSubMovRetn = 0x008C5117;
+const DWORD dwStatsSubMov = 0x008CA788;
+const DWORD dwStatsSubMovRetn = 0x008CA78D;
 const int StatsSubMovNOPs = 5;
 
 //beginning of packed client run addies //CwvsAppSetup?? //CWvsAppInitializeInput?? //CWvsAppCallUpdate?? //CClientSocketConnect??
@@ -370,45 +370,48 @@ const int dw0x00A4BE47Nops = 18;
 //0x009F4F12 //0x009F503C //0x009F526F //0x009F6F36 //0x009F7CFA //0x009F84E9 //0x00A4BDFE //0x00A4BD99 //0x00A4BD05 //0x00A4BB39
 
 //my cash shop fix
-const DWORD dwCashFix1 = 0x00469414;
-const DWORD dwCashFix1Rtm = 0x00469420;
-const DWORD dwITCFix1Rtm = 0x0059E9ED;
+const DWORD dwCashFix1 = 0x00468EDA;
+const DWORD dwCashFix1Rtm = 0x00468EE6;
+const DWORD dwITCFix1Rtm = 0x005D4105;
 const int dwCashFix1NOPs = 12;
-const DWORD dwCashFix2 = 0x0046942F;
-const DWORD dwCashFix2Rtm = 0x0046943D;
-const DWORD dwITCFix2Rtm = 0x0059EA06;
-const int dwCashFix2NOPs = 14;
-const DWORD dwCashFix3 = 0x0046944C;
-const DWORD dwCashFix3Rtm = 0x0046945C;
-const DWORD dwITCFix3Rtm = 0x0059EA22;
+const DWORD dwCashFix2 = 0x00468EF5;
+const DWORD dwCashFix2Rtm = 0x00468F02;
+const DWORD dwITCFix2Rtm = 0x005D411E;
+const int dwCashFix2NOPs = 13;
+const DWORD dwCashFix3 = 0x00468F11;
+const DWORD dwCashFix3Rtm = 0x00468F21;
+const DWORD dwITCFix3Rtm = 0x005D413A;
 const int dwCashFix3NOPs = 16;
-const DWORD dwCashFix4 = 0x0046946B;
-const DWORD dwCashFix4Rtm = 0x00469479;
-const DWORD dwITCFix4Rtm = 0x0059EA41;
+const DWORD dwCashFix4 = 0x00468F30;
+const DWORD dwCashFix4Rtm = 0x00468F3E;
+const DWORD dwITCFix4Rtm = 0x005D4159;
 const int dwCashFix4NOPs = 14;
-const DWORD dwCashFix5 = 0x00469488;
-const DWORD dwCashFix5Rtm = 0x00469499;
-const DWORD dwITCFix5Rtm = 0x0059EA5F;
+const DWORD dwCashFix5 = 0x00468F4D;
+const DWORD dwCashFix5Rtm = 0x00468F5E;
+const DWORD dwITCFix5Rtm = 0x005D4177;
 const int dwCashFix5NOPs = 17;
-const DWORD dwCashFix6 = 0x004694A8;
-const DWORD dwCashFix6Rtm = 0x004694B4;
-const DWORD dwITCFix6Rtm = 0x0059EA7C;
+const DWORD dwCashFix6 = 0x00468F6D;
+const DWORD dwCashFix6Rtm = 0x00468F79;
+const DWORD dwITCFix6Rtm = 0x005D4194;
 const int dwCashFix6NOPs = 12;
-const DWORD dwCashFix7 = 0x004694C8;
-const DWORD dwCashFix7Rtm = 0x004694D9;
-const DWORD dwITCFix7Rtm = 0x0059EA9F;
+const DWORD dwCashFix7 = 0x00468F8D;
+const DWORD dwCashFix7Rtm = 0x00468F9E;
+const DWORD dwITCFix7Rtm = 0x005D41B7;
 const int dwCashFix7NOPs = 17;
-const DWORD dwCashFix8 = 0x004694E8;
-const DWORD dwCashFix8Rtm = 0x004694F3;
-const DWORD dwITCFix8Rtm = 0x0059EABF;
+const DWORD dwCashFix8 = 0x00468FAD;
+const DWORD dwCashFix8Rtm = 0x00468FB8;
+const DWORD dwITCFix8Rtm = 0x005D41D7;
 const int dwCashFix8NOPs = 11;
-const DWORD dwCashFixOnOff = 0x00776B5F;
-const DWORD dwCashFixOnOffRtm = 0x00776B64;
-const DWORD dwCashFixOnOffCall = 0x004732D2;
+const DWORD dwCashFix9 = 0x0046C2CF;
+const DWORD dwCashFix9Rtm = 0x0046C2E0;
+const int dwCashFix9NOPs = 17;
+const DWORD dwCashFixOnOff = 0x0077F319;
+const DWORD dwCashFixOnOffRtm = 0x0077F31E;
+const DWORD dwCashFixOnOffCall = 0x00472BCC;
 const int dwCashFixOnOffNOPs = 5;
 //const DWORD dwCashFixOnOffCall2 = 0x00BEC20C;
-const DWORD dwCashFixPrev = 0x004AB10F;
-const DWORD dwCashFixPrevRtm = 0x004AB11D;
+const DWORD dwCashFixPrev = 0x004AF4F8;
+const DWORD dwCashFixPrevRtm = 0x004AF506;
 const int dwCashFixPrevNOPs = 14;
 
 // ===== Unlimited Teleport =====
