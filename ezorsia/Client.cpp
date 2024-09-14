@@ -522,7 +522,11 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x0065A8E8 + 1, m_nGameWidth);   //未知
 	Memory::WriteInt(0x0065A8E3 + 1, m_nGameHeight);
 
-	Memory::WriteInt(0x005B7123 + 1, m_nGameWidth);  //喇叭位置
+	Memory::WriteInt(0x005B7123 + 1, m_nGameWidth);  //顶部喇叭位置
+	//喇叭
+	Memory::WriteInt(0x00459F1B + 1, m_nGameWidth);				 //   所有动画位置参数都是 左上角  右上角 宽 高
+	Memory::WriteInt(0x0045AB28 + 1, m_nGameWidth + 100);  //飘入喇叭起始位置
+	Memory::WriteInt(0x0045AC0A + 1, m_nGameWidth - 225);  //飘入喇叭终止位置
 	Memory::WriteInt(0x0099EBBC + 1, m_nGameWidth / 2 - 133); //蓝色提示框
 	Memory::WriteInt(0x0099EBA9 + 1, m_nGameHeight);
 	Memory::WriteInt(0x005BBAE8 + 1, m_nGameWidth); //顶部通知
@@ -911,6 +915,5 @@ void Client::MoreHook() {
 		Memory::WriteInt(0x008CC2F5 + 1, 210); // 移动时详情面板x
 		Memory::CodeCave(apDetailBtn, 0x008CA489, 7); // 详情按钮
 	}
-	//// 喇叭
-	Memory::WriteInt(0x00459F0E + 1, 9999);
+
 }
