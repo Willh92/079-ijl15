@@ -2,7 +2,7 @@
 
 移植与https://github.com/BeiDouMS/BeiDou-ijl15
 
-主要是为了移植https://github.com/Chronicle20/gms-83-dll这个框架
+主要是为了移植https://github.com/Chronicle20/gms-83-dll 这个框架
 
 代码未清理，除了启用的功能能外，其他基址还是083的
 
@@ -29,6 +29,6 @@ HOOK模式:
 ## 主要额外添加的特殊功能
 
 - 双击跳跃键使用二段跳
-- 屏蔽了聊天室按钮弹窗仅发数据包（可用作）
+- 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
 
 # 仅供学习交流使用!!!
