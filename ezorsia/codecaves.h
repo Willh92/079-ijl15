@@ -987,9 +987,9 @@ __declspec(naked) void testingCodeCave4() {
 }
 
 
-DWORD fixMouseWheelAddr = 0x009E8090;
-DWORD fixMouseWheelRetJmpAddr = 0x009E809F;
-DWORD fixMouseWheelCallSetCursorPosAddr = 0x0059A0CB;
+DWORD fixMouseWheelAddr = 0x009F1AD5;
+DWORD fixMouseWheelRetJmpAddr = 0x009F1AE4;
+DWORD fixMouseWheelCallSetCursorPosAddr = 0x005CA91A;
 __declspec(naked) void fixMouseWheelHook() {
 	__asm {
 		// is mouse wheel
@@ -1645,12 +1645,25 @@ __declspec(naked) void canSendPkgTimeCave()
 }
 
 DWORD apDetailBtnRtn = 0x008CA490;
+int statDetailBtnX = 124;
 __declspec(naked) void apDetailBtn()
 {
 	__asm {
-		push    134h
-		push    99h
+		push 13Ah
+		push statDetailBtnX
 		jmp apDetailBtnRtn
+
+	}
+}
+
+DWORD apAutoBtnRtn = 0x008CD3E3;
+int statAutoBtnX = 97;
+__declspec(naked) void apAutoBtn()
+{
+	__asm {
+		push statAutoBtnX
+		push 7D7h
+		jmp apAutoBtnRtn
 
 	}
 }
@@ -1704,5 +1717,22 @@ __declspec(naked) void unlockPacket() {
 	__asm {
 		call sentUnlockPacket
 		ret
+	}
+}
+
+DWORD doubleJumpRtn = 0x00955F56;
+DWORD keyJump = 0x00952F1F;
+DWORD skill = 0x00974307;
+__declspec(naked) void doubleJump()
+{
+	__asm {
+		call keyJump
+		push 0
+		push edi
+		push 0x003EBA9E  //4111006
+		mov  ecx, ebx
+		call skill
+		jmp doubleJumpRtn
+
 	}
 }

@@ -46,4 +46,7 @@ public:
 	static int serverIP_Port;
 	static bool talkRepeat;
 	static int talkTime;
+	static int StatBackgrndWidth;
+	static int StatDetailBackgrndWidth;
+	static int StatDetailBackgrndWidthRect;
 };

@@ -33,6 +33,9 @@ std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
 int Client::talkTime = 2000;
+int Client::StatBackgrndWidth = 176;
+int Client::StatDetailBackgrndWidth = 177;
+int Client::StatDetailBackgrndWidthRect = 200;
 
 
 void Client::UpdateGameStartup() {
@@ -713,7 +716,7 @@ void Client::UpdateLogin() {	//un-used //may still contain some useful addresses
 }
 
 void Client::FixMouseWheel() {
-	Memory::CodeCave(fixMouseWheelHook, 0x009E8090, 5);
+	Memory::CodeCave(fixMouseWheelHook, 0x009F1AD5, 5);
 }
 
 void Client::Chinese() {
@@ -903,17 +906,22 @@ void Client::MoreHook() {
 	}
 	Memory::WriteInt(0x00490127 + 2, talkTime);
 
-	if (setAtkOutCap > 999999)
-	{
-		Memory::WriteInt(0x008CA0C2 + 1, 192); // 面板关闭按钮x
-		Memory::WriteInt(0x008CA226 + 1, 210); // 面板宽度
-		Memory::WriteInt(0x008CA780 + 1, 218); // 详情面板宽度
-		Memory::WriteInt(0x00815A5E + 1, 210); // 详情面板初始x
-		Memory::WriteInt(0x00816786 + 1, 210); // 详情面板切换x
-		Memory::WriteInt(0x008CD155 + 1, 185); // 加属性按钮x
-		Memory::WriteInt(0x008C7FCF + 1, 195); // 详情面板关闭按钮x
-		Memory::WriteInt(0x008CC2F5 + 1, 210); // 移动时详情面板x
-		Memory::CodeCave(apDetailBtn, 0x008CA489, 7); // 详情按钮
-	}
+	Memory::WriteInt(0x008CA0C2 + 1, Client::StatBackgrndWidth - 20); // 面板关闭按钮x  176-20
+	Memory::WriteInt(0x008CA226 + 1, Client::StatBackgrndWidth); // 面板宽度       176
+	Memory::WriteInt(0x008CA780 + 1, Client::StatDetailBackgrndWidthRect); // 详情面板宽度
+	Memory::WriteInt(0x00815A5E + 1, Client::StatBackgrndWidth); // 详情面板初始x
+	Memory::WriteInt(0x00816786 + 1, Client::StatBackgrndWidth); // 详情面板切换x
+	Memory::WriteInt(0x008CD155 + 1, Client::StatBackgrndWidth - 23); // 加属性按钮x    176-23
+	Memory::WriteInt(0x008C7FCF + 1, Client::StatDetailBackgrndWidth - 23); // 详情面板关闭按钮x    177 - 23
+	Memory::WriteInt(0x008CC2F5 + 1, Client::StatBackgrndWidth); // 移动时详情面板x
+	// 偏移面板位置
+	Memory::WriteInt(0x008CADD1 + 1, Client::StatBackgrndWidth);
+	Memory::WriteInt(0x008CA519 + 1, Client::StatBackgrndWidth);
+	statDetailBtnX = Client::StatBackgrndWidth - 52; // 详情按钮 176-52
+	Memory::CodeCave(apDetailBtn, 0x008CA489, 7);
+	statAutoBtnX = Client::StatBackgrndWidth - 79;   //自动加点 176-79
+	Memory::CodeCave(apAutoBtn, 0x008CD3DC, 7);
+
+	Memory::CodeCave(doubleJump, 0x00955F51, 5);
 
 }

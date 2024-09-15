@@ -58,7 +58,7 @@ void Injected() {
 	Client::UpdateGameStartup();
 	Client::UpdateResolution();
 	Client::LongQuickSlot();
-	//Client::FixMouseWheel();
+	Client::FixMouseWheel();
 	//Client::Chinese();
 	//Client::FixDateFormat();
 	//Client::FixItemType();
@@ -112,6 +112,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", 8484);
 			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
+			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
+			Client::StatDetailBackgrndWidth = reader.GetInteger("ui", "StatDetailBackgrndWidth", 177);
+			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);
 		}
 		if(Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want
