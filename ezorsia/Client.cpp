@@ -887,7 +887,7 @@ void Client::CRCBypass() {
 }
 
 void Client::NoPassword() {
-	if (noPassword && debug)
+	if (noPassword)
 	{
 		Memory::WriteInt(0x0064C529 + 2, 0);
 	}
