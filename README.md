@@ -16,10 +16,10 @@
 
 支持两种模式
 
-直接加载模式：
+### 直接加载模式：
 直接覆盖客户端的ijl15.dll,并修改配置文件中ijl15hook为false
 
-HOOK模式:
+### HOOK模式:
 先把客户端原本的ijl15.dll重命名成2ijl15.dll，然后把生成的ijl15.dll拷贝到客户端目录下，ijl15hook为true
 
 两种模式均需要把项目根目录下的config.ini同样复制到客户端目录下，具体配置都在config.ini中
