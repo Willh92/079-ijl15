@@ -1382,7 +1382,7 @@ _declspec(naked) void Restore_Array_Expanded() //Thank you Max
 DWORD keyMap79Rtn = 0x005BA219;   //start 0x005BA1C6
 unsigned int Array_keyMap_offset[] = {
 	0xD6,
-	0x19F,
+	0x19E,
 	0x167,
 	0x171, //4
 	0xE,
