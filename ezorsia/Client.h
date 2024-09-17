@@ -16,6 +16,7 @@ public:
 	static void CRCBypass();
 	static void NoPassword();
 	static void MoreHook();
+	static void Skill();
 	static const int m_nIGCipherHash = 0XC65053F2;
 	static int m_nGameHeight;
 	static int m_nGameWidth;
@@ -49,4 +50,7 @@ public:
 	static int StatBackgrndWidth;
 	static int StatDetailBackgrndWidth;
 	static int StatDetailBackgrndWidthRect;
+	static bool s4221001;
+	static bool s4221007;
+	static bool s14101004;
 };

@@ -67,7 +67,7 @@ void Injected() {
 	Client::NoPassword();
 	BossHP::Hook();
 	Client::MoreHook();
-
+	Client::Skill();
 	std::cout << "GetModuleFileName hook created" << std::endl;
 	ijl15::CreateHook(); //NMCO::CreateHook();
 	std::cout << "NMCO hook initialized" << std::endl;
@@ -115,6 +115,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
 			Client::StatDetailBackgrndWidth = reader.GetInteger("ui", "StatDetailBackgrndWidth", 177);
 			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);
+			Client::s4221001 = reader.GetBoolean("skill", "s4221001", false);
+			Client::s4221007 = reader.GetBoolean("skill", "s4221007", false);
+			Client::s14101004 = reader.GetBoolean("skill", "s14101004", true);
 		}
 		if(Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want

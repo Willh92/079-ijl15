@@ -37,6 +37,9 @@ int Client::StatBackgrndWidth = 176;
 int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
 
+bool Client::s14101004 = true;
+bool Client::s4221001 = false;
+bool Client::s4221007 = false;
 
 void Client::UpdateGameStartup() {
 	//Memory::CodeCave(cc0x0044E550, dw0x0044E550, dw0x0044E550Nops); //run from packed client //skip //sub_44E546
@@ -137,7 +140,7 @@ void Client::UpdateGameStartup() {
 	//Memory::WriteByte(0x0049D398 + 1, 0x01);//remove elevation requests	//still not working unfortunately
 
 	////optional non-resolution related stuff
-	if(useTubi) { Memory::FillBytes(0x00485173, 0x90, 2); }
+	if (useTubi) { Memory::FillBytes(0x00485173, 0x90, 2); }
 
 	Memory::WriteInt(0x007868CF + 1, 2147483646); // 物攻PAD 相关具体不明，默认值1999，int 4字节
 	Memory::WriteInt(0x007869A9 + 1, 2147483646); // 技能 相关具体不明，默认值1999，int 4字节
@@ -203,8 +206,8 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwToolTipLimitHPos + 1, m_nGameWidth - 1); //mov eax,799 ; CUIToolTip::MakeLayer
 
 	Memory::WriteInt(dwTempStatToolTipDraw + 3, -m_nGameWidth + 6); //lea eax,[eax+ecx-797] ; CTemporaryStatView::ShowToolTip
-	Memory::WriteByte(0x007B9CB9+2, 26);   // 3 + 23                 buff tip y-pos range
-	Memory::WriteByte(0x007B9CC2+2, 58);   // 35+23
+	Memory::WriteByte(0x007B9CB9 + 2, 26);   // 3 + 23                 buff tip y-pos range
+	Memory::WriteByte(0x007B9CC2 + 2, 58);   // 35+23
 	Memory::WriteInt(dwTempStatToolTipFind + 3, -m_nGameWidth + 6); //lea eax,[eax+ecx-797] ; CTemporaryStatView::FindIcon
 	Memory::WriteByte(0x007B9EA7 + 2, 26);   // 3 + 23                  y-pos cancel range
 	Memory::WriteByte(0x007B9EAC + 2, 58);   // 35 + 23
@@ -452,7 +455,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x007518B2 + 1, m_nGameWidth);//??related to in-game taking screenshot functionality
 	Memory::WriteInt(0x007518B7 + 1, m_nGameHeight);//??related to in-game taking screenshot functionality
 	Memory::WriteInt(0x00751828 + 1, 3 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
-	Memory::WriteInt(0x00751841 + 1, m_nGameWidth* m_nGameHeight);//??related to in-game taking screenshot functionality
+	Memory::WriteInt(0x00751841 + 1, m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
 	Memory::WriteInt(0x007517A4 + 1, 4 * m_nGameWidth * m_nGameHeight);//??related to in-game taking screenshot functionality
 
 	//Memory::WriteInt(0x008A8FA9 + 1, (m_nGameWidth / 2) - 143);//??related to exp gain/item pick up msg
@@ -875,15 +878,10 @@ void Client::FixChatPosHook() {
 }
 
 void Client::CRCBypass() {
-	Memory::WriteInt(13642571, 1385655400);
-	Memory::WriteInt(10855524, 2179763139);
-	Memory::WriteInt(10479445, 2240484469);
-	Memory::WriteInt(10856777, 1374456771);
-	Memory::WriteInt(7957490, 4294967230);
-	//Memory::WriteInt(1987638317, 1797760184);
-	//Memory::WriteInt(2001066480, 1797783736);
-	//Memory::WriteInt(1987638317, 1797760184);
-	//Memory::WriteInt(2001066480, 1797783736);
+	Memory::WriteInt(0x00D02B4B + 1, 0x0752976C);
+	Memory::WriteByte(0x00A5A464, 0xC3);
+	Memory::WriteInt(0x00A5A949, 0xC3);
+	Memory::WriteByte(0x009FE755, 0x75);
 }
 
 void Client::NoPassword() {
@@ -922,6 +920,20 @@ void Client::MoreHook() {
 	statAutoBtnX = Client::StatBackgrndWidth - 79;   //自动加点 176-79
 	Memory::CodeCave(apAutoBtn, 0x008CD3DC, 7);
 
-	Memory::CodeCave(doubleJump, 0x00955F51, 5);
+}
 
+void Client::Skill() {
+	//二段跳
+	if (Client::s14101004) {
+		Memory::CodeCave(doubleJump, 0x00955F51, 5);
+	}
+	//暗杀
+	if (Client::s4221001) {
+		Memory::CodeCave(skill4221001, 0x00975369, 5);
+	}
+	//一出双击
+	if (Client::s4221001) {
+		byte s4221001[] = { 0xB8,0xFF,0xFF ,0xFF ,0xFF };
+		Memory::WriteByteArray(0x0097A28F, s4221001, sizeof(s4221001));
+	}
 }

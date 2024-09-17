@@ -1360,7 +1360,8 @@ _declspec(naked) void DefaultQuickslotKeyMap_cave()
 		ret;
 	}
 }
-_declspec(naked) void Restore_Array_Expanded() //Thank you Max
+
+_declspec(naked) void Restore_Array_Expanded() //Thank you Max  0x006282FC
 {
 	_asm {
 		lea eax, [esi + 0344h]
@@ -1733,6 +1734,24 @@ __declspec(naked) void doubleJump()
 		mov  ecx, ebx
 		call skill
 		jmp doubleJumpRtn
+
+	}
+}
+
+DWORD skill4221001Rtn = 0x00975478;
+__declspec(naked) void skill4221001()   //0x00975369
+{
+	__asm {
+		pushfd
+		cmp eax,0x1
+		jne label_ret
+		push eax
+		mov eax,0x0097642E
+		mov byte ptr[eax], 0xEB
+		pop eax
+		label_ret :
+		popfd
+		jmp skill4221001Rtn
 
 	}
 }
