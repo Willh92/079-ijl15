@@ -382,6 +382,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x008DD6F6 + 1, m_nGameHeight - 19);
 	Memory::WriteInt(0x008DDE76 + 1, m_nGameHeight - 19);
 	Memory::WriteInt(0x008DE5C1 + 1, m_nGameHeight - 19);
+	Memory::WriteInt(0x008DEC14 + 1, m_nGameHeight - 19);	//push 581 临时经验条
 	Memory::WriteInt(0x008D6D3B + 1, m_nGameHeight - 22);
 
 	Memory::WriteInt(0x008D6D40 + 1, m_nGameWidth);
