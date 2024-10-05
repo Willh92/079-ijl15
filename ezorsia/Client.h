@@ -18,6 +18,7 @@ public:
 	static void MoreHook();
 	static void Skill();
 	static const int m_nIGCipherHash = 0XC65053F2;
+	static bool isImg;
 	static int m_nGameHeight;
 	static int m_nGameWidth;
 	static int MsgAmount;
@@ -29,6 +30,7 @@ public:
 	static int setAccCap;
 	static int setAvdCap;
 	static double setAtkOutCap;
+	static bool longEXP;
 	static bool useTubi;
 	static bool bigLoginFrame;
 	static bool SwitchChinese;

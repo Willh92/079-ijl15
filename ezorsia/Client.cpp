@@ -5,6 +5,7 @@
 #include "FixIme.h"
 #include "FixBuddy.h"
 
+bool Client::isImg = true;
 int Client::m_nGameHeight = 720;
 int Client::m_nGameWidth = 1280;
 int Client::MsgAmount = 26;
@@ -16,6 +17,7 @@ int Client::setMAtkCap = 1999;
 int Client::setAccCap = 999;
 int Client::setAvdCap = 999;
 double Client::setAtkOutCap = 199999;
+bool Client::longEXP = false;
 bool Client::useTubi = false;
 bool Client::bigLoginFrame = false;
 bool Client::SwitchChinese = false;

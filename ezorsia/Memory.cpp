@@ -109,7 +109,15 @@ void Memory::WriteByteArray(const DWORD dwOriginAddress, unsigned char* ucValue,
 void Memory::CodeCave(void* ptrCodeCave, const DWORD dwOriginAddress, const int nNOPCount) { //tested and working
 	__try {
 		if (nNOPCount) FillBytes(dwOriginAddress, 0x90, nNOPCount); // create space for the jmp
-		WriteByte(dwOriginAddress, 0xe9); // jmp instruction
+		WriteByte(dwOriginAddress, 0xE9); // jmp instruction
 		WriteInt(dwOriginAddress + 1, (int)(((int)ptrCodeCave - (int)dwOriginAddress) - 5)); // [jmp(1 byte)][address(4 bytes)] //this means you need to clear a space of at least 5 bytes (nNOPCount bytes)
 	} __except (EXCEPTION_EXECUTE_HANDLER) {}
+}
+
+void  Memory::PatchCall(DWORD dwOriginAddress, void* dst) {
+    __try {
+        WriteByte(dwOriginAddress, 0xE8); // call instruction
+		WriteInt(dwOriginAddress + 1, (int)(((int)dst - (int)dwOriginAddress) - 5)); // [jmp(1 byte)][address(4 bytes)] //this means you need to clear a space of at least 5 bytes (nNOPCount bytes)
+    }
+    __except (EXCEPTION_EXECUTE_HANDLER) {}
 }

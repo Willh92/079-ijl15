@@ -60,9 +60,6 @@
     <ClInclude Include="syelog.h">
       <Filter>Header Files\detours</Filter>
     </ClInclude>
-    <ClInclude Include="codecaves.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AutoTypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -180,6 +177,15 @@
     <ClInclude Include="MapleClientCollectionTypes\ZMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="codecaves.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resman.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterEx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -211,6 +217,12 @@
     </ClCompile>
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp">
       <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Resman.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterEx.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

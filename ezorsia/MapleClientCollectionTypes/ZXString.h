@@ -56,7 +56,7 @@ private:
 	T* m_pStr; // needs to be initialized to zero when hooking sometimes
 
 public:
-	// ------------------------------------------------------ Constructors
+	// ------------------------------------------------------ Constructorsm_pStr
 
 	/// <summary>
 	/// Constructs an empty ZXString object.

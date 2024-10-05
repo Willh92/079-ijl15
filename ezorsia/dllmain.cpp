@@ -6,6 +6,8 @@
 #include "ReplacementFuncs.h"
 #include <comutil.h>
 #include "BossHP.h"
+#include <Resman.h>
+#include <CharacterEx.h>
 
 void CreateConsole() {
 	AllocConsole();
@@ -33,6 +35,7 @@ void Injected() {
 	while (!Client::canInjected) {
 		Sleep(10);
 	}
+	std::cout << "GetModuleFileName hook created" << std::endl;
 	//Waitting fo Maplestory.exe load
 	//HookCreateWindowExA(true); //default ezorsia
 	//HookGetModuleFileName(true); //default ezorsia
@@ -49,12 +52,13 @@ void Injected() {
 	//Hook_lpfn_NextLevel(true);
 	////Hook_get_unknown(true);
 	////Hook_get_resource_object(true); //helper function hooks  //ty teto for helping me get started
-	////Hook_com_ptr_t_IWzProperty__ctor(true);
-	////Hook_com_ptr_t_IWzProperty__dtor(true);
+	////Hook_com_ptr_t_IWzProperty__ctor(true);£¬Âò
 	//std::cout << "Applying resolution " << Client::m_nGameWidth << "x" << Client::m_nGameHeight << std::endl;
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
+	Resman::Hook_InitializeResMan(Client::isImg);
+	CharacterEx::InitExpOverride(true);
 	Client::UpdateGameStartup();
 	Client::UpdateResolution();
 	Client::LongQuickSlot();
@@ -68,7 +72,6 @@ void Injected() {
 	BossHP::Hook();
 	Client::MoreHook();
 	Client::Skill();
-	std::cout << "GetModuleFileName hook created" << std::endl;
 	ijl15::CreateHook(); //NMCO::CreateHook();
 	std::cout << "NMCO hook initialized" << std::endl;
 	Client::injected = true;
@@ -76,11 +79,13 @@ void Injected() {
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
+	DisableThreadLibraryCalls(hModule);
 	switch (ul_reason_for_call) {
 	case DLL_PROCESS_ATTACH:
 	{
 		INIReader reader("config.ini");
 		if (reader.ParseError() == 0) {
+			Client::isImg = reader.GetBoolean("general", "isImg", true);
 			Client::m_nGameWidth = reader.GetInteger("general", "width", 1280);
 			Client::m_nGameHeight = reader.GetInteger("general", "height", 720);
 			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", 26);
@@ -93,6 +98,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::setAccCap = reader.GetReal("optional", "setAccCap", 999);
 			Client::setAvdCap = reader.GetReal("optional", "setAvdCap", 999);
 			Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", 199999);
+			Client::longEXP = reader.GetBoolean("optional", "longEXP", false);
 			Client::useTubi = reader.GetBoolean("optional", "useTubi", false);
 			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", false);
 			Client::SwitchChinese = reader.GetBoolean("general", "SwitchChinese", false);
@@ -119,7 +125,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::s4221007 = reader.GetBoolean("skill", "s4221007", false);
 			Client::s14101004 = reader.GetBoolean("skill", "s14101004", true);
 		}
-		if(Client::debug)
+		if (Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want
 		Hook_CreateMutexA(true); //multiclient //ty darter, angel, and alias!
 		Hook_gethostbyname(true);

@@ -175,6 +175,7 @@
       <FileType>CppHeader</FileType>
     </ClInclude>
     <ClInclude Include="BossHP.h" />
+    <ClInclude Include="CharacterEx.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="FixBuddy.h" />
     <ClInclude Include="FixIme.h" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Memory.h" />
     <ClInclude Include="NMCO.h" />
     <ClInclude Include="AutoTypes.h" />
+    <ClInclude Include="Resman.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="syelog.h" />
@@ -222,10 +224,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BossHP.cpp" />
+    <ClCompile Include="CharacterEx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ijl15.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
+    <ClCompile Include="Resman.cpp" />
     <ClCompile Include="ZAllocEx.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Memory.cpp" />
