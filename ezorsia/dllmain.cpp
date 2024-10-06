@@ -58,7 +58,8 @@ void Injected() {
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
 	Resman::Hook_InitializeResMan(Client::isImg);
-	CharacterEx::InitExpOverride(true);
+	CharacterEx::InitExpOverride(Client::longEXP);
+	CharacterEx::InitLevelOverride(Client::shortLevel);
 	Client::UpdateGameStartup();
 	Client::UpdateResolution();
 	Client::LongQuickSlot();
@@ -99,6 +100,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::setAvdCap = reader.GetReal("optional", "setAvdCap", 999);
 			Client::setAtkOutCap = reader.GetReal("optional", "setAtkOutCap", 199999);
 			Client::longEXP = reader.GetBoolean("optional", "longEXP", false);
+			Client::shortLevel = reader.GetBoolean("optional", "shortLevel", false);
 			Client::useTubi = reader.GetBoolean("optional", "useTubi", false);
 			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", false);
 			Client::SwitchChinese = reader.GetBoolean("general", "SwitchChinese", false);

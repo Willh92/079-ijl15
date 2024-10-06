@@ -224,6 +224,9 @@
     <ClCompile Include="CharacterEx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ezorsia.rc">

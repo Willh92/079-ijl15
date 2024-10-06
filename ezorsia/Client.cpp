@@ -18,6 +18,7 @@ int Client::setAccCap = 999;
 int Client::setAvdCap = 999;
 double Client::setAtkOutCap = 199999;
 bool Client::longEXP = false;
+bool Client::shortLevel = false;
 bool Client::useTubi = false;
 bool Client::bigLoginFrame = false;
 bool Client::SwitchChinese = false;

@@ -230,6 +230,7 @@
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ijl15.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\CClientSocket.cpp" />
+    <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp" />
     <ClCompile Include="MapleClientCollectionTypes\COutPacket.cpp" />
     <ClCompile Include="Resman.cpp" />
     <ClCompile Include="ZAllocEx.cpp" />

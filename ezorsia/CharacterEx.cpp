@@ -1,42 +1,7 @@
 #include "stdafx.h"
 #include "CharacterEx.h"
 #include <string>
-
-struct _CInPacket {
-	bool fLoopback;
-	int iState;
-	union {
-		BYTE* lpvData;
-		struct {
-			ULONG dw;
-			USHORT wHeader;
-		} *pHeader;
-		struct {
-			ULONG dw;
-			PUCHAR Data;
-		} *pData;
-	};
-	ULONG Size;
-	USHORT usRawSeq;
-	USHORT usDataLen;
-	USHORT usUnknown;
-	UINT uOffset;
-	PVOID lpv;
-	template<typename T>
-	T Decode()
-	{
-		// TODO write real decode template instead of relying on decodebuffer
-
-		typedef INT(__fastcall* _DecodeBuffer_t)(_CInPacket* pThis, PVOID ecx, PVOID p, size_t nLen);
-		static _DecodeBuffer_t _DecodeBuffer = reinterpret_cast<_DecodeBuffer_t>(0x00431E77);
-
-		T retval;
-
-		_DecodeBuffer(this, NULL, &retval, sizeof(T));
-
-		return retval;
-	}
-};
+#include <unordered_map>
 
 /*
 	character data extension class. stores exp for now.
@@ -48,6 +13,8 @@ private:
 	static CharacterDataEx* m_pInstance;
 public:
 	LONGLONG m_liExp;
+	short m_liLevel;
+	std::unordered_map<int, short> h_liLevel;
 
 	CharacterDataEx()
 	{
@@ -111,6 +78,39 @@ char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
 	return buffer;
 }
 
+LPWSTR __cdecl _itoa_LevelSwap(int value, LPWSTR lpWideCharStr, int radix)
+{
+	CHAR MultiByteStr[64];
+	_itoa_s(CharacterDataEx::GetInstance()->m_liLevel, MultiByteStr, strlen(MultiByteStr), radix);
+	MultiByteToWideChar(0, 1u, MultiByteStr, -1, lpWideCharStr, 20);
+	return lpWideCharStr;
+}
+
+int level = 1;
+void getlevel() {
+	level = CharacterDataEx::GetInstance()->m_liLevel;
+}
+
+void getlevel2(void* esi) {
+	int addr = reinterpret_cast<int>(esi);
+	CharacterDataEx::GetInstance()->m_liLevel = CharacterDataEx::GetInstance()->h_liLevel[addr];
+}
+
+const DWORD itoa_LevelSwapRetn = 0x0063458C;
+__declspec(naked) void itoa_LevelSwap() {
+	__asm {
+		pushad
+		pushfd
+		push esi
+		call getlevel2
+		pop esi
+		popfd
+		popad
+		call _itoa_LevelSwap
+		jmp dword ptr[itoa_LevelSwapRetn]
+	}
+}
+
 /* all arguments passed on the stack despite being a member function */
 void __cdecl FormatExpString_Hook(ZXString<char>* pThis, const char* originalstring, int curexp, int nextlevelexp)
 {
@@ -151,14 +151,24 @@ void* __fastcall _lpfn_NextLevel_Hook(LONGLONG expTable[maxLevelForCustomEXP])	 
 	return expTable;					//currently using predefined array	
 }
 
-int __fastcall ExpSwap__Decode4To8(_CInPacket* pThis, void* ecx)
+int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
 {
+	LONGLONG liExp;
 
-	LONGLONG liExp = pThis->Decode<LONGLONG>();
+	pThis->DecodeBuffer(&liExp, sizeof(liExp));
 
 	CharacterDataEx::GetInstance()->m_liExp = liExp;
 
 	return liExp < INT_MAX ? (INT)liExp : INT_MAX;
+}
+
+char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
+{
+	short level = pThis->Decode2();
+
+	CharacterDataEx::GetInstance()->m_liLevel = level;
+
+	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
 }
 
 const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID edx)
@@ -170,6 +180,48 @@ const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID
 	return static_cast<const char*>(*pThis);
 }
 
+const char* __fastcall ZXString_LevelString(ZXString<char>* pThis, PVOID edx)
+{
+	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevel); // need to include string lib
+
+	pThis->Assign(s.c_str(), s.length());
+
+	return static_cast<const char*>(*pThis);
+}
+
+void putLevel(void* esi) {
+	int addr = reinterpret_cast<int>(esi);
+	if (CharacterDataEx::GetInstance()->h_liLevel.size() > 12) {
+		CharacterDataEx::GetInstance()->h_liLevel.clear();
+	}
+	CharacterDataEx::GetInstance()->h_liLevel.insert(std::make_pair(addr, CharacterDataEx::GetInstance()->m_liLevel));
+}
+
+const DWORD sub_429411 = 0x00429411;
+const DWORD drawLevelStringRetn = 0x008DCE4B;
+__declspec(naked) void drawLevelString() {
+	__asm {
+		call sub_429411
+		call getlevel
+		push level
+		jmp dword ptr[drawLevelStringRetn]
+	}
+}
+
+const DWORD characterLevelStatDecodeRetn = 0x004F2269;
+__declspec(naked) void characterLevelStatDecode() {
+	__asm {
+		call LevelSwap__Decode1To2
+		pushad
+		pushfd
+		push esi
+		call putLevel
+		pop esi
+		popfd
+		popad
+		jmp dword ptr[characterLevelStatDecodeRetn]
+	}
+}
 
 void CharacterEx::InitExpOverride(BOOL bEnable)
 {
@@ -200,4 +252,25 @@ void CharacterEx::InitExpOverride(BOOL bEnable)
 	///* CUIStatusBar::SetNumberValue -> hijack displayed exp above exp gauge */
 	Memory::WriteByte(0x008DEEFE + 1, 64); // increase string size allocation -- v207 = alloca(32)
 	Memory::PatchCall(0x008DEF10, itoa_ExpSwap);
+}
+
+void CharacterEx::InitLevelOverride(BOOL bEnable)
+{
+	if (!bEnable)
+		return;
+	/* GW_CharacterStat::DecodeChangeStat */
+	Memory::PatchCall(0x004F26F8, LevelSwap__Decode1To2);
+
+	/* GW_CharacterStat::Decode */
+	Memory::CodeCave(characterLevelStatDecode, 0x004F2264, 5);
+	//Memory::PatchCall(0x004F2264, LevelSwap__Decode1To2);
+
+	///* CUIStat::Draw */
+	Memory::PatchCall(0x008CB2AF, ZXString_LevelString);
+
+	Memory::WriteByte(0x00634565 + 1, 64);
+	//Memory::PatchCall(0x00634587, _itoa_LevelSwap);
+	Memory::CodeCave(itoa_LevelSwap, 0x00634587, 5);
+
+	Memory::CodeCave(drawLevelString, 0x008DCE43, 5);
 }
