@@ -2,6 +2,9 @@
 #include "CharacterEx.h"
 #include <string>
 #include <unordered_map>
+#include<iostream>
+#include<fstream>
+#include<sstream>
 
 /*
 	character data extension class. stores exp for now.
@@ -71,10 +74,8 @@ BYTE CharacterDataEx::GetCharLevel()
 
 char* __cdecl itoa_ExpSwap(int value, PCHAR buffer, int radix)
 {
-	_i64toa_s(CharacterDataEx::GetInstance()->m_liExp, buffer, strlen(buffer), radix);
-
+	_i64toa_s(CharacterDataEx::GetInstance()->m_liExp, buffer, 64, radix);
 	// TODO abbreviate large numbers to something like 14.123B or something -- maybe make toggleable through some UI setting??
-
 	return buffer;
 }
 
@@ -173,7 +174,16 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
 
 const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID edx)
 {
-	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liExp); // need to include string lib
+	std::ostringstream oss;
+
+	oss << CharacterDataEx::GetInstance()->m_liExp;
+
+	char pencent[64];
+	sprintf_s(pencent, " (%.2f%%)", std::floor((double)CharacterDataEx::GetInstance()->m_liExp / get_next_level_exp() * 10000) / 100);
+
+	oss << pencent;
+
+	std::string s = oss.str();
 
 	pThis->Assign(s.c_str(), s.length());
 
