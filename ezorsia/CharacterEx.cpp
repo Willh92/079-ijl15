@@ -179,7 +179,8 @@ const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID
 	oss << CharacterDataEx::GetInstance()->m_liExp;
 
 	char pencent[64];
-	sprintf_s(pencent, " (%.2f%%)", std::floor((double)CharacterDataEx::GetInstance()->m_liExp / get_next_level_exp() * 10000) / 100);
+	float value = std::floor((double)CharacterDataEx::GetInstance()->m_liExp / get_next_level_exp() * 10000) / 100;
+	sprintf_s(pencent, " (%.2f%%)", min(value, 100.0f));
 
 	oss << pencent;
 

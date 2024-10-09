@@ -110,9 +110,11 @@
 ////static _com_ptr_t_IWzProperty__dtor_t _com_ptr_t_IWzProperty__dtor_Hook = [](_com_ptr_t* pThis) {
 ////	return _com_ptr_t_IWzProperty__dtor(pThis); };
 //	
-//typedef ZXString<char>*(__fastcall* _StringPool__GetString_t)(void* pThis, void* edx, ZXString<char>* result, unsigned int nIdx, char formal); //also ty to the creators of MapleClientEditTemplate
-//static auto _StringPool__GetString = reinterpret_cast<_StringPool__GetString_t>(0x0079E993);//hook stringpool modification //ty !! popcorn //ty darter //ty teto
-//
+typedef ZXString<char>*(__fastcall* _StringPool__GetString_t)(void* pThis, void* edx, ZXString<char>* result, unsigned int nIdx, char formal); //also ty to the creators of MapleClientEditTemplate
+static auto _StringPool__GetString = reinterpret_cast<_StringPool__GetString_t>(0x007A4A5E);//hook stringpool modification //ty !! popcorn //ty darter //ty teto
+typedef ZXString<wchar_t>* (__fastcall* _StringPool__GetStringW_t)(void* pThis, void* edx, ZXString<wchar_t>* result, unsigned int nIdx, char formal);
+static auto _StringPool__GetStringW = reinterpret_cast<_StringPool__GetStringW_t>(0x007A4B2E);//hook stringpool modification //ty !! popcorn //ty darter //ty teto
+
 //typedef HRESULT(__fastcall* _IWzFileSystem__Init_t)(void* pThis, void* edx, void* sPath);	//HRESULT
 //static auto _IWzFileSystem__Init = reinterpret_cast<_IWzFileSystem__Init_t>(0x009F7964);
 //static _IWzFileSystem__Init_t _IWzFileSystem__Init_Hook = [](void* pThis, void* edx, void* sPath) {

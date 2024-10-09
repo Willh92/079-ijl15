@@ -48,7 +48,8 @@ void Injected() {
 	//HookIWzFileSystem__Init(true);
 	//HookIWzNameSpace__Mount(true);
 	//HookCWvsApp__InitializeResMan(false); //experimental //ty to all the contributors of the ragezone release: Client load .img instead of .wz v62~v92
-	//Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
+	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
+	Hook_StringPool__GetStringW(true);
 	//Hook_lpfn_NextLevel(true);
 	////Hook_get_unknown(true);
 	////Hook_get_resource_object(true); //helper function hooks  //ty teto for helping me get started
