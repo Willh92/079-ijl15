@@ -16,6 +16,7 @@ private:
 	static CharacterDataEx* m_pInstance;
 public:
 	LONGLONG m_liExp;
+	LONGLONG m_liExpMsg;
 	short m_liLevel;
 	std::unordered_map<int, short> h_liLevel;
 
@@ -23,6 +24,7 @@ public:
 	{
 		/* setting default value as proof of concept. can be removed. */
 		m_liExp = 0;
+		m_liExpMsg = 0;
 	}
 
 	BYTE GetCharLevel();
@@ -122,6 +124,17 @@ void __cdecl FormatExpString_Hook(ZXString<char>* pThis, const char* originalstr
 	pThis->Assign(s.c_str(), s.length());
 }
 
+void __cdecl FormatExpMsgString_Hook(ZXString<char>* pThis, const char* originalstring, int expmsg)
+{
+	std::stringstream ss;
+	ss << "得到经验值(+";
+	ss << CharacterDataEx::GetInstance()->m_liExpMsg;
+	ss << ")";
+	std::string s = ss.str();
+
+	pThis->Assign(s.c_str(), s.length());
+}
+
 typedef void* (__cdecl* _lpfn_NextLevel_t)(int[]);
 static auto _lpfn_NextLevel = reinterpret_cast<_lpfn_NextLevel_t>(0x00793711);
 
@@ -150,6 +163,17 @@ void* __fastcall _lpfn_NextLevel_Hook(LONGLONG expTable[maxLevelForCustomEXP])	 
 	memcpy(expTable, myArrayForCustomEXP, maxLevelForCustomEXP);	//ty to creator of github.com/PurpleMadness/CustomExpTable
 	expTable[maxLevelForCustomEXP] = 0;	//insert your own formula or predefined array into this part. MUST MATCH server numbers
 	return expTable;					//currently using predefined array	
+}
+
+int __fastcall ExpSwap__Decode4To8msg(CInPacket* pThis, void* edx)
+{
+	LONGLONG liExpMsg;
+
+	pThis->DecodeBuffer(&liExpMsg, sizeof(liExpMsg));
+
+	CharacterDataEx::GetInstance()->m_liExpMsg = liExpMsg;
+
+	return liExpMsg < INT_MAX ? (INT)liExpMsg : INT_MAX;
 }
 
 int __fastcall ExpSwap__Decode4To8(CInPacket* pThis, void* edx)
@@ -244,6 +268,10 @@ void CharacterEx::InitExpOverride(BOOL bEnable)
 
 	/* GW_CharacterStat::Decode -> hijack decode4 call and switch to decode8, then return int value */
 	Memory::PatchCall(0x004F2360, ExpSwap__Decode4To8);
+
+	// GainExpShow
+	Memory::PatchCall(0x00A2B20D, ExpSwap__Decode4To8msg);
+	Memory::PatchCall(0x00A2B337, FormatExpMsgString_Hook);
 
 	Memory::SetHook(true, reinterpret_cast<void**>(&CUIStatusBar__SetNumberValue_t), CUIStatusBar__SetNumberValue_Hook);
 

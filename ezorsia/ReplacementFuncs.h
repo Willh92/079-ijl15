@@ -2145,8 +2145,8 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			//if (strstr(str, "BasicEff.img") != nullptr) {
-				//std::cout << "StringPool__GetString id = " << nIdx << " " << str << std::endl;
+			//if (strstr(str, "经验") != nullptr) {
+			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << std::endl;
 			//}
 			//if (nIdx == 1163)
 			//{
@@ -2154,6 +2154,9 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 			//}
 			switch (nIdx)
 			{
+			//case 233:
+				//if(Client::longEXP)
+				//	*ret = ("得到经验值 (+%ld)"); break;
 				//case 1307:	//1307_UI_LOGINIMG_COMMON_FRAME = 51Bh
 				//	if (EzorsiaV2WzIncluded && !ownLoginFrame) {
 				//		switch (Client::m_nGameWidth)
@@ -2203,9 +2206,9 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 		{
 			auto ret = _StringPool__GetStringW(pThis, edx, result, nIdx, formal);
 			const wchar_t* str = static_cast<const wchar_t*>(*ret);
-			//if (wcsstr(str, L"BasicEff.img") != nullptr) {
-				//std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << std::endl;
-			//}
+			if (wcsstr(str, L"经验") != nullptr) {
+				std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << std::endl;
+			}
 			//if (nIdx == 1163)
 			//{
 			//    *ret = "BeiDou";
