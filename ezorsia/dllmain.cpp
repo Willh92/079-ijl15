@@ -58,6 +58,7 @@ void Injected() {
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
+
 	Resman::Hook_InitializeResMan(Client::isImg);
 	CharacterEx::InitExpOverride(Client::longEXP);
 	CharacterEx::InitLevelOverride(Client::shortLevel);

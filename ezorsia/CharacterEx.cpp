@@ -18,6 +18,7 @@ public:
 	LONGLONG m_liExp;
 	LONGLONG m_liExpMsg;
 	short m_liLevel;
+	short m_liLevelCharInfo;
 	std::unordered_map<int, short> h_liLevel;
 
 	CharacterDataEx()
@@ -196,6 +197,22 @@ char __fastcall LevelSwap__Decode1To2(CInPacket* pThis, void* edx)
 	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
 }
 
+char __fastcall LevelSwapOnCharacterInfo__Decode1To2(CInPacket* pThis, void* edx)
+{
+	short level = pThis->Decode2();
+
+	CharacterDataEx::GetInstance()->m_liLevelCharInfo = level;
+
+	return level < UCHAR_MAX ? (char)level : UCHAR_MAX;
+}
+
+const char* __fastcall LevelOnCharacterInfoStr(ZXString<char>* pThis, PVOID edx)
+{
+	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevelCharInfo);
+
+	pThis->Assign(s.c_str(), s.length());
+}
+
 const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID edx)
 {
 	std::ostringstream oss;
@@ -217,7 +234,7 @@ const char* __fastcall ZXString__GetConstCharString(ZXString<char>* pThis, PVOID
 
 const char* __fastcall ZXString_LevelString(ZXString<char>* pThis, PVOID edx)
 {
-	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevel); // need to include string lib
+	std::string s = std::to_string(CharacterDataEx::GetInstance()->m_liLevel);
 
 	pThis->Assign(s.c_str(), s.length());
 
@@ -312,4 +329,8 @@ void CharacterEx::InitLevelOverride(BOOL bEnable)
 	Memory::CodeCave(itoa_LevelSwap, 0x00634587, 5);
 
 	Memory::CodeCave(drawLevelString, 0x008DCE43, 5);
+
+	//CWvsContext::OnCharacterInfo
+	Memory::PatchCall(0x00A2CE3A, LevelSwapOnCharacterInfo__Decode1To2);   //0x0090740B pic init
+	Memory::PatchCall(0x00908929, LevelOnCharacterInfoStr);
 }
