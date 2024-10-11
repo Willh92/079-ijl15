@@ -167,6 +167,14 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x008C9900 + 1, speedMovementCap); //set speed cap //ty ronan
 
 	Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
+	if (WindowedMode) {
+		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
+		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode
+	}
+	if (RemoveLogos) {
+		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
+	}
+	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //remove start ads
 	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp remove exit ads
 	Memory::CodeCave(unlockPacket, 0x007DADB8, 5);
 }
@@ -480,14 +488,6 @@ void Client::UpdateResolution() {
 	//Memory::WriteInt(0x0061DB08 + 1, (m_nGameHeight / 2) - 130);//??likely related to login pop-up msg
 	//Memory::WriteInt(0x0061DB10 + 1, (m_nGameWidth / 2) - 201);//??likely related to login pop-up msg
 	//Memory::WriteInt(0x0061DB19 + 1, (m_nGameWidth / 2) - 181);//??likely related to login pop-up msg
-
-	if (WindowedMode) {
-		unsigned char forced_window[] = { 0xB8, 0x00, 0x00, 0x00, 0x00 }; //force window mode	//thanks stelmo for showing me how to do this
-		Memory::WriteByteArray(0x00A00EF2, forced_window, sizeof(forced_window));//force window mode
-	}
-	if (RemoveLogos) {
-		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
-	}
 
 	int msgAmntOffset, msgAmnt; msgAmnt = MsgAmount; msgAmntOffset = msgAmnt * 14;
 
