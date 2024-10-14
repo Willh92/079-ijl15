@@ -138,7 +138,8 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;EZORSIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)\MapleClientCollectionTypes;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\MapleClientCollectionTypes;$(ProjectDir)\Util;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -181,14 +182,14 @@
     <ClInclude Include="FixIme.h" />
     <ClInclude Include="ijl.h" />
     <ClInclude Include="ijl15.h" />
-    <ClInclude Include="IWzArchive.h" />
-    <ClInclude Include="IWzProperty.h" />
-    <ClInclude Include="IWzSerialize.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
     <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h" />
     <ClInclude Include="MapleClientCollectionTypes\CInPacket.h" />
     <ClInclude Include="MapleClientCollectionTypes\COutPacket.h" />
     <ClInclude Include="MapleClientCollectionTypes\framework.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzArchive.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzProperty.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzSerialize.h" />
     <ClInclude Include="MapleClientCollectionTypes\TSecType.h" />
     <ClInclude Include="MapleClientCollectionTypes\TSingleton.h" />
     <ClInclude Include="MapleClientCollectionTypes\ZAllocAnonSelector.h" />
@@ -224,6 +225,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="syelog.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Util\robin_growth_policy.h" />
+    <ClInclude Include="Util\robin_hash.h" />
+    <ClInclude Include="Util\robin_map.h" />
+    <ClInclude Include="Util\robin_set.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BossHP.cpp" />

@@ -302,8 +302,8 @@ inline int ini_parse(const char* filename, ini_handler handler, void* user)
 #ifndef __INIREADER_H__
 #define __INIREADER_H__
 
-#include <map>
-#include <set>
+#include <../Util/robin_set.h>
+#include <../Util/robin_map.h>
 #include <string>
 
 // Read an INI file into easy-to-access name/value pairs. (Note that I've gone
@@ -327,7 +327,7 @@ public:
     int ParseError() const;
 
     // Return the list of sections found in ini file
-    const std::set<std::string>& Sections() const;
+    const tsl::robin_set<std::string>& Sections() const;
 
     // Get a string value from INI file, returning default_value if not found.
     std::string Get(std::string section, std::string name,
@@ -354,8 +354,8 @@ public:
 
 protected:
     int _error;
-    std::map<std::string, std::string> _values;
-    std::set<std::string> _sections;
+    tsl::robin_map<std::string, std::string> _values;
+    tsl::robin_set<std::string> _sections;
     static std::string MakeKey(std::string section, std::string name);
     static int ValueHandler(void* user, const char* section, const char* name,
         const char* value);
@@ -386,7 +386,7 @@ inline int INIReader::ParseError() const
     return _error;
 }
 
-inline const std::set<std::string>& INIReader::Sections() const
+inline const tsl::robin_set<std::string>& INIReader::Sections() const
 {
     return _sections;
 }

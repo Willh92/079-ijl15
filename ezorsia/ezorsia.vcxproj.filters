@@ -37,6 +37,9 @@
     <Filter Include="Header Files\ijl15">
       <UniqueIdentifier>{2d9d7a10-717f-41d7-a6cc-e42076bb078a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Util">
+      <UniqueIdentifier>{8a58b2c4-2100-4f18-95b4-c5ab8cf0ca53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dllmain.h">
@@ -186,14 +189,26 @@
     <ClInclude Include="CharacterEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IWzProperty.h">
+    <ClInclude Include="MapleClientCollectionTypes\IWzArchive.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="IWzArchive.h">
+    <ClInclude Include="MapleClientCollectionTypes\IWzProperty.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
-    <ClInclude Include="IWzSerialize.h">
+    <ClInclude Include="MapleClientCollectionTypes\IWzSerialize.h">
       <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\robin_growth_policy.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\robin_hash.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\robin_map.h">
+      <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\robin_set.h">
+      <Filter>Header Files\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

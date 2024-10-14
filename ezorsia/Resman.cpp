@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Resman.h"
 #include <sys/stat.h>
-#include <map>
 #include <algorithm>
 #include "IWzProperty.h"
 #include <sstream>
@@ -74,7 +73,7 @@ struct WZPath
 	std::wstring path;
 };
 
-std::map<IUnknown*, std::shared_ptr<WZPath>> imgPath;
+tsl::robin_map<IUnknown*, std::shared_ptr<WZPath>> imgPath;
 void* GetUOLProperty(VARIANT* prop, void** result)
 {
 	if (prop == NULL || result == NULL)
