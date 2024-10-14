@@ -60,7 +60,7 @@ void Injected() {
 	Client::CRCBypass();
 
 	Resman::Hook_InitializeResMan(Client::isImg);
-	Resman::Hook_InitInlinkOutlink(true);
+	Resman::Hook_InitInlinkOutlink();
 	CharacterEx::InitExpOverride(Client::longEXP);
 	CharacterEx::InitLevelOverride(Client::shortLevel);
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);

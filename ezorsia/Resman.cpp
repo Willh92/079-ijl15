@@ -68,7 +68,13 @@ DWORD* GetResManInstance()
 	return (DWORD*)*g_rm;
 }
 
-std::map<IUnknown*, std::shared_ptr<std::wstring>> gMapImgPath;
+struct WZPath
+{
+	IUnknown* parent;
+	std::wstring path;
+};
+
+std::map<IUnknown*, std::shared_ptr<WZPath>> imgPath;
 void* GetUOLProperty(VARIANT* prop, void** result)
 {
 	if (prop == NULL || result == NULL)
@@ -93,13 +99,15 @@ void* GetUOLProperty(VARIANT* prop, void** result)
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
 {
 	std::wstring strT = (wchar_t*)*sUOL;
-	//if (strT.find(L"64247") != std::wstring::npos) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest << " " << strT << std::endl;
-	//}
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
+	//if (strT.find(L"Miss") != std::wstring::npos) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest << std::endl;
+	//}
 	if (ret && ret->vt == VT_UNKNOWN)
 	{
-		gMapImgPath[ret->punkVal] = std::make_shared<std::wstring>(strT);
+		WZPath wz;
+		wz.path = strT;
+		imgPath[ret->punkVal] = std::make_shared<WZPath>(wz);
 	}
 	return ret;
 };
@@ -108,31 +116,18 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 {
 	std::wstring strT = (wchar_t*)*sPath;
 
-	//if (strT.find(L"64247") != std::wstring::npos) {
-	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << pvargDest << " " << strT << std::endl;
-	//}
-	//if (Client::DamageSkin > 0) {
-	//	if ((int)pvargDest == 0x0019DC70 || (int)pvargDest == 0x0019DCA4 ||
-	//		(int)pvargDest == 0x0019D5C0) {
-	//		VARIANTARG pvarg1 = errorVar;
-	//		VARIANTARG pvarg2 = errorVar;
-	//		std::wostringstream oss;
-	//		oss << L"Effect/DamageSkin.img/";
-	//		oss << Client::DamageSkin;
-	//		oss << "/NoRed0/";
-	//		oss << strT;
-	//		std::wstring path = oss.str();
-	//		std::wcout << " " << path << std::endl;
-	//		return IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
-	//	}
-	//}
-
 	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
 	if (pvargDest->vt == VT_UNKNOWN)
 	{
-		if (gMapImgPath.find(This) != gMapImgPath.end())
+		if (imgPath.find(This) != imgPath.end())
 		{
-			gMapImgPath[pvargDest->punkVal] = gMapImgPath[This];
+			WZPath wz;
+			wz.path = strT;
+			wz.parent = This;
+			imgPath[pvargDest->punkVal] = std::make_shared<WZPath>(wz);
+			//if (strT.find(L"Miss") != std::wstring::npos) {
+			//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << pvargDest << std::endl;
+			//}
 		}
 	}
 	void* sUOL = NULL;
@@ -177,16 +172,22 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 					skinId = it->second;
 				}
 			}
-			//std::wcout << attackObject << " " << skinId << std::endl;
+			std::wstring name;
+			if (imgPath.find(This) != imgPath.end())
+			{
+				name = (*imgPath[This]).path;
+			}
+			//std::wcout << This << " " << attackObject << " " << skinId << std::endl;
 			if (skinId != 0) {
-				if ((int)pvargDest == 0x0019DC70 || (int)pvargDest == 0x0019DCA4 ||
-					(int)pvargDest == 0x0019D5C0) {
+				if (name == L"NoRed0" || name == L"NoRed1" || name == L"NoCri0" || name == L"NoCri1") {
 					VARIANTARG pvarg1 = errorVar;
 					VARIANTARG pvarg2 = errorVar;
 					std::wostringstream oss;
 					oss << L"Effect/DamageSkin.img/";
 					oss << skinId;
-					oss << "/NoRed0/";
+					oss << "/";
+					oss << name;
+					oss << "/";
 					oss << strT;
 					std::wstring path = oss.str();
 					//std::wcout << This << " " << attackObject << " " << path  << std::endl;
@@ -266,11 +267,11 @@ int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a
 		{
 			IUnknown* pUnk = (IUnknown*)*a2;
 
-			if (gMapImgPath.find(pUnk) != gMapImgPath.end())
+			if (imgPath.find(pUnk) != imgPath.end())
 			{
 				//LOGI("_inlink: %S, FullPath: %S", dst.bstrVal, gMapImgPath[pUnk]->c_str());
 				DWORD ptr = 0;
-				ret = GetCanvasPropertyByPath(GetImgFullPath(gMapImgPath[pUnk]->c_str()) + dst.bstrVal, (DWORD*)&ptr);
+				ret = GetCanvasPropertyByPath(GetImgFullPath(imgPath[pUnk]->path.c_str()) + dst.bstrVal, (DWORD*)&ptr);
 				if (ptr)
 					*This = ptr;
 			}
@@ -369,17 +370,18 @@ BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
 }
 
-VOID Resman::Hook_InitInlinkOutlink(BOOL bEnable) {
-	if (!bEnable)
-		return;
-	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
-	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
-	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
+VOID Resman::Hook_InitInlinkOutlink() {
+	Memory::SetHook(true, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
+	Memory::SetHook(true, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
+	Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
 	//skin
-	Memory::PatchCall(0x00437BDA, IWzProperty__GetSkinItem_Hook);
-	Memory::PatchCall(0x00437B62, IWzProperty__GetSkinItem_Hook);
-	Memory::PatchCall(0x00437F8E, IWzProperty__GetSkinItem_Hook);
-	Memory::PatchCall(0x00437DFE, IWzProperty__GetSkinItem_Hook);
+	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
+		Memory::PatchCall(0x0043873E, IWzProperty__GetSkinItem_Hook);
+		Memory::PatchCall(0x00437BDA, IWzProperty__GetSkinItem_Hook);
+		Memory::PatchCall(0x00437B62, IWzProperty__GetSkinItem_Hook);
+		Memory::PatchCall(0x00437F8E, IWzProperty__GetSkinItem_Hook);
+		Memory::PatchCall(0x00437DFE, IWzProperty__GetSkinItem_Hook);
+	}
 }
 
 // Enable Restrictions
