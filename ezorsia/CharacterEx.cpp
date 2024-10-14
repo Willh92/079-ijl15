@@ -363,8 +363,6 @@ int __fastcall OnUserLeave_DecodeID(CInPacket* pThis, void* edx)
 
 	int userId = pThis->Decode4();
 
-	std::cout << userId;
-
 	CharacterEx::h_userSkin.erase(userId);
 
 	return userId;
