@@ -39,6 +39,8 @@ int Client::talkTime = 2000;
 int Client::StatBackgrndWidth = 176;
 int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
+int Client::DamageSkin = 0;
+bool Client::RemoteDamageSkin = false;
 
 bool Client::s14101004 = true;
 bool Client::s4221001 = false;
@@ -153,7 +155,7 @@ void Client::UpdateGameStartup() {
 	Memory::WriteInt(0x0078881B + 1, setAccCap); // 命中，默认999
 	Memory::WriteInt(0x0078884D + 1, setAvdCap); // 回避，默认999
 	Memory::WriteInt(0x0079617F + 1, 2147483646); // 计算物理伤害相关，意义不明，默认1999，int 4字节
-	//Memory::WriteInt(0x00796BF2 + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改的话，打怪输出计算的魔法伤害就是按1999计算的
+	Memory::WriteInt(0x00796BF2 + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改的话，打怪输出计算的魔法伤害就是按1999计算的
 	Memory::WriteInt(0x007971CC + 1, 2147483646); // 计算魔攻MDamage的，默认值1999，int 4字节，注意：这里不改似乎也不影响输出计算
 	Memory::WriteInt(0x007942B1 + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
 	Memory::WriteInt(0x007948AF + 1, 2147483646); //CalcDamage::PDamage 999，意义不明，int 4字节
@@ -541,7 +543,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x0099EBA9 + 1, m_nGameHeight);
 	Memory::WriteInt(0x005BBAE8 + 1, m_nGameWidth); //顶部通知
 	Memory::WriteInt(0x005BBAE3 + 1, m_nGameHeight);
-	Memory::WriteInt(0x005EE9E7 + 1, m_nGameWidth / 2); //地图指示
+	Memory::WriteInt(0x005449E7 + 1, m_nGameWidth / 2); //地图指示
 	Memory::WriteInt(0x005449E2 + 1, 230);
 
 	Memory::WriteInt(0x008581D3 + 1, m_nGameHeight - 198); //system menu pop up
@@ -900,7 +902,12 @@ void Client::MoreHook() {
 	Memory::WriteInt(0x009AFEEE + 1, 480);
 
 	Memory::CodeCave(faceHairCave, 0x005FCEFF, 10);
+	Memory::CodeCave(faceHairNpcCave, 0x009B7E99, 18);
 	Memory::CodeCave(canSendPkgTimeCave, 0x00485169, 10);
+
+	// Worldmap Center on open codecave
+	Memory::CodeCave(CodeCave_CWorldMapDlg__OnCreate, 0x009F51ED, 13);
+
 
 	if (talkRepeat)
 	{

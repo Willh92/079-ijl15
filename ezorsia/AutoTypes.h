@@ -132,3 +132,11 @@ static auto _StringPool__GetStringW = reinterpret_cast<_StringPool__GetStringW_t
 //
 //typedef void* (__cdecl* _lpfn_NextLevel_t)(int[]); 
 //static auto _lpfn_NextLevel = reinterpret_cast<_lpfn_NextLevel_t>(0x0078C8A6);
+
+//typedef void(__fastcall* _CLoginSendSelectCharPacket_t)(void* pThis, void* edx);
+//static auto _CLoginSendSelectCharPacket = reinterpret_cast<_CLoginSendSelectCharPacket_t>(0x005F726D);
+//static _CLoginSendSelectCharPacket_t _CLoginSendSelectCharPacket_Hook = [](void* pThis, void* edx)
+//-> void {_CLoginSendSelectCharPacket(pThis, edx); //changing the values here will modify the result of the function
+////Client::loggedIn = 1;						//usually put changes here
+////Client::UpdateResolution();	//tried to get client to change to different res than login while in main game. failed. this is what's left
+//};

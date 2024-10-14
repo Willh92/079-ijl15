@@ -30,5 +30,78 @@
 
 - 双击跳跃键使用二段跳
 - 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
+- 角色等级突破Short类型，角色经验突破为Long类型
+- 伤害皮肤
+
+### 伤害皮肤说明:
+
+伤害皮肤的img文件放在Data/Effect/DamageSkin.img路径，里头格式为{皮肤ID}/NoRed0   皮肤ID 0为默认皮肤
+
+#### 本地版本：
+
+DamageSkin={皮肤ID}，直接开起，仅自己可见
+
+#### 远程版本：
+
+RemoteDamageSkin=true,服务器需要做相应的处理,主要hook了家族名称数据包做对应加载
+
+假设GuildName为 `途插天下第一`皮肤ID为 `2`
+则对应发送数据包GuildName变为`途插天下第一$$2`
+
+GuildName不存在的时候用`#`替代变为`#$$2`
+
+1. `MapleStat`添加 `DAMAGESKIN(4194304)` 枚举类型
+2. `MaplePacketCreator.updatePlayerStats`添加`DAMAGESKIN`处理为`writeInt`
+
+#### 更新皮肤的参考代码如下
+
+```Java
+public static byte[] updatePlayerStats(Map<MapleStat, Number> mystats, boolean itemReaction, MapleCharacter chr) {
+    //……省略
+                case DAMAGESKIN:
+                    mplew.writeInt(statupdate2.getValue().intValue());
+                    continue;
+    //……省略
+}
+
+public void updateDamageSkin(int damageSkin) {
+        this.damageSkin = damageSkin;
+        MapleMap map = getMap();
+        if (map != null) {
+            String guildName = null;
+            MapleGuild gs = World.Guild.getGuild(getGuildId());
+            if (gs != null) {
+                guildName = gs.getName();
+            }
+            if (guildName == null || guildName.length() == 0) {
+                guildName = "#";
+            }
+            getMap().broadcastMessage(this, MaplePacketCreator.guildNameChanged(getId()
+                    , guildName + "$$" + damageSkin), false);
+        }
+        updateSingleStat(MapleStat.DAMAGESKIN, damageSkin);
+    }
+
+public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
+        //……省略
+        //找到对应代码块修改
+        if (chr.getGuildId() <= 0) {
+            mplew.writeMapleAsciiString("#$$" + chr.getDamageSkin());
+            mplew.writeZeroBytes(6);
+        } else {
+            MapleGuild gs = World.Guild.getGuild(chr.getGuildId());
+            if (gs != null) {
+                mplew.writeMapleAsciiString(gs.getName() + "$$" + chr.getDamageSkin());
+                mplew.writeShort(gs.getLogoBG());
+                mplew.write(gs.getLogoBGColor());
+                mplew.writeShort(gs.getLogo());
+                mplew.write(gs.getLogoColor());
+            } else {
+                mplew.writeMapleAsciiString("#$$" + chr.getDamageSkin());
+                mplew.writeZeroBytes(6);
+            }
+        }
+        //……省略
+```
 
 # 仅供学习交流使用!!!

@@ -1611,6 +1611,7 @@ __declspec(naked) void calcSpeedHook()
 DWORD faceRtn = 0x005FCF6C;
 DWORD hairRtn = 0x005FCF3F;
 DWORD faceHairCaveRtn = 0x005FCF09;
+DWORD faceHairNpcRtn = 0x009B7EAB;
 __declspec(naked) void faceHairCave()
 {
 	__asm {
@@ -1632,6 +1633,65 @@ __declspec(naked) void faceHairCave()
 
 		label_hair :
 		jmp hairRtn
+	}
+}
+
+// Face and Hair NPC Extension
+__declspec(naked) void faceHairNpcCave() {
+	__asm {
+		cmp eax, 0x2
+		je face_check
+		cmp eax, 0x5
+		je face_check
+		cmp eax, 0x3
+		je hair_check
+		cmp eax, 0x4
+		je hair_check
+		cmp eax, 0x6
+		je hair_check
+
+		jmp skin_check
+
+		face_check :
+		mov eax, 0x0
+			mov ecx, 0x0
+			jmp return_point
+
+			hair_check :
+		mov eax, 0x1
+			mov ecx, 0x1
+			jmp return_point
+
+			skin_check :
+		mov eax, 0x2
+			mov ecx, 0x2
+
+			return_point :
+			jmp DWORD PTR[faceHairNpcRtn]
+	}
+}
+
+//WORLD MAP CENTER ON OPEN CODECAVE
+const DWORD CodeCave_CWorldMapDlg__OnCreate_Return = 0x009F51FA;
+__declspec(naked) void CodeCave_CWorldMapDlg__OnCreate()
+{
+	__asm {
+		push    524; dialogue height
+		push    666; dialogue width
+
+		// push -> (screenHeight / 2) - 262
+		mov        eax, [Client::m_nGameHeight]
+		shr        eax, 1
+		sub        eax, 262
+		push    eax
+
+		// push -> (screenWidth / 2) - 333
+		mov        eax, [Client::m_nGameWidth]
+		shr        eax, 1
+		sub        eax, 333
+		push    eax
+
+		jmp        dword ptr[CodeCave_CWorldMapDlg__OnCreate_Return]
 	}
 }
 

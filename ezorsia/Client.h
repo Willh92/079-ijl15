@@ -53,6 +53,8 @@ public:
 	static int StatBackgrndWidth;
 	static int StatDetailBackgrndWidth;
 	static int StatDetailBackgrndWidthRect;
+	static int DamageSkin;
+	static bool RemoteDamageSkin;
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;

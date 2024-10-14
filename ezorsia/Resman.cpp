@@ -1,6 +1,13 @@
 #include "stdafx.h"
 #include "Resman.h"
 #include <sys/stat.h>
+#include <map>
+#include <algorithm>
+#include "IWzProperty.h"
+#include <sstream>
+#include <CharacterEx.h>
+
+VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
 
 enum RESMAN_PARAM {
 	RC_AUTO_SERIALIZE = 0x1,
@@ -15,6 +22,17 @@ enum RESMAN_PARAM {
 };
 
 typedef void(__fastcall* CWvsApp__InitializeResMan_t)(void*);
+typedef DWORD(__fastcall* _Ztl_variant_t__GetUnknown)(VARIANTARG* This, void* notuse, bool a2, bool a3);
+typedef VARIANTARG* (__fastcall* _IWzResMan__GetObjectA)(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux);
+typedef VARIANTARG* (__fastcall* _IWzProperty__GetItem)(IUnknown* This, void* notuse, VARIANTARG* pvargDest, int* sPath);
+typedef IUnknown* (__fastcall* _IWzUOL_QueryInterface)(DWORD* This, void* notuse, IUnknown* a2);
+typedef int(__fastcall* _IWzUOL__GetfilePath)(DWORD* This, void* notuse, int a2);
+typedef int(__fastcall* _IWzCanvas_operator_equal)(DWORD* This, void* notuse, DWORD* a2);
+typedef int(__fastcall* _IWzCanvas__Getwidth)(DWORD* This, void* notuse);
+typedef int(__fastcall* _IWzCanvas__Getheight)(DWORD* This, void* notuse);
+typedef DWORD(__fastcall* _IWzCanvas__GetProperty)(DWORD* This, void* notuse, IUnknown** a2);
+typedef DWORD* (__cdecl* _get_unknown)(DWORD*, VARIANT*);
+typedef int(__fastcall* _bstr_constructor_wchar)(void* ecx, void* edx, const wchar_t* str);
 
 // Function Address
 auto CWvsApp__InitializeResMan = reinterpret_cast<CWvsApp__InitializeResMan_t>(0x009FFF26);
@@ -28,10 +46,262 @@ auto bstr_constructor = (void(__fastcall*)(void*, void*, const char*))0x004063D7
 auto IWzFileSystem__Init = (void* (__fastcall*)(void*, void*, void*))0x00A00D93;
 auto IWZNameSpace__Mount = (void* (__fastcall*)(void*, void*, void*, void*, void*))0x00A00D39;
 
+_Ztl_variant_t__GetUnknown Ztl_variant_t__GetUnknown = (_Ztl_variant_t__GetUnknown)0x004032B2;
+_IWzResMan__GetObjectA IWzResMan__GetObjectA = (_IWzResMan__GetObjectA)0x00404A75;
+_IWzProperty__GetItem IWzProperty__GetItem = (_IWzProperty__GetItem)0x00403AC7;
+_IWzUOL_QueryInterface IWzUOL_QueryInterface = (_IWzUOL_QueryInterface)0x004170BD;
+_IWzUOL__GetfilePath IWzUOL__GetfilePath = (_IWzUOL__GetfilePath)0x004152B1;
+_IWzCanvas_operator_equal IWzCanvas_operator_equal = (_IWzCanvas_operator_equal)0x0041EF46;
+_IWzCanvas__Getwidth IWzCanvas__Getwidth = (_IWzCanvas__Getwidth)0x0040C250;
+_IWzCanvas__Getheight IWzCanvas__Getheight = (_IWzCanvas__Getheight)0x0040C2E7;
+_IWzCanvas__GetProperty IWzCanvas__GetProperty = (_IWzCanvas__GetProperty)0x00404BA3;
+_get_unknown get_unknown = (_get_unknown)0x0041511B;
+_bstr_constructor_wchar bstr_constructor_wchar = (_bstr_constructor_wchar)0x00402C82;
+
 // DWORD Address
 auto g_rm = (void**)0x00BE2784;
 auto g_root = (void**)0x00BE277C;
 auto pNameSpace = 0x00BE1FC0;
+
+DWORD* GetResManInstance()
+{
+	return (DWORD*)*g_rm;
+}
+
+std::map<IUnknown*, std::shared_ptr<std::wstring>> gMapImgPath;
+void* GetUOLProperty(VARIANT* prop, void** result)
+{
+	if (prop == NULL || result == NULL)
+		return NULL;
+	IUnknown* pUnk = (IUnknown*)Ztl_variant_t__GetUnknown(prop, nullptr, 0, 0);
+	if (pUnk)
+	{
+		pUnk->AddRef();
+		IUnknown* pWzUOL = NULL;
+		IWzUOL_QueryInterface((DWORD*)&pWzUOL, nullptr, (IUnknown*)&pUnk);
+
+		if (pWzUOL)
+		{
+			IWzUOL__GetfilePath((DWORD*)pWzUOL, nullptr, (int)result);
+			if (*result)
+				return *result;
+		}
+	}
+	return NULL;
+}
+
+VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
+{
+	std::wstring strT = (wchar_t*)*sUOL;
+	//if (strT.find(L"64247") != std::wstring::npos) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest << " " << strT << std::endl;
+	//}
+	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
+	if (ret && ret->vt == VT_UNKNOWN)
+	{
+		gMapImgPath[ret->punkVal] = std::make_shared<std::wstring>(strT);
+	}
+	return ret;
+};
+
+VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse, VARIANTARG* pvargDest, int* sPath)
+{
+	std::wstring strT = (wchar_t*)*sPath;
+
+	//if (strT.find(L"64247") != std::wstring::npos) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << pvargDest << " " << strT << std::endl;
+	//}
+	//if (Client::DamageSkin > 0) {
+	//	if ((int)pvargDest == 0x0019DC70 || (int)pvargDest == 0x0019DCA4 ||
+	//		(int)pvargDest == 0x0019D5C0) {
+	//		VARIANTARG pvarg1 = errorVar;
+	//		VARIANTARG pvarg2 = errorVar;
+	//		std::wostringstream oss;
+	//		oss << L"Effect/DamageSkin.img/";
+	//		oss << Client::DamageSkin;
+	//		oss << "/NoRed0/";
+	//		oss << strT;
+	//		std::wstring path = oss.str();
+	//		std::wcout << " " << path << std::endl;
+	//		return IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+	//	}
+	//}
+
+	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
+	if (pvargDest->vt == VT_UNKNOWN)
+	{
+		if (gMapImgPath.find(This) != gMapImgPath.end())
+		{
+			gMapImgPath[pvargDest->punkVal] = gMapImgPath[This];
+		}
+	}
+	void* sUOL = NULL;
+	GetUOLProperty(pvargDest, &sUOL);
+	if (sUOL)
+	{
+		VARIANTARG pvarg1 = errorVar;
+		VARIANTARG pvarg2 = errorVar;
+		ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)sUOL, (int)&pvarg1, (int)&pvarg2);
+	}
+
+	return ret;
+};
+
+
+int attackObject = 0;
+const DWORD attackObjectAddr = 0x0019DD94 + 8;
+__declspec(naked) void getattackObjectId() {
+
+	__asm {
+		push eax
+		mov eax, [attackObjectAddr]
+		mov eax, dword ptr[eax]
+		mov attackObject, eax
+		pop eax
+		ret
+	}
+}
+
+
+VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* notuse, VARIANTARG* pvargDest, int* sPath)
+{
+	std::wstring strT = (wchar_t*)*sPath;
+
+	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
+		try {
+			getattackObjectId();
+			int skinId = (Client::DamageSkin > 0 && attackObject == CharacterEx::m_loginUserId) ? Client::DamageSkin : 0;
+			if (Client::RemoteDamageSkin) {
+				auto it = CharacterEx::h_userSkin.find(attackObject);
+				if (it != CharacterEx::h_userSkin.end()) {
+					skinId = it->second;
+				}
+			}
+			//std::wcout << attackObject << " " << skinId << std::endl;
+			if (skinId != 0) {
+				if ((int)pvargDest == 0x0019DC70 || (int)pvargDest == 0x0019DCA4 ||
+					(int)pvargDest == 0x0019D5C0) {
+					VARIANTARG pvarg1 = errorVar;
+					VARIANTARG pvarg2 = errorVar;
+					std::wostringstream oss;
+					oss << L"Effect/DamageSkin.img/";
+					oss << skinId;
+					oss << "/NoRed0/";
+					oss << strT;
+					std::wstring path = oss.str();
+					//std::wcout << This << " " << attackObject << " " << path  << std::endl;
+					return IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+				}
+			}
+		}
+		catch (...) {}
+	}
+	return  IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
+};
+
+DWORD GetCanvasPropertyByPath(std::wstring path, DWORD* result)
+{
+	VARIANT varDest = { 0 };
+	VARIANT var1 = { 0 };
+	VARIANT var2 = { 0 };
+	DWORD varUnk = 0;
+	void* sUol = NULL;
+	bstr_constructor_wchar(&sUol, nullptr, path.c_str());
+	auto v9 = IWzResMan__GetObjectA((DWORD*)*g_rm, nullptr, &varDest, (int*)sUol, (int)&var1, (int)&var2);
+	auto v10 = get_unknown(&varUnk, v9);
+	return IWzCanvas_operator_equal(result, nullptr, v10);
+}
+
+std::wstring GetImgFullPath(std::wstring strT)
+{
+	std::wstring lstr = strT;
+	std::transform(lstr.begin(), lstr.end(), lstr.begin(), towlower);
+
+	int pos = lstr.rfind(L".img");
+	if (pos != std::string::npos)
+	{
+		pos += 4; // 4
+		strT = strT.substr(0, pos);
+		strT += L"/";
+	}
+	return strT;
+}
+
+int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a2)
+{
+	auto ret = IWzCanvas_operator_equal(This, nullptr, a2);
+	IUnknown* prop = NULL;
+	void* pStrInlink = NULL;
+	void* pStrOutlink = NULL;
+	VARIANT dst = { 0 };
+	int w = 0, h = 0;
+	if (!*This)
+		goto RET;
+
+	w = IWzCanvas__Getwidth((DWORD*)*This, nullptr);
+	h = IWzCanvas__Getheight((DWORD*)*This, nullptr);
+
+	if (w > 1 || h > 1)
+		goto RET;
+
+	IWzCanvas__GetProperty((DWORD*)*This, nullptr, &prop);
+
+	if (!prop)
+		goto RET;
+
+	bstr_constructor(&pStrInlink, nullptr, "_inlink");
+
+	if (!pStrInlink)
+		goto OUTLINK;
+
+	IWzProperty__GetItem(prop, nullptr, &dst, (int*)pStrInlink);
+
+	if (!dst.vt)
+		goto OUTLINK;
+
+	if (dst.vt == VT_BSTR)
+	{
+		void* link = NULL;
+		if (dst.bstrVal)
+		{
+			IUnknown* pUnk = (IUnknown*)*a2;
+
+			if (gMapImgPath.find(pUnk) != gMapImgPath.end())
+			{
+				//LOGI("_inlink: %S, FullPath: %S", dst.bstrVal, gMapImgPath[pUnk]->c_str());
+				DWORD ptr = 0;
+				ret = GetCanvasPropertyByPath(GetImgFullPath(gMapImgPath[pUnk]->c_str()) + dst.bstrVal, (DWORD*)&ptr);
+				if (ptr)
+					*This = ptr;
+			}
+		}
+	}
+
+OUTLINK:
+	bstr_constructor(&pStrOutlink, nullptr, "_outlink");
+	IWzProperty__GetItem(prop, nullptr, &dst, (int*)pStrOutlink);
+
+	if (!dst.vt)
+		goto RET;
+
+	if (dst.vt == VT_BSTR)
+	{
+		void* link = NULL;
+		if (dst.bstrVal)
+		{
+			DWORD ptr = 0;
+			ret = GetCanvasPropertyByPath(dst.bstrVal, (DWORD*)&ptr);
+			if (ptr)
+				*This = ptr;
+		}
+	}
+
+
+RET:
+	if (prop)
+		((IUnknown*)prop)->Release();
+	return ret;
+};
 
 // Disable Restrictions
 #pragma optimize("", off)
@@ -97,6 +367,19 @@ BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
 		};
 
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
+}
+
+VOID Resman::Hook_InitInlinkOutlink(BOOL bEnable) {
+	if (!bEnable)
+		return;
+	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
+	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
+	//Memory::SetHook(bEnable, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
+	//skin
+	Memory::PatchCall(0x00437BDA, IWzProperty__GetSkinItem_Hook);
+	Memory::PatchCall(0x00437B62, IWzProperty__GetSkinItem_Hook);
+	Memory::PatchCall(0x00437F8E, IWzProperty__GetSkinItem_Hook);
+	Memory::PatchCall(0x00437DFE, IWzProperty__GetSkinItem_Hook);
 }
 
 // Enable Restrictions

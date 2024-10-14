@@ -181,6 +181,9 @@
     <ClInclude Include="FixIme.h" />
     <ClInclude Include="ijl.h" />
     <ClInclude Include="ijl15.h" />
+    <ClInclude Include="IWzArchive.h" />
+    <ClInclude Include="IWzProperty.h" />
+    <ClInclude Include="IWzSerialize.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
     <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h" />
     <ClInclude Include="MapleClientCollectionTypes\CInPacket.h" />

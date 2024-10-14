@@ -186,6 +186,15 @@
     <ClInclude Include="CharacterEx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IWzProperty.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="IWzArchive.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="IWzSerialize.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

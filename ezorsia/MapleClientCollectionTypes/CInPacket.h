@@ -20,7 +20,7 @@ public:
 public:
 	char Decode1();
 	short Decode2();
-	unsigned long Decode4();
+	int Decode4();
 	int DecodeBuffer(PVOID out, int len);
 	unsigned char* DecodeStr(ZXString<char>* p);
 	int DecryptData(int unknow);

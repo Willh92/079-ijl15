@@ -2206,9 +2206,9 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 		{
 			auto ret = _StringPool__GetStringW(pThis, edx, result, nIdx, formal);
 			const wchar_t* str = static_cast<const wchar_t*>(*ret);
-			if (wcsstr(str, L"经验") != nullptr) {
-				std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << std::endl;
-			}
+			//if (wcsstr(str, L"经验") != nullptr) {
+			//	std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << std::endl;
+			//}
 			//if (nIdx == 1163)
 			//{
 			//    *ret = "BeiDou";
