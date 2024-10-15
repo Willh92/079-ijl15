@@ -272,11 +272,16 @@ int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a
 
 			if (imgPath.find(pUnk) != imgPath.end())
 			{
-				//LOGI("_inlink: %S, FullPath: %S", dst.bstrVal, gMapImgPath[pUnk]->c_str());
 				DWORD ptr = 0;
-				ret = GetCanvasPropertyByPath(GetImgFullPath(imgPath[pUnk]->path.c_str()) + dst.bstrVal, (DWORD*)&ptr);
-				if (ptr)
+				std::shared_ptr<WZPath> img = imgPath[pUnk];
+				if (img->parent) {
+					img = imgPath[img->parent];
+				}
+				//std::wcout << "_inlink: " << dst.bstrVal << ", FullPath:" << img->path << std::endl;
+				ret = GetCanvasPropertyByPath(GetImgFullPath(img->path.c_str()) + dst.bstrVal, (DWORD*)&ptr);
+				if (ptr) {
 					*This = ptr;
+				}
 			}
 		}
 	}
