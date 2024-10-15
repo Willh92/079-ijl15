@@ -190,7 +190,11 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 					oss << strT;
 					std::wstring path = oss.str();
 					//std::wcout << This << " " << attackObject << " " << path  << std::endl;
-					return IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+					auto ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+					if (ret && ret->vt == VT_UNKNOWN)
+					{
+						return ret;
+					}
 				}
 			}
 		}

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "CharacterEx.h"
 #include <string>
-#include <unordered_map>
 #include<iostream>
 #include<fstream>
 #include<sstream>

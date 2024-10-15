@@ -50,12 +50,26 @@ RemoteDamageSkin=true,服务器需要做相应的处理,主要hook了家族名�
 
 GuildName不存在的时候用`#`替代变为`#$$2`
 
-1. `MapleStat`添加 `DAMAGESKIN(4194304)` 枚举类型
-2. `MaplePacketCreator.updatePlayerStats`添加`DAMAGESKIN`处理为`writeInt`
+1. `client.MapleStat`添加 `DAMAGESKIN(4194304)` 枚举类型
+2. `tools.MaplePacketCreator.MaplePacketCreator.updatePlayerStats`添加`DAMAGESKIN`处理为`writeInt`
 
 #### 更新皮肤的参考代码如下
 
 ```Java
+//handling.channel.handler.InterServerHandler
+public static void LoggedIn(int playerid, MapleClient c) {
+     //……省略
+     player.sendDamageSkin();  //发送伤害皮肤包
+     player.sendMacros();
+      //……省略
+}
+
+//client.MapleCharacter
+public void sendDamageSkin() {
+    updateSingleStat(MapleStat.DAMAGESKIN, this.damageSkin);
+}
+
+//tools.MaplePacketCreator
 public static byte[] updatePlayerStats(Map<MapleStat, Number> mystats, boolean itemReaction, MapleCharacter chr) {
     //……省略
                 case DAMAGESKIN:
@@ -64,6 +78,7 @@ public static byte[] updatePlayerStats(Map<MapleStat, Number> mystats, boolean i
     //……省略
 }
 
+//tools.MaplePacketCreator
 public void updateDamageSkin(int damageSkin) {
         this.damageSkin = damageSkin;
         MapleMap map = getMap();
