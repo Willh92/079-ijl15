@@ -36,25 +36,8 @@ void Injected() {
 		Sleep(10);
 	}
 	std::cout << "GetModuleFileName hook created" << std::endl;
-	//Waitting fo Maplestory.exe load
-	//HookCreateWindowExA(true); //default ezorsia
-	//HookGetModuleFileName(true); //default ezorsia
-	//HookPcCreateObject_IWzResMan(true);
-	//HookPcCreateObject_IWzNameSpace(true);
-	//HookPcCreateObject_IWzFileSystem(true);
-	//HookCWvsApp__Dir_BackSlashToSlash(true);
-	//HookCWvsApp__Dir_upDir(true);
-	//Hookbstr_ctor(true);
-	//HookIWzFileSystem__Init(true);
-	//HookIWzNameSpace__Mount(true);
-	//HookCWvsApp__InitializeResMan(false); //experimental //ty to all the contributors of the ragezone release: Client load .img instead of .wz v62~v92
 	Hook_StringPool__GetString(true); //hook stringpool modification //ty !! popcorn //ty darter
 	Hook_StringPool__GetStringW(true);
-	//Hook_lpfn_NextLevel(true);
-	////Hook_get_unknown(true);
-	////Hook_get_resource_object(true); //helper function hooks  //ty teto for helping me get started
-	////Hook_com_ptr_t_IWzProperty__ctor(true);£¬Âò
-	//std::cout << "Applying resolution " << Client::m_nGameWidth << "x" << Client::m_nGameHeight << std::endl;
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
@@ -77,6 +60,7 @@ void Injected() {
 	BossHP::Hook();
 	Client::MoreHook();
 	Client::Skill();
+	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
 	std::cout << "NMCO hook initialized" << std::endl;
 	Client::injected = true;
@@ -124,6 +108,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::serverIP_Port = reader.GetInteger("general", "serverIP_Port", 8484);
 			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
+			Client::meleePunching = reader.GetBoolean("optional", "meleePunching", true);
+			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
+			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
 			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
 			Client::StatDetailBackgrndWidth = reader.GetInteger("ui", "StatDetailBackgrndWidth", 177);
 			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);

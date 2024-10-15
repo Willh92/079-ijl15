@@ -36,6 +36,9 @@ std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
 int Client::talkTime = 2000;
+bool Client::showItemID = false;
+bool Client::showWeaponSpeed = true;
+bool Client::meleePunching = true;
 int Client::StatBackgrndWidth = 176;
 int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
@@ -898,6 +901,14 @@ void Client::NoPassword() {
 }
 
 void Client::MoreHook() {
+
+	if (!Client::showWeaponSpeed)
+		Memory::WriteByte(0x008F2EFF, 0xEB);//hide draw weapons speed
+
+	if (!Client::meleePunching) {
+		byte meleePunching[] = { 0x00,0x5A,0x5A };
+		Memory::WriteByteArray(0x00958D80, meleePunching, sizeof(meleePunching));
+	}
 
 	Memory::WriteInt(0x009AFEEE + 1, 480);
 
