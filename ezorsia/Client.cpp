@@ -177,8 +177,8 @@ void Client::UpdateGameStartup() {
 	if (RemoveLogos) {
 		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
 	}
-	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //remove start ads
-	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp remove exit ads
+	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //移除启动广告(remove start ads )
+	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp 移除退出广告(remove exit ads)
 	Memory::CodeCave(unlockPacket, 0x007DADB8, 5);
 }
 
@@ -188,14 +188,14 @@ void Client::UpdateResolution() {
 		Memory::WriteInt(dwQuickSlotInitHPos + 1, 580); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotHPos + 1, 580); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -580); //lea ebx,[eax-647]
-		Memory::WriteInt(0x008E4448 + 1, 587);  //装备按鈕寬度
-		Memory::WriteInt(0x008E53FB + 1, 587);  //装备闪烁寬度
-		Memory::WriteInt(0x008E44C5 + 1, 621);  //背包按鈕寬度
-		Memory::WriteInt(0x008E549E + 1, 621);  //背包闪烁寬度
-		Memory::WriteInt(0x008E4542 + 1, 587);  //能力值按鈕寬度
+		Memory::WriteInt(0x008E4448 + 1, 587);  //装备按钮宽度
+		Memory::WriteInt(0x008E53FB + 1, 587);  //装备闪烁宽度
+		Memory::WriteInt(0x008E44C5 + 1, 621);  //背包按钮宽度
+		Memory::WriteInt(0x008E549E + 1, 621);  //背包闪烁宽度
+		Memory::WriteInt(0x008E4542 + 1, 587);  //能力值按钮宽度
 		Memory::WriteInt(0x008E5358 + 1, 587);  //能力值闪烁图标宽度
-		Memory::WriteInt(0x008E45BF + 1, 621);  //技能按鈕寬度
-		Memory::WriteInt(0x008E5157 + 1, 621);  //技能按鈕寬度
+		Memory::WriteInt(0x008E45BF + 1, 621);  //技能按钮宽度
+		Memory::WriteInt(0x008E5157 + 1, 621);  //技能按钮宽度
 		return;
 	}
 
