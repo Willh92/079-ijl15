@@ -70,7 +70,7 @@ void Injected() {
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
 
-	Resman::Hook_InitializeResMan(Client::isImg);
+	Resman::Hook_InitializeResMan();
 	Resman::Hook_InitInlinkOutlink();
 	CharacterEx::InitExpOverride(Client::longEXP);
 	CharacterEx::InitLevelOverride(Client::shortLevel);
@@ -104,7 +104,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	{
 		INIReader reader("config.ini");
 		if (reader.ParseError() == 0) {
-			Client::isImg = reader.GetBoolean("general", "isImg", true);
 			Client::m_nGameWidth = reader.GetInteger("general", "width", 1280);
 			Client::m_nGameHeight = reader.GetInteger("general", "height", 720);
 			Client::MsgAmount = reader.GetInteger("general", "MsgAmount", 26);
@@ -127,7 +126,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::debug = reader.GetBoolean("debug", "debug", false);
 			Client::ijl15hook = reader.GetBoolean("debug", "ijl15hook", false);
 			Client::noPassword = reader.GetBoolean("debug", "noPassword", false);
-			Client::imeType = reader.GetInteger("general", "imeType", 1);
 			ownLoginFrame = reader.GetBoolean("optional", "ownLoginFrame", false);
 			ownCashShopFrame = reader.GetBoolean("optional", "ownCashShopFrame", false);
 			EzorsiaV2WzIncluded = reader.GetBoolean("general", "EzorsiaV2WzIncluded", true);

@@ -339,70 +339,78 @@ VOID loadDamageFile() {
 	catch (...) {}
 }
 
-BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
+BOOL Resman::Hook_InitializeResMan() {
 
 	CWvsApp__InitializeResMan_t Hook = [](void*) {
 
-		// Generic
-		void* pData = nullptr;
-		void* pFileSystem = nullptr;
-		void* pUnkOuter = 0;
-		void* nPriority = 0;
-		void* sPath;
-
-		// Resman
-		PcCreateObject_IWzResMan(L"ResMan", g_rm, pUnkOuter);
-
-		void* pIWzResMan_Instance = *g_rm;
-		auto IWzResMan__SetResManParam = *(void(__cdecl**)(void*, int, int, int))((*(int*)pIWzResMan_Instance) + 20); // Hard Coded
-		IWzResMan__SetResManParam(pIWzResMan_Instance, RC_AUTO_REPARSE | RC_AUTO_SERIALIZE, -1, -1);
-
-		// NameSpace
-		PcCreateObject_IWzNameSpace(L"NameSpace", g_root, pUnkOuter);
-
-		void* pIWzNameSpace_Instance = g_root;
-		auto PcSetRootNameSpace = (void(__cdecl*)(void*, int)) * (int*)pNameSpace; // Hard Coded
-		PcSetRootNameSpace(pIWzNameSpace_Instance, 1);
-
-		// Game FileSystem
-		PcCreateObject_IWzFileSystem(L"NameSpace#FileSystem", &pFileSystem, pUnkOuter);
-
-		char sStartPath[MAX_PATH];
-		GetModuleFileNameA(NULL, sStartPath, MAX_PATH);
-		CWvsApp__Dir_BackSlashToSlash(sStartPath);
-		CWvsApp__Dir_upDir(sStartPath);
-
-		bstr_constructor(&sPath, pData, sStartPath);
-
-		auto iGameFS = IWzFileSystem__Init(pFileSystem, pData, sPath);
-
-		bstr_constructor(&sPath, pData, "/");
-
-		auto mGameFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
-
-		// Data FileSystem
-		PcCreateObject_IWzFileSystem(L"NameSpace#FileSystem", &pFileSystem, pUnkOuter);
-
 		struct stat sb;
 
-		if (stat("./Data", &sb) == 0) {
-			bstr_constructor(&sPath, pData, "./Data");
+		if (stat("./Base.wz", &sb) == 0) {
+			CWvsApp__InitializeResMan(nullptr);
 		}
 		else {
-			bstr_constructor(&sPath, pData, "../Data");
+			// Generic
+			void* pData = nullptr;
+			void* pFileSystem = nullptr;
+			void* pUnkOuter = 0;
+			void* nPriority = 0;
+			void* sPath;
+
+			// Resman
+			PcCreateObject_IWzResMan(L"ResMan", g_rm, pUnkOuter);
+
+			void* pIWzResMan_Instance = *g_rm;
+			auto IWzResMan__SetResManParam = *(void(__cdecl**)(void*, int, int, int))((*(int*)pIWzResMan_Instance) + 20); // Hard Coded
+			IWzResMan__SetResManParam(pIWzResMan_Instance, RC_AUTO_REPARSE | RC_AUTO_SERIALIZE, -1, -1);
+
+			// NameSpace
+			PcCreateObject_IWzNameSpace(L"NameSpace", g_root, pUnkOuter);
+
+			void* pIWzNameSpace_Instance = g_root;
+			auto PcSetRootNameSpace = (void(__cdecl*)(void*, int)) * (int*)pNameSpace; // Hard Coded
+			PcSetRootNameSpace(pIWzNameSpace_Instance, 1);
+
+			// Game FileSystem
+			PcCreateObject_IWzFileSystem(L"NameSpace#FileSystem", &pFileSystem, pUnkOuter);
+
+			char sStartPath[MAX_PATH];
+			GetModuleFileNameA(NULL, sStartPath, MAX_PATH);
+			CWvsApp__Dir_BackSlashToSlash(sStartPath);
+			CWvsApp__Dir_upDir(sStartPath);
+
+			bstr_constructor(&sPath, pData, sStartPath);
+
+			auto iGameFS = IWzFileSystem__Init(pFileSystem, pData, sPath);
+
+			bstr_constructor(&sPath, pData, "/");
+
+			auto mGameFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
+
+			// Data FileSystem
+			PcCreateObject_IWzFileSystem(L"NameSpace#FileSystem", &pFileSystem, pUnkOuter);
+
+			if (stat("./Data", &sb) == 0) {
+				bstr_constructor(&sPath, pData, "./Data");
+			}
+			else if (stat("../Data", &sb) == 0) {
+				bstr_constructor(&sPath, pData, "../Data");
+			}
+			else {
+				bstr_constructor(&sPath, pData, "/");
+			}
+
+			auto iDataFS = IWzFileSystem__Init(pFileSystem, pData, sPath);
+
+			bstr_constructor(&sPath, pData, "/");
+
+			auto mDataFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
 		}
-
-		auto iDataFS = IWzFileSystem__Init(pFileSystem, pData, sPath);
-
-		bstr_constructor(&sPath, pData, "/");
-
-		auto mDataFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
 		//¼ÓÔØÆ¤·ôÎÄ¼þ
 		loadDamageFile();
 
 		};
 
-	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
+	return Memory::SetHook(true, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
 }
 
 VOID Resman::Hook_InitInlinkOutlink() {

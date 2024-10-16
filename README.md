@@ -35,7 +35,9 @@
 
 ### 伤害皮肤说明:
 
-伤害皮肤的img文件放在[Data/Effect/DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)路径，里头格式为{皮肤ID}/NoRed0   皮肤ID 0为默认皮肤
+伤害皮肤的[DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)文件放在Effect下
+
+格式为：{皮肤ID}/NoRed0   皮肤ID=0为默认皮肤 具体参考下载文件
 
 #### 本地版本：
 

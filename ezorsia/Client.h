@@ -7,7 +7,6 @@ public:
 	static void UpdateResolution();
 	static void UpdateLogin();
 	static void FixMouseWheel();
-	static void Chinese();
 	static void LongQuickSlot();
 	static void FixDateFormat();
 	static void FixItemType();
@@ -18,7 +17,6 @@ public:
 	static void MoreHook();
 	static void Skill();
 	static const int m_nIGCipherHash = 0XC65053F2;
-	static bool isImg;
 	static int m_nGameHeight;
 	static int m_nGameWidth;
 	static int MsgAmount;
@@ -40,7 +38,6 @@ public:
 	static bool climbSpeedAuto;
 	static float climbSpeed;
 	static int speedMovementCap;
-	static unsigned char imeType;
 	static DWORD jumpCap;
 	static std::string ServerIP_AddressFromINI;
 	static bool ServerIP_Address_hook;

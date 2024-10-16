@@ -5,7 +5,6 @@
 #include "FixIme.h"
 #include "FixBuddy.h"
 
-bool Client::isImg = true;
 int Client::m_nGameHeight = 720;
 int Client::m_nGameWidth = 1280;
 int Client::MsgAmount = 26;
@@ -31,7 +30,6 @@ bool Client::injected = false;
 bool Client::ServerIP_Address_hook = true;
 bool Client::ijl15hook = false;
 float Client::climbSpeed = 1.0;
-unsigned char Client::imeType = 1;
 std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
@@ -729,33 +727,6 @@ void Client::UpdateLogin() {	//un-used //may still contain some useful addresses
 
 void Client::FixMouseWheel() {
 	Memory::CodeCave(fixMouseWheelHook, 0x009F1AD5, 5);
-}
-
-void Client::Chinese() {
-	if (Client::imeType == 0)
-	{
-		FixIme::HookOld();
-	}
-	else {
-		FixIme::HookNew();
-	}
-
-	FixBuddy::Hook();
-	if (SwitchChinese) {
-		// 聊天栏选项
-		Memory::WriteString(0x00AF2B28, "对联盟     ");
-
-		// 有效期字体大小
-		Memory::WriteByte(0x008E55ED + 1, 0x0B);
-
-		// 属性位置字体大小
-		Memory::WriteByte(0x008E557A + 1, 0x0B);
-		Memory::WriteByte(0x008E565E + 1, 0x0B);
-
-		// 玩家名片 职业字体大小和位置
-		Memory::WriteByte(0x0090142E + 1, 0x5E); // 60->5E 位置上移
-		Memory::WriteByte(0x00901400 + 1, 1); // 字体type改为1 对应12号大小
-	}
 }
 
 void Client::LongQuickSlot() {

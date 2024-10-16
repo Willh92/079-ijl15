@@ -2,7 +2,7 @@
 class Resman
 {
 public:
-	static BOOL Hook_InitializeResMan(BOOL bEnable);
+	static BOOL Hook_InitializeResMan();
 	static VOID Hook_InitInlinkOutlink();
 };
 
