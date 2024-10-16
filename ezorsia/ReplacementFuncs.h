@@ -2,6 +2,9 @@
 #include "AutoTypes.h"
 #include "Memory.h"
 #include <WinSock2.h>
+#include<iostream>
+#include<fstream>
+#include<sstream>
 
 static bool ownLoginFrame;
 static bool ownCashShopFrame;
@@ -240,6 +243,25 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&_StringPool__GetStringW), _StringPool__GetStringW_Hook);
 }
 
+bool Hook_CItemInfo__GetItemName(bool enable)
+{
+	CItemInfo__GetItemName_t hook = [](void* pThis, void* edx, ZXString<char>* result, int nItemID) -> ZXString<char>*
+		{
+			auto ret = CItemInfo__GetItemName(pThis, edx, result, nItemID);
+
+			int type = nItemID / 1000000;
+			if (type >= 1 && type <= 5)
+			{
+				*ret += "(";
+				*ret += std::to_string(nItemID).c_str();
+				*ret += ")";
+			}
+
+			return ret;
+		};
+	return  Memory::SetHook(enable, reinterpret_cast<void**>(&CItemInfo__GetItemName), hook);
+}
+
 bool Hook_CItemInfo__GetItemDesc(bool enable)
 {
 	CItemInfo__GetItemDesc_t hook = [](void* pThis, void* edx, ZXString<char>* result, int nItemID) -> ZXString<char>*
@@ -249,13 +271,16 @@ bool Hook_CItemInfo__GetItemDesc(bool enable)
 			int type = nItemID / 1000000;
 			if (type >= 1 && type <= 5)
 			{
+				std::stringstream ss;
+				ss << "ID: ";
+				ss << std::to_string(nItemID);
 				if (ret->Length() > 0)
 				{
-					*ret += "\r\n";
+					ss << "\r\n";
+					ss << static_cast<const char*>(*ret);
 				}
-				*ret += "ÎïÆ·ID: ";
-				*ret += std::to_string(nItemID).c_str();
-				*ret += "#";
+				std::string s = ss.str();
+				ret->Assign(s.c_str(), s.length());
 			}
 
 			return ret;

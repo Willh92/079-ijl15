@@ -8,6 +8,7 @@
 #include "BossHP.h"
 #include <Resman.h>
 #include <CharacterEx.h>
+#include "psapi.h"
 
 void CreateConsole() {
 	AllocConsole();
@@ -30,6 +31,33 @@ std::string GetCurrentProcessName() {
 
 	return "";
 }
+
+HANDLE hThread;
+
+DWORD GetCurrentMemoryUsage()
+{
+	MEMORYSTATUS    MS;
+	PROCESS_MEMORY_COUNTERS pmc;
+	GlobalMemoryStatus(&MS);
+	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
+	DWORD CurrentMem = pmc.WorkingSetSize / 1048576;
+	DWORD TotalMem = MS.dwTotalPhys / 1048576;
+	return CurrentMem;
+}
+
+void EmptyMemory()
+{
+	while (true)
+	{
+		Sleep(1000);
+		int memory = GetCurrentMemoryUsage();
+		if (memory >= 2048)
+		{
+			std::cout << "EmptyMemory:" << memory;
+			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);
+		}
+	}
+};
 
 void Injected() {
 	while (!Client::canInjected) {
@@ -60,8 +88,10 @@ void Injected() {
 	BossHP::Hook();
 	Client::MoreHook();
 	Client::Skill();
+	//Hook_CItemInfo__GetItemName(Client::showItemID);
 	Hook_CItemInfo__GetItemDesc(Client::showItemID);
 	ijl15::CreateHook(); //NMCO::CreateHook();
+	hThread = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)EmptyMemory, NULL, 0, 0);
 	std::cout << "NMCO hook initialized" << std::endl;
 	Client::injected = true;
 }
@@ -129,6 +159,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 	}
 	default: break;
 	case DLL_PROCESS_DETACH:
+		if (hThread)
+			CloseHandle(hThread);
 		ExitProcess(0);
 	}
 	return TRUE;

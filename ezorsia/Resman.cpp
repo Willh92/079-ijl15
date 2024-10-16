@@ -7,6 +7,7 @@
 #include <CharacterEx.h>
 
 VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
+IWzProperty* damageSkinImg;
 
 enum RESMAN_PARAM {
 	RC_AUTO_SERIALIZE = 0x1,
@@ -70,7 +71,7 @@ DWORD* GetResManInstance()
 struct WZPath
 {
 	IUnknown* parent;
-	std::wstring path;
+	std::wstring name;
 };
 
 tsl::robin_map<IUnknown*, std::shared_ptr<WZPath>> imgPath;
@@ -95,17 +96,30 @@ void* GetUOLProperty(VARIANT* prop, void** result)
 	return NULL;
 }
 
+bool startsWith(const std::wstring& fullString, const std::wstring& starting) {
+	if (fullString.length() >= starting.length()) {
+		return (0 == fullString.compare(0, starting.length(), starting));
+	}
+	else {
+		return false;
+	}
+}
+
+bool endsWith(const std::wstring& str, const std::wstring& suffix) {
+	return str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
+}
+
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
 {
 	std::wstring strT = (wchar_t*)*sUOL;
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
-	//if (strT.find(L"Miss") != std::wstring::npos) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest << std::endl;
+	//if (startsWith(strT,L"Mob")) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest<< " " << strT << std::endl;
 	//}
 	if (ret && ret->vt == VT_UNKNOWN)
 	{
 		WZPath wz;
-		wz.path = strT;
+		wz.name = strT;
 		imgPath[ret->punkVal] = std::make_shared<WZPath>(wz);
 	}
 	return ret;
@@ -116,28 +130,27 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	std::wstring strT = (wchar_t*)*sPath;
 
 	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
-	if (pvargDest->vt == VT_UNKNOWN)
+	if (ret && ret->vt == VT_UNKNOWN)
 	{
 		if (imgPath.find(This) != imgPath.end())
 		{
 			WZPath wz;
-			wz.path = strT;
+			wz.name = strT;
 			wz.parent = This;
-			imgPath[pvargDest->punkVal] = std::make_shared<WZPath>(wz);
+			imgPath[ret->punkVal] = std::make_shared<WZPath>(wz);
 			//if (strT.find(L"Miss") != std::wstring::npos) {
 			//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << pvargDest << std::endl;
 			//}
 		}
 	}
-	void* sUOL = NULL;
-	GetUOLProperty(pvargDest, &sUOL);
-	if (sUOL)
-	{
-		VARIANTARG pvarg1 = errorVar;
-		VARIANTARG pvarg2 = errorVar;
-		ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)sUOL, (int)&pvarg1, (int)&pvarg2);
-	}
-
+	//void* sUOL = NULL;
+	//GetUOLProperty(pvargDest, &sUOL);
+	//if (sUOL)
+	//{
+	//	VARIANTARG pvarg1 = errorVar;
+	//	VARIANTARG pvarg2 = errorVar;
+	//	ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)sUOL, (int)&pvarg1, (int)&pvarg2);
+	//}
 	return ret;
 };
 
@@ -161,7 +174,7 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 {
 	std::wstring strT = (wchar_t*)*sPath;
 
-	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
+	if ((Client::DamageSkin > 0 || Client::RemoteDamageSkin) && damageSkinImg) {
 		try {
 			getattackObjectId();
 			int skinId = (Client::DamageSkin > 0 && attackObject == CharacterEx::m_loginUserId) ? Client::DamageSkin : 0;
@@ -174,23 +187,19 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 			std::wstring name;
 			if (imgPath.find(This) != imgPath.end())
 			{
-				name = (*imgPath[This]).path;
+				name = (*imgPath[This]).name;
 			}
 			//std::wcout << This << " " << attackObject << " " << skinId << std::endl;
 			if (skinId != 0) {
 				if (name == L"NoRed0" || name == L"NoRed1" || name == L"NoCri0" || name == L"NoCri1") {
-					VARIANTARG pvarg1 = errorVar;
-					VARIANTARG pvarg2 = errorVar;
 					std::wostringstream oss;
-					oss << L"Effect/DamageSkin.img/";
 					oss << skinId;
 					oss << "/";
 					oss << name;
 					oss << "/";
 					oss << strT;
 					std::wstring path = oss.str();
-					//std::wcout << This << " " << attackObject << " " << path  << std::endl;
-					auto ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+					auto ret = IWzProperty__GetItem(damageSkinImg, nullptr, pvargDest, (int*)&path);
 					if (ret && ret->vt == VT_UNKNOWN)
 					{
 						return ret;
@@ -278,7 +287,7 @@ int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a
 					img = imgPath[img->parent];
 				}
 				//std::wcout << "_inlink: " << dst.bstrVal << ", FullPath:" << img->path << std::endl;
-				ret = GetCanvasPropertyByPath(GetImgFullPath(img->path.c_str()) + dst.bstrVal, (DWORD*)&ptr);
+				ret = GetCanvasPropertyByPath(GetImgFullPath(img->name.c_str()) + dst.bstrVal, (DWORD*)&ptr);
 				if (ptr) {
 					*This = ptr;
 				}
@@ -314,6 +323,21 @@ RET:
 
 // Disable Restrictions
 #pragma optimize("", off)
+
+VOID loadDamageFile() {
+	VARIANTARG pvargDest = {};
+	VARIANTARG pvarg1 = errorVar;
+	VARIANTARG pvarg2 = errorVar;
+	std::wstring path = L"Effect/DamageSkin.img/";
+	try {
+		auto ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, &pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+		if (ret && ret->vt == VT_UNKNOWN)
+		{
+			damageSkinImg = (IWzProperty*)Ztl_variant_t__GetUnknown(ret, nullptr, 0, 0);
+		}
+	}
+	catch (...) {}
+}
 
 BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
 
@@ -373,6 +397,9 @@ BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
 		bstr_constructor(&sPath, pData, "/");
 
 		auto mDataFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
+		//¼ÓÔØÆ¤·ôÎÄ¼þ
+		loadDamageFile();
+
 		};
 
 	return Memory::SetHook(bEnable, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);
@@ -381,7 +408,7 @@ BOOL Resman::Hook_InitializeResMan(BOOL bEnable) {
 VOID Resman::Hook_InitInlinkOutlink() {
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
-	Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
+	//Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
 	//skin
 	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
 		Memory::PatchCall(0x0043873E, IWzProperty__GetSkinItem_Hook);

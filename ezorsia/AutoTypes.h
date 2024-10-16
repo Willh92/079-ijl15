@@ -9,3 +9,6 @@ static auto _StringPool__GetStringW = reinterpret_cast<_StringPool__GetStringW_t
 
 typedef ZXString<char>* (__fastcall* CItemInfo__GetItemDesc_t)(void* pThis, void* edx, ZXString<char>* result, int nItemID);
 static auto CItemInfo__GetItemDesc = reinterpret_cast<CItemInfo__GetItemDesc_t>(0x0060319E);
+
+typedef ZXString<char>* (__fastcall* CItemInfo__GetItemName_t)(void* pThis, void* edx, ZXString<char>* result, int nItemID);
+static auto CItemInfo__GetItemName = reinterpret_cast<CItemInfo__GetItemName_t>(0x0060313E);
