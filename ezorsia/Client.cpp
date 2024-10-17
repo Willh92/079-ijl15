@@ -877,8 +877,8 @@ void Client::MoreHook() {
 		Memory::WriteByte(0x008F2EFF, 0xEB);//hide draw weapons speed
 
 	if (!Client::meleePunching) {
-		byte meleePunching[] = { 0x00,0x5A,0x5A };
-		Memory::WriteByteArray(0x00958D80, meleePunching, sizeof(meleePunching));
+		byte meleePunching[] = { 0x90,0x90 };
+		Memory::WriteByteArray(0x00958D81, meleePunching, sizeof(meleePunching));
 	}
 
 	Memory::WriteInt(0x009AFEEE + 1, 480);
