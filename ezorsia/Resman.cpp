@@ -71,6 +71,7 @@ DWORD* GetResManInstance()
 struct WZPath
 {
 	IUnknown* parent;
+	std::wstring rootPath;
 	std::wstring name;
 };
 
@@ -89,36 +90,27 @@ void* GetUOLProperty(VARIANT* prop, void** result)
 		if (pWzUOL)
 		{
 			IWzUOL__GetfilePath((DWORD*)pWzUOL, nullptr, (int)result);
-			if (*result)
+			if (*result) {
 				return *result;
+			}
 		}
 	}
 	return NULL;
 }
 
-bool startsWith(const std::wstring& fullString, const std::wstring& starting) {
-	if (fullString.length() >= starting.length()) {
-		return (0 == fullString.compare(0, starting.length(), starting));
-	}
-	else {
-		return false;
-	}
-}
-
-bool endsWith(const std::wstring& str, const std::wstring& suffix) {
-	return str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
-}
-
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
 {
 	std::wstring strT = (wchar_t*)*sUOL;
+
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
-	//if (startsWith(strT,L"Mob")) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << pvargDest<< " " << strT << std::endl;
+	//if (strT.find(L"2503") != std::wstring::npos) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << ret->punkVal << " " << strT << std::endl;
 	//}
 	if (ret && ret->vt == VT_UNKNOWN)
 	{
 		WZPath wz;
+		wz.parent = nullptr;
+		wz.rootPath = strT;
 		wz.name = strT;
 		imgPath[ret->punkVal] = std::make_shared<WZPath>(wz);
 	}
@@ -130,17 +122,18 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	std::wstring strT = (wchar_t*)*sPath;
 
 	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
-	if (ret && ret->vt == VT_UNKNOWN)
+	//if (strT.find(L"face") != std::wstring::npos) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << std::endl;
+	//}
+	if (pvargDest->vt == VT_UNKNOWN)
 	{
 		if (imgPath.find(This) != imgPath.end())
 		{
 			WZPath wz;
 			wz.name = strT;
+			wz.rootPath = imgPath[This]->rootPath;
 			wz.parent = This;
-			imgPath[ret->punkVal] = std::make_shared<WZPath>(wz);
-			//if (strT.find(L"Miss") != std::wstring::npos) {
-			//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << pvargDest << std::endl;
-			//}
+			imgPath[pvargDest->punkVal] = std::make_shared<WZPath>(wz);
 		}
 	}
 	//void* sUOL = NULL;
@@ -212,7 +205,7 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 	return  IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
 };
 
-DWORD GetCanvasPropertyByPath(std::wstring path, DWORD* result)
+DWORD GetCanvasPropertyByPath(DWORD* This, std::wstring path, DWORD* result)
 {
 	VARIANT varDest = { 0 };
 	VARIANT var1 = { 0 };
@@ -269,8 +262,9 @@ int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a
 
 	IWzProperty__GetItem(prop, nullptr, &dst, (int*)pStrInlink);
 
-	if (!dst.vt)
+	if (!dst.vt) {
 		goto OUTLINK;
+	}
 
 	if (dst.vt == VT_BSTR)
 	{
@@ -278,16 +272,11 @@ int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a
 		if (dst.bstrVal)
 		{
 			IUnknown* pUnk = (IUnknown*)*a2;
+			DWORD ptr = 0;
 
 			if (imgPath.find(pUnk) != imgPath.end())
 			{
-				DWORD ptr = 0;
-				std::shared_ptr<WZPath> img = imgPath[pUnk];
-				if (img->parent) {
-					img = imgPath[img->parent];
-				}
-				//std::wcout << "_inlink: " << dst.bstrVal << ", FullPath:" << img->path << std::endl;
-				ret = GetCanvasPropertyByPath(GetImgFullPath(img->name.c_str()) + dst.bstrVal, (DWORD*)&ptr);
+				ret = GetCanvasPropertyByPath(This, GetImgFullPath(imgPath[pUnk]->rootPath.c_str()) + dst.bstrVal, (DWORD*)&ptr);
 				if (ptr) {
 					*This = ptr;
 				}
@@ -308,7 +297,7 @@ OUTLINK:
 		if (dst.bstrVal)
 		{
 			DWORD ptr = 0;
-			ret = GetCanvasPropertyByPath(dst.bstrVal, (DWORD*)&ptr);
+			ret = GetCanvasPropertyByPath(GetResManInstance(), dst.bstrVal, (DWORD*)&ptr);
 			if (ptr)
 				*This = ptr;
 		}
@@ -416,7 +405,7 @@ BOOL Resman::Hook_InitializeResMan() {
 VOID Resman::Hook_InitInlinkOutlink() {
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
-	//Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
+	Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);
 	//skin
 	if (Client::DamageSkin > 0 || Client::RemoteDamageSkin) {
 		Memory::PatchCall(0x0043873E, IWzProperty__GetSkinItem_Hook);
