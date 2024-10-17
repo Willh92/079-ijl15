@@ -52,24 +52,13 @@ void EmptyMemory()
 	{
 		Sleep(1000);
 		int memory = GetCurrentMemoryUsage();
-		if (memory >= 2048)
+		if (memory >= 1792)
 		{
 			std::cout << "EmptyMemory:" << memory << std::endl;
 			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);
 		}
 	}
 };
-
-void flushcache() {
-	Memory::WriteInt(0x004122A8 + 2, 10000);   //sweep cache delay default 60000
-	int SWEEPCACHE_DELAY_2[] = { 0x004122ED, 0x0041243C, 0x0041258E, 0x004126E0, 0x00412813, 0x00412919 };
-	for (auto n : SWEEPCACHE_DELAY_2)
-	{
-		Memory::WriteInt(n + 1, 10000);  //default 300000
-	}
-	//flush in CField::Init
-	Memory::WriteInt(0x00533F53 + 1, 0);  //default 180000
-}
 
 void Injected() {
 	while (!Client::canInjected) {
@@ -81,8 +70,6 @@ void Injected() {
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
-	flushcache();
-
 	Resman::Hook_InitializeResMan();
 	Resman::Hook_InitInlinkOutlink();
 	CharacterEx::InitExpOverride(Client::longEXP);
