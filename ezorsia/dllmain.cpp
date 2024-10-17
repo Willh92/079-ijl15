@@ -65,10 +65,10 @@ void flushcache() {
 	int SWEEPCACHE_DELAY_2[] = { 0x004122ED, 0x0041243C, 0x0041258E, 0x004126E0, 0x00412813, 0x00412919 };
 	for (auto n : SWEEPCACHE_DELAY_2)
 	{
-		Memory::WriteInt(n + 1, 10000);  //default 30000
+		Memory::WriteInt(n + 1, 10000);  //default 300000
 	}
 	//flush in CField::Init
-	Memory::WriteInt(0x00533F53 + 1, 60000);  //default 180000
+	Memory::WriteInt(0x00533F53 + 1, 0);  //default 180000
 }
 
 void Injected() {
@@ -148,6 +148,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::holdAttack = reader.GetBoolean("optional", "holdAttack", false);
 			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
 			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
+			Client::minimizeMaptitleColor = reader.GetBoolean("ui", "minimizeMaptitleColor", false);
 			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
 			Client::StatDetailBackgrndWidth = reader.GetInteger("ui", "StatDetailBackgrndWidth", 177);
 			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);

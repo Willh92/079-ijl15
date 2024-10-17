@@ -45,6 +45,7 @@ public:
 	static int talkTime;
 	static bool showItemID;
 	static bool showWeaponSpeed;
+	static bool minimizeMaptitleColor;
 	static bool meleePunching;
 	static bool holdAttack;
 	static int StatBackgrndWidth;

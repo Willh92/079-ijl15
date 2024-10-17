@@ -34,6 +34,7 @@ bool Client::talkRepeat = false;
 int Client::talkTime = 2000;
 bool Client::showItemID = false;
 bool Client::showWeaponSpeed = true;
+bool Client::minimizeMaptitleColor = false;
 bool Client::meleePunching = true;
 bool Client::holdAttack = false;
 int Client::StatBackgrndWidth = 176;
@@ -182,8 +183,8 @@ void Client::UpdateGameStartup() {
 }
 
 void Client::UpdateResolution() {
-
-	Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
+	if (Client::minimizeMaptitleColor)
+		Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
 
 	if (m_nGameWidth <= 800) {
 		Memory::WriteInt(dwQuickSlotInitHPos + 1, 580); //push 647 //hd800
