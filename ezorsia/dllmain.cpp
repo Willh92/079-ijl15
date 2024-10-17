@@ -60,6 +60,17 @@ void EmptyMemory()
 	}
 };
 
+void flushcache() {
+	Memory::WriteInt(0x004122A8 + 2, 10000);   //sweep cache delay default 60000
+	int SWEEPCACHE_DELAY_2[] = { 0x004122ED, 0x0041243C, 0x0041258E, 0x004126E0, 0x00412813, 0x00412919 };
+	for (auto n : SWEEPCACHE_DELAY_2)
+	{
+		Memory::WriteInt(n + 1, 10000);  //default 30000
+	}
+	//flush in CField::Init
+	Memory::WriteInt(0x00533F53 + 1, 60000);  //default 180000
+}
+
 void Injected() {
 	while (!Client::canInjected) {
 		Sleep(10);
@@ -70,6 +81,7 @@ void Injected() {
 	std::string processName = GetCurrentProcessName();
 	std::cout << "Current process name: " << processName << std::endl;
 	Client::CRCBypass();
+	flushcache();
 
 	Resman::Hook_InitializeResMan();
 	Resman::Hook_InitInlinkOutlink();

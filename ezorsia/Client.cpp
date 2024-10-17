@@ -183,6 +183,8 @@ void Client::UpdateGameStartup() {
 
 void Client::UpdateResolution() {
 
+	Memory::WriteInt(0x00864524 + 1, 0xFFFFFFFF);  //minimize map title color white
+
 	if (m_nGameWidth <= 800) {
 		Memory::WriteInt(dwQuickSlotInitHPos + 1, 580); //push 647 //hd800
 		Memory::WriteInt(dwQuickSlotHPos + 1, 580); //push 647 //hd800
@@ -582,6 +584,9 @@ void Client::UpdateResolution() {
 
 	myHeight = (Client::m_nGameHeight - 600) / 2;//cash shop fix for frame area	//recalc offsets
 	myWidth = (Client::m_nGameWidth - 800) / 2;//cash shop fix for frame area		//recalc offsets
+
+	// 频道变更居中
+	Memory::WriteInt(0x009A1C15 + 1, myWidth + 182);
 
 	// 现金商城居中
 	nHeightOfsetted1 = 316; nWidthOfsetted1 = 256; nTopOfsetted1 = 0 + myHeight; nLeftOfsetted1 = 0 + myWidth; //parameters for fix1
