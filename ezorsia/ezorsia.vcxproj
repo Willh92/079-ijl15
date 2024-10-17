@@ -179,7 +179,6 @@
     <ClInclude Include="CharacterEx.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="FixBuddy.h" />
-    <ClInclude Include="FixIme.h" />
     <ClInclude Include="ijl.h" />
     <ClInclude Include="ijl15.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />

@@ -8,10 +8,7 @@ public:
 	static void UpdateLogin();
 	static void FixMouseWheel();
 	static void LongQuickSlot();
-	static void FixDateFormat();
-	static void FixItemType();
 	static void JumpCap();
-	static void FixChatPosHook();
 	static void CRCBypass();
 	static void NoPassword();
 	static void MoreHook();
@@ -32,7 +29,6 @@ public:
 	static bool shortLevel;
 	static bool useTubi;
 	static bool bigLoginFrame;
-	static bool SwitchChinese;
 	static bool debug;
 	static bool noPassword;
 	static bool climbSpeedAuto;
@@ -50,6 +46,7 @@ public:
 	static bool showItemID;
 	static bool showWeaponSpeed;
 	static bool meleePunching;
+	static bool holdAttack;
 	static int StatBackgrndWidth;
 	static int StatDetailBackgrndWidth;
 	static int StatDetailBackgrndWidthRect;

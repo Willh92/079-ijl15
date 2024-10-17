@@ -2,7 +2,6 @@
 #include "AddyLocations.h"
 #include "codecaves.h"
 #include <cstringt.h>
-#include "FixIme.h"
 #include "FixBuddy.h"
 
 int Client::m_nGameHeight = 720;
@@ -20,7 +19,6 @@ bool Client::longEXP = false;
 bool Client::shortLevel = false;
 bool Client::useTubi = false;
 bool Client::bigLoginFrame = false;
-bool Client::SwitchChinese = false;
 int Client::speedMovementCap = 140;
 bool Client::noPassword = false;
 bool Client::debug = false;
@@ -37,6 +35,7 @@ int Client::talkTime = 2000;
 bool Client::showItemID = false;
 bool Client::showWeaponSpeed = true;
 bool Client::meleePunching = true;
+bool Client::holdAttack = false;
 int Client::StatBackgrndWidth = 176;
 int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
@@ -814,24 +813,6 @@ void Client::LongQuickSlot() {
 	Memory::CodeCave(DefaultQuickslotKeyMap79_cave, 0x005BA1C6, 7);
 }
 
-void Client::FixDateFormat() {
-	if (SwitchChinese)
-	{
-		Memory::CodeCave(fixDateFormat, 0x008EBF57, 14); // StringPool 5273
-		Memory::CodeCave(fixDateFormat2, 0x008EBFA1, 14); // StringPool 655
-		Memory::CodeCave(fixDateFormat3, 0x008EC31A, 14); // StringPool 679
-		Memory::CodeCave(fixDateFormat4, 0x008EBF05, 14); // StringPool 3138
-	}
-}
-
-void Client::FixItemType() {
-	if (SwitchChinese)
-	{
-		Memory::CodeCave(getItemType1, 0x005CFA99, 15);
-		Memory::CodeCave(getItemType2, getItemType2Addr, 27);
-	}
-}
-
 DWORD Client::jumpCap = 123;
 static float climbSpeedSave = 0;
 void Client::JumpCap() {
@@ -847,14 +828,6 @@ void Client::JumpCap() {
 	else {
 		Memory::WriteDouble((DWORD)&climbSpeedSave, climbSpeed * 3.0);
 	}
-}
-
-void Client::FixChatPosHook() {
-	// 修复聊天窗里的聊天信息偏下的问题
-	// Memory::WriteByte(0x008DD05A + 2, 0x4);
-	// Memory::WriteByte(0x008DD067 + 2, 0x3);
-	// 老方法导致收起聊天框时，显示的信息太偏下了
-	Memory::CodeCave(chatTextPos, 0x008DD06F, 6);
 }
 
 void Client::CRCBypass() {
@@ -877,8 +850,12 @@ void Client::MoreHook() {
 		Memory::WriteByte(0x008F2EFF, 0xEB);//hide draw weapons speed
 
 	if (!Client::meleePunching) {
-		byte meleePunching[] = { 0x90,0x90 };
-		Memory::WriteByteArray(0x00958D81, meleePunching, sizeof(meleePunching));
+		Memory::FillBytes(0x00958D81, 0x90, 2);
+	}
+
+	if (Client::holdAttack) {
+		byte holdAttackBytes[] = { 0x0C ,0xEB };
+		Memory::WriteByteArray(0x0095C4F1, holdAttackBytes, sizeof(holdAttackBytes));
 	}
 
 	Memory::WriteInt(0x009AFEEE + 1, 480);

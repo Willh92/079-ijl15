@@ -135,9 +135,6 @@
     <ClInclude Include="BossHP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FixIme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FixBuddy.h">
       <Filter>Header Files</Filter>
     </ClInclude>

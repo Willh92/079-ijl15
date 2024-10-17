@@ -36,12 +36,13 @@ HANDLE hThread;
 
 DWORD GetCurrentMemoryUsage()
 {
-	MEMORYSTATUS    MS;
+	MEMORYSTATUSEX MS;
+	MS.dwLength = sizeof(MS);
 	PROCESS_MEMORY_COUNTERS pmc;
-	GlobalMemoryStatus(&MS);
+	GlobalMemoryStatusEx(&MS);
 	GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc));
 	DWORD CurrentMem = pmc.WorkingSetSize / 1048576;
-	DWORD TotalMem = MS.dwTotalPhys / 1048576;
+	DWORD TotalMem = MS.ullTotalPhys / 1048576;
 	return CurrentMem;
 }
 
@@ -53,7 +54,7 @@ void EmptyMemory()
 		int memory = GetCurrentMemoryUsage();
 		if (memory >= 2048)
 		{
-			std::cout << "EmptyMemory:" << memory;
+			std::cout << "EmptyMemory:" << memory << std::endl;
 			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);
 		}
 	}
@@ -79,11 +80,7 @@ void Injected() {
 	Client::UpdateResolution();
 	Client::LongQuickSlot();
 	Client::FixMouseWheel();
-	//Client::Chinese();
-	//Client::FixDateFormat();
-	//Client::FixItemType();
 	Client::JumpCap();
-	//Client::FixChatPosHook();
 	Client::NoPassword();
 	BossHP::Hook();
 	Client::MoreHook();
@@ -120,7 +117,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::shortLevel = reader.GetBoolean("optional", "shortLevel", false);
 			Client::useTubi = reader.GetBoolean("optional", "useTubi", false);
 			Client::bigLoginFrame = reader.GetBoolean("general", "bigLoginFrame", false);
-			Client::SwitchChinese = reader.GetBoolean("general", "SwitchChinese", false);
 			Client::speedMovementCap = reader.GetInteger("optional", "speedMovementCap", 140);
 			Client::jumpCap = reader.GetInteger("optional", "jumpCap", 123);
 			Client::debug = reader.GetBoolean("debug", "debug", false);
@@ -137,6 +133,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::talkRepeat = reader.GetBoolean("optional", "talkRepeat", false);
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
 			Client::meleePunching = reader.GetBoolean("optional", "meleePunching", true);
+			Client::holdAttack = reader.GetBoolean("optional", "holdAttack", false);
 			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
 			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
 			Client::StatBackgrndWidth = reader.GetInteger("ui", "StatBackgrndWidth", 176);
