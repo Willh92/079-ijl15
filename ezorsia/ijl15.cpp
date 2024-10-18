@@ -2,6 +2,32 @@
 #include "ijl15.h"
 #include "ijl.h" 
 
+
+#ifdef IJL_MT
+
+void ijl15::CreateHook() {
+}
+
+extern "C"  const IJLibVersion* __stdcall ijlGetLibVersionWrapper() {
+	return ijlGetLibVersion();
+}
+
+extern "C"   IJLERR __stdcall ijlInitWrapper(JPEG_CORE_PROPERTIES* jcprops) { return ijlInit(jcprops); }
+
+extern "C"  IJLERR __stdcall ijlFreeWrapper(JPEG_CORE_PROPERTIES* jcprops) { return ijlFree(jcprops); }
+
+extern "C"  IJLERR __stdcall ijlReadWrapper(JPEG_CORE_PROPERTIES* jcprops, IJLIOTYPE iotype) {
+	return ijlRead(jcprops, iotype);
+}
+
+extern "C"  IJLERR __stdcall ijlWriteWrapper(JPEG_CORE_PROPERTIES* jcprops, IJLIOTYPE iotype) {
+	return ijlWrite(jcprops, iotype);
+}
+
+extern "C"  const char* __stdcall ijlErrorStrWrapper(IJLERR code) { return ijlErrorStr(code); }
+
+#else
+
 void(*ijlErrorStr_Proc) = ijlErrorStr;
 void(*ijlFree_Proc) = ijlFree;
 void(*ijlGetLibVersion_Proc) = ijlGetLibVersion;
@@ -55,20 +81,4 @@ extern "C" __declspec(naked) void ijlErrorStrWrapper()
 	__asm	jmp dword ptr[ijlErrorStr_Proc]
 }
 
-//extern "C"  const IJLibVersion* __stdcall ijlGetLibVersionWrapper() {
-//	return ijlGetLibVersion();
-//}
-//
-//extern "C"   IJLERR __stdcall ijlInitWrapper(JPEG_CORE_PROPERTIES* jcprops) { return ijlInit(jcprops); }
-//
-//extern "C"  IJLERR __stdcall ijlFreeWrapper(JPEG_CORE_PROPERTIES* jcprops) { return ijlFree(jcprops); }
-//
-//extern "C"  IJLERR __stdcall ijlReadWrapper(JPEG_CORE_PROPERTIES* jcprops, IJLIOTYPE iotype) {
-//	return ijlRead(jcprops, iotype);
-//}
-//
-//extern "C"  IJLERR __stdcall ijlWriteWrapper(JPEG_CORE_PROPERTIES* jcprops, IJLIOTYPE iotype) {
-//	return ijlWrite(jcprops, iotype);
-//}
-//
-//extern "C"  const char* __stdcall ijlErrorStrWrapper(IJLERR code) { return ijlErrorStr(code); }
+#endif

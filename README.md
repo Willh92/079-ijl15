@@ -10,9 +10,12 @@
 ## 使用方法
 已测试的开发工具 VS 2022，SDK 10，工具集 VS2022（v144）
 
-使用vs打开的时候注意，要使用 Release x86 的模式生成解决方案
+使用VS打开的时候注意，要使用 Release x86 MT/MD 模式生成解决方案
 
-生成后可在 out/Release 目录下找到 ijl15.dll
+- MT 无需C++运行库，不支持HOOK模式启动
+- MD 需要C++运行库，支持HOOK模式启动
+
+生成后可在 out相应的Release-mt/md 目录下找到 ijl15.dll
 
 支持两种模式
 

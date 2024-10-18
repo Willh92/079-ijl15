@@ -1,5 +1,5 @@
-**/Release
-**/Debug
-**/out
+**/Release*/
+**/Debug*/
+**/out*/
 .vs
 ezorsia/ezorsia.vcxproj.user
