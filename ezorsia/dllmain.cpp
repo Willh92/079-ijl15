@@ -52,7 +52,13 @@ void EmptyMemory()
 	{
 		Sleep(1000);
 		int memory = GetCurrentMemoryUsage();
-		if (memory >= 1792)
+		if (memory >= 512) {
+			autoFlushCacheTime(0);
+			callFlushcache();
+			autoFlushCacheTime(10000);
+			std::cout << "flushcache:" << memory << std::endl;
+		}
+		if (memory >= 1024)
 		{
 			std::cout << "EmptyMemory:" << memory << std::endl;
 			SetProcessWorkingSetSize(GetCurrentProcess(), -1, -1);

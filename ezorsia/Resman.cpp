@@ -328,19 +328,8 @@ VOID loadDamageFile() {
 	catch (...) {}
 }
 
-void flushcache() {
-	Memory::WriteInt(0x004122A8 + 2, 10000);   //sweep cache delay default 60000
-	int SWEEPCACHE_DELAY_2[] = { 0x004122ED, 0x0041243C, 0x0041258E, 0x004126E0, 0x00412813, 0x00412919 };
-	for (auto n : SWEEPCACHE_DELAY_2)
-	{
-		Memory::WriteInt(n + 1, 10000);  //default 300000
-	}
-	//flush in CField::Init
-	Memory::WriteInt(0x00533F53 + 1, 0);  //default 180000
-}
-
 BOOL Resman::Hook_InitializeResMan() {
-	flushcache();
+	autoFlushCacheTime(10000);
 
 	CWvsApp__InitializeResMan_t Hook = [](void*) {
 
