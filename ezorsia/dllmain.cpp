@@ -139,6 +139,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::talkTime = reader.GetInteger("optional", "talkTime", 2000);
 			Client::meleePunching = reader.GetBoolean("optional", "meleePunching", true);
 			Client::holdAttack = reader.GetBoolean("optional", "holdAttack", false);
+			Client::spLimit = reader.GetBoolean("optional", "spLimit", true);
 			Client::showItemID = reader.GetBoolean("ui", "showItemID", false);
 			Client::showWeaponSpeed = reader.GetBoolean("ui", "showWeaponSpeed", true);
 			Client::minimizeMaptitleColor = reader.GetBoolean("ui", "minimizeMaptitleColor", false);

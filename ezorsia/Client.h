@@ -48,6 +48,7 @@ public:
 	static bool minimizeMaptitleColor;
 	static bool meleePunching;
 	static bool holdAttack;
+	static bool spLimit;
 	static int StatBackgrndWidth;
 	static int StatDetailBackgrndWidth;
 	static int StatDetailBackgrndWidthRect;

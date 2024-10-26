@@ -37,6 +37,7 @@ bool Client::showWeaponSpeed = true;
 bool Client::minimizeMaptitleColor = false;
 bool Client::meleePunching = true;
 bool Client::holdAttack = false;
+bool Client::spLimit = true;
 int Client::StatBackgrndWidth = 176;
 int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
@@ -897,6 +898,14 @@ void Client::MoreHook() {
 	// 装备面板
 	//Memory::WriteInt(0x00815A5E + 1, Client::StatBackgrndWidth); // 装备面板面板初始x
 	//Memory::WriteInt(0x00816786 + 1, Client::StatBackgrndWidth); // 装备面板切换x
+
+	if (!Client::spLimit) {
+		Memory::WriteByte(0x008BE236, 0xEB);
+		byte spLimitBytes[] = { 0xE9 ,0xBC,0x00,0x00,0x00,0x90 };
+		Memory::WriteByteArray(0x008BE18D, spLimitBytes, sizeof(spLimitBytes));
+		byte spLimitBytes2[] = { 0xE9 ,0x67,0x01,0x00,0x00,0x90 };
+		Memory::WriteByteArray(0x008BE0E2, spLimitBytes2, sizeof(spLimitBytes2));
+	}
 
 }
 
