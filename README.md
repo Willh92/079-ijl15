@@ -1,12 +1,5 @@
 # CMS079-ijl15
 
-移植与https://github.com/BeiDouMS/BeiDou-ijl15
-
-主要是为了移植https://github.com/Chronicle20/gms-83-dll 这个框架
-
-代码未清理，除了启用的功能能外，其他基址还是083的
-
-
 ## 使用方法
 已测试的开发工具 VS 2022，SDK 10，工具集 VS2022（v144）
 
@@ -124,5 +117,13 @@ public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
         }
         //……省略
 ```
+
+## 参考相关开源库
+
+https://github.com/BeiDouMS/BeiDou-ijl15
+
+https://github.com/Chronicle20/gms-83-dll
+
+https://github.com/v3921358/MapleRoot
 
 # 仅供学习交流使用!!!
