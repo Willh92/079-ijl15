@@ -413,8 +413,67 @@ _declspec(naked) void exitCleart()
 		call _exitcleart
 		popfd
 		popad
-		push 0x00628318;
-		ret;
+		push 0x00628318
+		ret
+	}
+}
+
+int hypontizeId = 0;
+const DWORD hypontizeCInpacket__Decode4 = 0x004066FF;
+const DWORD hypontize_INT128__operator_bool = 0x00884E00;
+_declspec(naked) void hookHypontizePacket()
+{
+	_asm {
+		mov hypontizeId,0x0
+		call hypontizeCInpacket__Decode4
+		cmp eax, -1
+		jnz label_ret
+		call hypontizeCInpacket__Decode4
+		mov hypontizeId, eax
+		call hypontizeCInpacket__Decode4
+		label_ret :
+		ret
+	}
+}
+
+_declspec(naked) void hookHypontizeSet()
+{
+	_asm {
+		call hypontize_INT128__operator_bool
+		test al, al
+		push ebx
+		jz label_ret
+		mov ebx, [hypontizeId]
+		cmp ebx, 0x0
+		je label_ret
+		mov ebx, 0x00BE4F14
+		mov ebx, [ebx]
+		cmp ebx, [hypontizeId]
+		je label_ret
+		mov eax, 0x0
+		label_ret :
+		pop ebx
+			ret
+	}
+}
+
+_declspec(naked) void hookHypontizeCancel()
+{
+	_asm {
+		call hypontize_INT128__operator_bool
+		test al, al
+		push ebx
+		jz label_ret
+		mov ebx, 0x00BDD49C
+		mov ebx, [ebx]
+		add ebx, 0x68
+		mov ebx, [ebx]
+		cmp ebx, esi
+		je label_ret
+		mov eax, 0x0
+		label_ret :
+		pop ebx
+			ret
 	}
 }
 
@@ -491,5 +550,14 @@ void CharacterEx::InitDamageSkinOverride(BOOL bEnable)
 	Memory::CodeCave(GuildNameDecode, 0x0098CE5E, 5);
 	Memory::CodeCave(GuildNameDecode2, 0x009912E7, 5);
 	Memory::CodeCave(CharacterStatSkin, 0x004F28B4, 7);
-	
+
+}
+
+void CharacterEx::InitHypontizeFix(BOOL bEnable)
+{
+	if (!bEnable)
+		return;
+	Memory::PatchCall(0x007927DE, hookHypontizePacket);
+	Memory::PatchCall(0x0069AA65, hookHypontizeSet);
+	Memory::PatchCall(0x0069AF76, hookHypontizeCancel);
 }

@@ -47,6 +47,7 @@ bool Client::RemoteDamageSkin = false;
 bool Client::s14101004 = true;
 bool Client::s4221001 = false;
 bool Client::s4221007 = false;
+bool Client::s5221009 = false;
 
 void Client::UpdateGameStartup() {
 	//Memory::CodeCave(cc0x0044E550, dw0x0044E550, dw0x0044E550Nops); //run from packed client //skip //sub_44E546

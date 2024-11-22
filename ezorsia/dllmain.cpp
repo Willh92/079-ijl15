@@ -81,6 +81,7 @@ void Injected() {
 	CharacterEx::InitExpOverride(Client::longEXP);
 	CharacterEx::InitLevelOverride(Client::shortLevel);
 	CharacterEx::InitDamageSkinOverride(Client::DamageSkin > 0 || Client::RemoteDamageSkin);
+	CharacterEx::InitHypontizeFix(Client::s5221009);
 	Client::UpdateGameStartup();
 	Client::UpdateResolution();
 	Client::LongQuickSlot();
@@ -151,6 +152,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::s4221001 = reader.GetBoolean("skill", "s4221001", false);
 			Client::s4221007 = reader.GetBoolean("skill", "s4221007", false);
 			Client::s14101004 = reader.GetBoolean("skill", "s14101004", true);
+			Client::s5221009 = reader.GetBoolean("skill", "s5221009", true);
 		}
 		if (Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want

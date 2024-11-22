@@ -124,5 +124,21 @@ public static byte[] spawnPlayerMapobject(MapleCharacter chr) {
         }
         //……省略
 ```
+#### 心灵控制添加角色判断
+
+```Java
+//……省略
+} else if (buff.getSkill() > 0) {
+//添加部分
+if (buff.getStatus() == MonsterStatus.HYPNOTIZE) {
+                        mplew.writeInt(-1);  //用于区分是否启用
+                        MapleCharacter hypnotizeChr = buff.getHypnotizeChr();
+                        mplew.writeInt(hypnotizeChr == null ? 0 : hypnotizeChr.getId());
+                    }
+                    //添加结束
+                    mplew.writeInt((buff.getSkill() > 0) ? buff.getSkill() : 0);
+}
+//……省略
+```
 
 # 仅供学习交流使用!!!

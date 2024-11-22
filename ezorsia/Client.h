@@ -57,4 +57,5 @@ public:
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;
+	static bool s5221009;
 };
