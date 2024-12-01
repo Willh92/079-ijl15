@@ -98,6 +98,21 @@ void* GetUOLProperty(VARIANT* prop, void** result)
 	return NULL;
 }
 
+std::wstring GetImgFullPath(std::wstring strT)
+{
+	std::wstring lstr = strT;
+	std::transform(lstr.begin(), lstr.end(), lstr.begin(), towlower);
+
+	int pos = lstr.rfind(L".img");
+	if (pos != std::string::npos)
+	{
+		pos += 4; // 4
+		strT = strT.substr(0, pos);
+		strT += L"/";
+	}
+	return strT;
+}
+
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
 {
 	std::wstring strT = (wchar_t*)*sUOL;
@@ -122,9 +137,26 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	std::wstring strT = (wchar_t*)*sPath;
 
 	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
-	//if (strT.find(L"face") != std::wstring::npos) {
-	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << std::endl;
-	//}
+	if (Client::tamingMob198Effect) {
+		if (pvargDest->vt == VT_EMPTY && strT.find(L"stand1") != std::wstring::npos) {
+			if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0198"))
+			{
+				try {
+					std::wostringstream oss;
+					oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
+					oss << "sit";
+					std::wstring path = oss.str();
+					//ret = IWzProperty__GetItem(This, nullptr, pvargDest, (int*)&path);  读取不到sit节点
+					VARIANTARG pvarg1 = errorVar;
+					VARIANTARG pvarg2 = errorVar;
+					ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+					//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
+				}
+				catch (...) {
+				}
+			}
+		}
+	}
 	if (pvargDest->vt == VT_UNKNOWN)
 	{
 		if (imgPath.find(This) != imgPath.end())
@@ -216,21 +248,6 @@ DWORD GetCanvasPropertyByPath(DWORD* This, std::wstring path, DWORD* result)
 	auto v9 = IWzResMan__GetObjectA((DWORD*)*g_rm, nullptr, &varDest, (int*)sUol, (int)&var1, (int)&var2);
 	auto v10 = get_unknown(&varUnk, v9);
 	return IWzCanvas_operator_equal(result, nullptr, v10);
-}
-
-std::wstring GetImgFullPath(std::wstring strT)
-{
-	std::wstring lstr = strT;
-	std::transform(lstr.begin(), lstr.end(), lstr.begin(), towlower);
-
-	int pos = lstr.rfind(L".img");
-	if (pos != std::string::npos)
-	{
-		pos += 4; // 4
-		strT = strT.substr(0, pos);
-		strT += L"/";
-	}
-	return strT;
 }
 
 int __fastcall IWzCanvas_operator_equal_Hook(DWORD* This, void* notuse, DWORD* a2)

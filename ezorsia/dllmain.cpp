@@ -149,10 +149,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::StatDetailBackgrndWidthRect = reader.GetInteger("ui", "StatDetailBackgrndWidthRect", 200);
 			Client::DamageSkin = reader.GetInteger("ui", "DamageSkin", 0);
 			Client::RemoteDamageSkin = reader.GetBoolean("ui", "RemoteDamageSkin", false);
+			Client::tamingMob198Effect = reader.GetBoolean("ui", "tamingMob198", false);
 			Client::s4221001 = reader.GetBoolean("skill", "s4221001", false);
 			Client::s4221007 = reader.GetBoolean("skill", "s4221007", false);
 			Client::s14101004 = reader.GetBoolean("skill", "s14101004", true);
-			Client::s5221009 = reader.GetBoolean("skill", "s5221009", true);
+			Client::s5221009 = reader.GetBoolean("skill", "s5221009", false);
 		}
 		if (Client::debug)
 			CreateConsole();	//console for devs, use this to log stuff if you want

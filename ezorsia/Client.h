@@ -54,6 +54,7 @@ public:
 	static int StatDetailBackgrndWidthRect;
 	static int DamageSkin;
 	static bool RemoteDamageSkin;
+	static bool tamingMob198Effect;
 	static bool s4221001;
 	static bool s4221007;
 	static bool s14101004;

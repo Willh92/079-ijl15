@@ -43,6 +43,7 @@ int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
 int Client::DamageSkin = 0;
 bool Client::RemoteDamageSkin = false;
+bool Client::tamingMob198Effect = false;
 
 bool Client::s14101004 = true;
 bool Client::s4221001 = false;
@@ -908,6 +909,40 @@ void Client::MoreHook() {
 		Memory::WriteByteArray(0x008BE0E2, spLimitBytes2, sizeof(spLimitBytes2));
 	}
 
+	if (Client::tamingMob198Effect) {
+		//TamingMob÷ß≥÷198
+		Memory::CodeCave(tamingMob198, 0x00407A4C, 5);
+		Memory::CodeCave(tamingMob198_1, 0x00413FAC, 5);
+		Memory::CodeCave(tamingMob198_2, 0x0041437A, 7);
+		Memory::CodeCave(tamingMob198_3, 0x00451935, 5);
+		Memory::CodeCave(tamingMob198_4, 0x0045279F, 5);
+		Memory::CodeCave(tamingMob198_5, 0x00452810, 5);
+		Memory::CodeCave(tamingMob198_6, 0x00452C5C, 5);
+		Memory::CodeCave(tamingMob198_7, 0x0045451B, 5);
+		Memory::CodeCave(tamingMob198_8, 0x00454543, 5);
+		Memory::CodeCave(tamingMob198_9, 0x004545FF, 5);
+		Memory::CodeCave(tamingMob198_10, 0x00454631, 5);
+		Memory::CodeCave(tamingMob198_11, 0x004546D0, 5);
+		Memory::CodeCave(tamingMob198_12, 0x0045475B, 5);
+		Memory::CodeCave(tamingMob198_13, 0x0045499C, 5);
+		Memory::CodeCave(tamingMob198_14, 0x0045653B, 5);
+		Memory::CodeCave(tamingMob198_15, 0x004B1B8C, 5);
+		Memory::CodeCave(tamingMob198_16, 0x0066FB1E, 5);
+		Memory::CodeCave(tamingMob198_17, 0x0066FCA6, 5);
+		Memory::CodeCave(tamingMob198_18, 0x007AAA50, 5);
+		Memory::CodeCave(tamingMob198_19, 0x008C9EF1, 5);
+		Memory::CodeCave(tamingMob198_20, 0x008C9F5B, 5);
+		Memory::CodeCave(tamingMob198_21, 0x0093A8E3, 5);
+		Memory::CodeCave(tamingMob198_22, 0x0093CED9, 5);
+		Memory::CodeCave(tamingMob198_23, 0x0094220F, 5);
+		Memory::CodeCave(tamingMob198_24, 0x0096494E, 5);
+		Memory::CodeCave(tamingMob198_25, 0x0096CA51, 6);
+		Memory::CodeCave(tamingMob198_26, 0x0097452E, 5);
+		Memory::CodeCave(tamingMob198_27, 0x00A129EC, 7);
+		Memory::CodeCave(tamingMob198_28, 0x0096CA91, 7);
+		Memory::CodeCave(tamingMob198_29, 0x00413E3C, 5);
+		Memory::CodeCave(tamingMob198_30, 0x005FD1BA, 6);
+	}
 }
 
 void Client::Skill() {

@@ -1815,3 +1815,460 @@ __declspec(naked) void skill4221001()   //0x00975369
 
 	}
 }
+
+DWORD _tamingMob198 = 0x00407A53;
+DWORD _tamingMob198_Rtn = 0x00407A51;
+__declspec(naked) void tamingMob198()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn
+		label_j :
+		jmp _tamingMob198
+	}
+}
+
+DWORD _tamingMob198_1 = 0x004140DD;
+DWORD _tamingMob198_Rtn1 = 0x00413FB1;
+__declspec(naked) void tamingMob198_1()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn1
+		label_j:
+		jmp _tamingMob198_1
+	}
+}
+
+DWORD _tamingMob198_2 = 0x0041439C;
+DWORD _tamingMob198_Rtn2 = 0x00414381;
+__declspec(naked) void tamingMob198_2()
+{
+	__asm {
+		cmp dword ptr[ebp - 0x48], 0xC1
+		jz label_j
+		cmp dword ptr[ebp - 0x48], 0xC6
+		jmp _tamingMob198_Rtn2
+		label_j :
+		jmp _tamingMob198_2
+	}
+}
+
+DWORD _tamingMob198_3 = 0x0045193F;
+DWORD _tamingMob198_Rtn3 = 0x0045193A;
+__declspec(naked) void tamingMob198_3()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn3
+		label_j :
+		jmp _tamingMob198_3
+	}
+}
+
+DWORD _tamingMob198_4 = 0x004527A6;
+DWORD _tamingMob198_Rtn4 = 0x004527A4;
+__declspec(naked) void tamingMob198_4()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn4
+		label_j :
+		jmp _tamingMob198_4
+	}
+}
+
+DWORD _tamingMob198_5 = 0x0045281B;
+DWORD _tamingMob198_Rtn5 = 0x00452815;
+__declspec(naked) void tamingMob198_5()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn5
+		label_j :
+		jmp _tamingMob198_5
+	}
+}
+
+DWORD _tamingMob198_6 = 0x00452C63;
+DWORD _tamingMob198_Rtn6 = 0x00452C61;
+__declspec(naked) void tamingMob198_6()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn6
+		label_j :
+		jmp _tamingMob198_6
+	}
+}
+
+DWORD _tamingMob198_7 = 0x00454522;
+DWORD _tamingMob198_Rtn7 = 0x00454520;
+__declspec(naked) void tamingMob198_7()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn7
+		label_j :
+		jmp _tamingMob198_7
+	}
+}
+
+DWORD _tamingMob198_8 = 0x004545E1;
+DWORD _tamingMob198_Rtn8 = 0x00454548;
+__declspec(naked) void tamingMob198_8()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn8
+		label_j :
+		jmp _tamingMob198_8
+	}
+}
+
+DWORD _tamingMob198_9 = 0x00454606;
+DWORD _tamingMob198_Rtn9 = 0x00454604;
+__declspec(naked) void tamingMob198_9()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn9
+		label_j :
+		jmp _tamingMob198_9
+	}
+}
+
+DWORD _tamingMob198_10 = 0x0045463C;
+DWORD _tamingMob198_Rtn10 = 0x00454636;
+__declspec(naked) void tamingMob198_10()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn10
+		label_j :
+		jmp _tamingMob198_10
+	}
+}
+
+DWORD _tamingMob198_11 = 0x004546D7;
+DWORD _tamingMob198_Rtn11 = 0x004546D5;
+__declspec(naked) void tamingMob198_11()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn11
+		label_j :
+		jmp _tamingMob198_11
+	}
+}
+
+DWORD _tamingMob198_12 = 0x00454762;
+DWORD _tamingMob198_Rtn12 = 0x00454760;
+__declspec(naked) void tamingMob198_12()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn12
+		label_j :
+		jmp _tamingMob198_12
+	}
+}
+
+DWORD _tamingMob198_13 = 0x004549A7;
+DWORD _tamingMob198_Rtn13 = 0x004549A1;
+__declspec(naked) void tamingMob198_13()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn13
+		label_j :
+		jmp _tamingMob198_13
+	}
+}
+
+DWORD _tamingMob198_14 = 0x00456567;
+DWORD _tamingMob198_Rtn14 = 0x00456540;
+__declspec(naked) void tamingMob198_14()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn14
+		label_j :
+		jmp _tamingMob198_14
+	}
+}
+
+DWORD _tamingMob198_15 = 0x004B1BEA;
+DWORD _tamingMob198_Rtn15 = 0x004B1B91;
+__declspec(naked) void tamingMob198_15()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn15
+		label_j :
+		jmp _tamingMob198_15
+	}
+}
+
+DWORD _tamingMob198_16 = 0x0066FB25;
+DWORD _tamingMob198_Rtn16 = 0x0066FB23;
+__declspec(naked) void tamingMob198_16()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn16
+		label_j :
+		jmp _tamingMob198_16
+	}
+}
+
+DWORD _tamingMob198_17 = 0x0066FCB1;
+DWORD _tamingMob198_Rtn17 = 0x0066FCAB;
+__declspec(naked) void tamingMob198_17()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn17
+		label_j :
+		jmp _tamingMob198_17
+	}
+}
+
+DWORD _tamingMob198_18 = 0x007AAA5E;
+DWORD _tamingMob198_Rtn18= 0x007AAA55;
+__declspec(naked) void tamingMob198_18()
+{
+	__asm {
+		inc     eax
+		test    eax, eax
+		jnz label_j
+		mov     eax, [ebp - 0E6Ch]
+		cdq
+		mov     ecx, 0x2710
+		idiv    ecx
+		sub     eax, 0xC6
+		neg     eax
+		sbb     eax, eax
+		inc     eax
+		test    eax, eax
+		jnz label_j
+		jmp _tamingMob198_Rtn18
+		label_j :
+		jmp _tamingMob198_18
+	}
+}
+
+DWORD _tamingMob198_19 = 0x008C9EF8;
+DWORD _tamingMob198_Rtn19 = 0x008C9EF6;
+__declspec(naked) void tamingMob198_19()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn19
+		label_j :
+		jmp _tamingMob198_19
+	}
+}
+
+DWORD _tamingMob198_20 = 0x008C9F62;
+DWORD _tamingMob198_Rtn20 = 0x008C9F60;
+__declspec(naked) void tamingMob198_20()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn20
+		label_j :
+		jmp _tamingMob198_20
+	}
+}
+
+DWORD _tamingMob198_21 = 0x0093A8EE;
+DWORD _tamingMob198_Rtn21 = 0x0093A8E8;
+__declspec(naked) void tamingMob198_21()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn21
+		label_j :
+		jmp _tamingMob198_21
+	}
+}
+
+DWORD _tamingMob198_22 = 0x0093CEE4;
+DWORD _tamingMob198_Rtn22 = 0x0093CEDE;
+__declspec(naked) void tamingMob198_22()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn22
+		label_j :
+		jmp _tamingMob198_22
+	}
+}
+
+DWORD _tamingMob198_23 = 0x0094231F;
+DWORD _tamingMob198_Rtn23 = 0x00942214;
+__declspec(naked) void tamingMob198_23()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn23
+		label_j :
+		jmp _tamingMob198_23
+	}
+}
+
+DWORD _tamingMob198_24 = 0x00964959;
+DWORD _tamingMob198_Rtn24 = 0x00964953;
+__declspec(naked) void tamingMob198_24()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn24
+		label_j :
+		jmp _tamingMob198_24
+	}
+}
+
+DWORD _tamingMob198_25 = 0x0096CA59;
+DWORD _tamingMob198_25_2 = 0x0096CA57;
+DWORD _tamingMob198_Rtn25 = 0x0096CA55;
+__declspec(naked) void tamingMob198_25()
+{
+	__asm {
+		cmp eax, ebx
+		jz label_j
+		cmp eax, 0xC6
+		jz label_j
+		xor eax, eax
+		jmp _tamingMob198_25_2
+		label_j :
+		jmp _tamingMob198_25
+	}
+}
+
+DWORD _tamingMob198_26 = 0x00974539;
+DWORD _tamingMob198_Rtn26 = 0x00974533;
+__declspec(naked) void tamingMob198_26()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn26
+		label_j :
+		jmp _tamingMob198_26
+	}
+}
+
+DWORD _tamingMob198_27 = 0x00A12B39;
+DWORD _tamingMob198_Rtn27 = 0x00A129F3;
+__declspec(naked) void tamingMob198_27()
+{
+	__asm {
+		cmp dword ptr[ebp - 0x10], 0xC1
+		jz label_j
+		cmp dword ptr[ebp - 0x10], 0xC6
+		jmp _tamingMob198_Rtn27
+		label_j :
+		jmp _tamingMob198_27
+	}
+}
+
+DWORD _tamingMob198_28 = 0x0096CA98;
+DWORD _tamingMob198_Rtn28 = 0x0096CAC3;
+__declspec(naked) void tamingMob198_28()
+{
+	__asm {
+		cmp eax, ebx
+		jz label_j
+		cmp eax, 0xC6
+		jnz label_j2
+		label_j :
+		lea eax, [ebp - 0x14]
+		jmp _tamingMob198_28
+		label_j2 :
+		jmp _tamingMob198_Rtn28
+	}
+}
+
+DWORD _tamingMob198_29 = 0x00413E43;
+DWORD _tamingMob198_Rtn29 = 0x00413E41;
+__declspec(naked) void tamingMob198_29()
+{
+	__asm {
+		cmp eax, 0xC1
+		jz label_j
+		cmp eax, 0xC6
+		jmp _tamingMob198_Rtn29
+		label_j :
+		jmp _tamingMob198_29
+	}
+}
+
+DWORD _tamingMob198_30 = 0x005FD208;
+DWORD _tamingMob198_Rtn30 = 0x005FD1C0;
+__declspec(naked) void tamingMob198_30()
+{
+	__asm {
+		jz label_j
+		dec ecx
+		dec ecx
+		jz label_j
+		dec ecx
+		dec ecx
+		dec ecx
+		dec ecx
+		dec ecx
+		jz label_j
+		jmp _tamingMob198_Rtn30
+		label_j :
+		jmp _tamingMob198_30
+	}
+}
