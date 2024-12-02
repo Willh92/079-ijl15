@@ -40,6 +40,12 @@
     <Filter Include="Header Files\Util">
       <UniqueIdentifier>{8a58b2c4-2100-4f18-95b4-c5ab8cf0ca53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\include">
+      <UniqueIdentifier>{117a8ff4-f544-4132-b371-8a5102205504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\include\wil">
+      <UniqueIdentifier>{a5747e77-f218-4622-bcb8-7e291d8af72a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dllmain.h">
@@ -206,6 +212,102 @@
     </ClInclude>
     <ClInclude Include="Util\robin_set.h">
       <Filter>Header Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ChairRelMove.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\com.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\com_apartment_variable.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\common.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\coroutine.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\cppwinrt.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\cppwinrt_authoring.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\cppwinrt_helpers.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\cppwinrt_wrl.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\filesystem.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\nt_result_macros.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\registry.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\registry_helpers.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\resource.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\result.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\result_macros.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\result_originate.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\rpc_helpers.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\safecast.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\stl.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\token_helpers.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\Tracelogging.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\traceloggingconfig.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\win32_helpers.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\win32_result_macros.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\windowing.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\winrt.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\wistd_config.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\wistd_functional.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\wistd_memory.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\wistd_type_traits.h">
+      <Filter>Header Files\include\wil</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wil\wrl.h">
+      <Filter>Header Files\include\wil</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

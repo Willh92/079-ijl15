@@ -136,7 +136,31 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 {
 	std::wstring strT = (wchar_t*)*sPath;
 
-	auto ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
+	VARIANTARG* ret = nullptr;
+
+	//if (strT.find(L"walk1") != std::wstring::npos)
+	//{
+	//	if (imgPath.find(This) != imgPath.end()) {
+			//try {
+			//	std::wostringstream oss;
+			//	oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
+			//	oss << "walk1";
+			//	std::wstring path = oss.str();
+			//	VARIANTARG pvarg1 = errorVar;
+			//	VARIANTARG pvarg2 = errorVar;
+			//	ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+			//	//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
+			//}
+			//catch (...) {
+			//}
+			//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << _ReturnAddress() << " " << imgPath[This]->name << strT << std::endl;
+	//	}
+	//}
+
+	if (ret == nullptr || pvargDest->vt == VT_EMPTY) {
+		ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
+	}
+
 	if (Client::tamingMob198Effect) {
 		if (pvargDest->vt == VT_EMPTY && strT.find(L"stand1") != std::wstring::npos) {
 			if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0198"))
@@ -157,6 +181,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 			}
 		}
 	}
+
 	if (pvargDest->vt == VT_UNKNOWN)
 	{
 		if (imgPath.find(This) != imgPath.end())

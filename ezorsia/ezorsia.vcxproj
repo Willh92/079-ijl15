@@ -174,7 +174,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;EZORSIA_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)\MapleClientCollectionTypes;$(ProjectDir)\Util;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\MapleClientCollectionTypes;$(ProjectDir)\Util;$(ProjectDir)\include\wil;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
@@ -255,6 +255,7 @@
       <FileType>CppHeader</FileType>
     </ClInclude>
     <ClInclude Include="BossHP.h" />
+    <ClInclude Include="ChairRelMove.h" />
     <ClInclude Include="CharacterEx.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="FixBuddy.h" />
@@ -262,6 +263,37 @@
     <ClInclude Include="ijl15.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="include\wil\com.h" />
+    <ClInclude Include="include\wil\common.h" />
+    <ClInclude Include="include\wil\com_apartment_variable.h" />
+    <ClInclude Include="include\wil\coroutine.h" />
+    <ClInclude Include="include\wil\cppwinrt.h" />
+    <ClInclude Include="include\wil\cppwinrt_authoring.h" />
+    <ClInclude Include="include\wil\cppwinrt_helpers.h" />
+    <ClInclude Include="include\wil\cppwinrt_wrl.h" />
+    <ClInclude Include="include\wil\filesystem.h" />
+    <ClInclude Include="include\wil\nt_result_macros.h" />
+    <ClInclude Include="include\wil\registry.h" />
+    <ClInclude Include="include\wil\registry_helpers.h" />
+    <ClInclude Include="include\wil\resource.h" />
+    <ClInclude Include="include\wil\result.h" />
+    <ClInclude Include="include\wil\result_macros.h" />
+    <ClInclude Include="include\wil\result_originate.h" />
+    <ClInclude Include="include\wil\rpc_helpers.h" />
+    <ClInclude Include="include\wil\safecast.h" />
+    <ClInclude Include="include\wil\stl.h" />
+    <ClInclude Include="include\wil\token_helpers.h" />
+    <ClInclude Include="include\wil\Tracelogging.h" />
+    <ClInclude Include="include\wil\traceloggingconfig.h" />
+    <ClInclude Include="include\wil\win32_helpers.h" />
+    <ClInclude Include="include\wil\win32_result_macros.h" />
+    <ClInclude Include="include\wil\windowing.h" />
+    <ClInclude Include="include\wil\winrt.h" />
+    <ClInclude Include="include\wil\wistd_config.h" />
+    <ClInclude Include="include\wil\wistd_functional.h" />
+    <ClInclude Include="include\wil\wistd_memory.h" />
+    <ClInclude Include="include\wil\wistd_type_traits.h" />
+    <ClInclude Include="include\wil\wrl.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
     <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h" />
     <ClInclude Include="MapleClientCollectionTypes\CInPacket.h" />

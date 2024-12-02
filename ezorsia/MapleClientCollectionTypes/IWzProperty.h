@@ -5,34 +5,38 @@
 #define INTERFACE   IWzProperty
 
 DECLARE_INTERFACE_(IWzProperty, IWzSerialize) {
-	BEGIN_INTERFACE
+	BEGIN_INTERFACE;
 
-	// *** IWzSerialize methods ***
+	/*** IUnknown methods ***/
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, void** ppv) PURE;
-
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
-
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	STDMETHOD(GetpersistentUOL)(THIS_  wchar_t**) PURE;
+	/*** IWzSerialize methods ***/
+	STDMETHOD(get_persistentUOL)(THIS_ wchar_t**) PURE;
+	STDMETHOD(raw_Serialize)(THIS_ uintptr_t*) PURE;
 
-	STDMETHOD(Serialize)(THIS_ IWzArchive*) PURE;
+	/*** IWzProperty methods ***/
+	STDMETHOD(get_item)(THIS_ const wchar_t* wsPath, _variant_t * result);
+	STDMETHOD(put_item)(THIS_ const wchar_t* wsPath, _variant_t pItem);
+	STDMETHOD(get__NewEnum)(THIS_ IUnknown**);
+	STDMETHOD(get_count)(THIS_ unsigned int*);
+	STDMETHOD(raw_Add)(THIS_ wchar_t*, tagVARIANT, tagVARIANT);
+	STDMETHOD(raw_Remove)(THIS_ wchar_t*);
+	STDMETHOD(raw_Import)(THIS_ wchar_t*);
+	STDMETHOD(raw__GetHeadPosition)(THIS_ unsigned int**);
+	STDMETHOD(raw__GetAt)(THIS_ unsigned int*, tagVARIANT*);
+	STDMETHOD(raw__GetName)(THIS_ unsigned int*, wchar_t**);
+	STDMETHOD(raw__GetNext)(THIS_ unsigned int**);
 
-	// ** IWzProperty methods ***
+	template <typename T>
+	T get_item(const wchar_t* wsPath)
+	{
+		_variant_t pItem(0);
+		this->get_item(wsPath, &pItem);
 
-	STDMETHOD(Getitem)(THIS_ wchar_t*, tagVARIANT*) PURE;
+		return reinterpret_cast<T>(pItem.ppunkVal);
+	}
 
-	STDMETHOD(Putitem)(THIS_ wchar_t*, tagVARIANT) PURE;
-
-	STDMETHOD(GetNewEnum)(THIS_ IUnknown**) PURE;
-
-	STDMETHOD(Getcount)(THIS_ unsigned int*) PURE;
-
-	STDMETHOD(Add)(THIS_ wchar_t*, tagVARIANT, tagVARIANT) PURE;
-
-	STDMETHOD(Remove)(THIS_ wchar_t*) PURE;
-
-	STDMETHOD(Import)(THIS_ wchar_t*) PURE;
-
-	END_INTERFACE
+	END_INTERFACE;
 };
