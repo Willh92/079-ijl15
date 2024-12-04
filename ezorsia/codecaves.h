@@ -1631,7 +1631,7 @@ __declspec(naked) void faceHairCave()
 		label_face :
 		jmp faceRtn
 
-		label_hair :
+			label_hair :
 		jmp hairRtn
 	}
 }
@@ -1803,15 +1803,15 @@ __declspec(naked) void skill4221001()   //0x00975369
 {
 	__asm {
 		pushfd
-		cmp eax,0x1
+		cmp eax, 0x1
 		jne label_ret
 		push eax
-		mov eax,0x0097642E
+		mov eax, 0x0097642E
 		mov byte ptr[eax], 0xEB
 		pop eax
 		label_ret :
 		popfd
-		jmp skill4221001Rtn
+			jmp skill4221001Rtn
 
 	}
 }
@@ -1839,7 +1839,7 @@ __declspec(naked) void tamingMob198_1()
 		jz label_j
 		cmp eax, 0xC6
 		jmp _tamingMob198_Rtn1
-		label_j:
+		label_j :
 		jmp _tamingMob198_1
 	}
 }
@@ -2071,7 +2071,7 @@ __declspec(naked) void tamingMob198_17()
 }
 
 DWORD _tamingMob198_18 = 0x007AAA5E;
-DWORD _tamingMob198_Rtn18= 0x007AAA55;
+DWORD _tamingMob198_Rtn18 = 0x007AAA55;
 __declspec(naked) void tamingMob198_18()
 {
 	__asm {
@@ -2196,13 +2196,19 @@ __declspec(naked) void tamingMob198_25()
 }
 
 DWORD _tamingMob198_26 = 0x00974539;
-DWORD _tamingMob198_Rtn26 = 0x00974533;
+DWORD _tamingMob198_Rtn26 = 0x009746D2;
 __declspec(naked) void tamingMob198_26()
 {
 	__asm {
 		cmp eax, 0xC1
-		jz label_j
+		jz label_j2
 		cmp eax, 0xC6
+		jz label_j2
+		jmp _tamingMob198_Rtn26
+		label_j2:
+		mov eax, 0x003EBA9E    //ÔÊÐí¶þ¶ÎÌø
+		cmp eax,esi
+		jnz label_j
 		jmp _tamingMob198_Rtn26
 		label_j :
 		jmp _tamingMob198_26
@@ -2234,8 +2240,8 @@ __declspec(naked) void tamingMob198_28()
 		jnz label_j2
 		label_j :
 		lea eax, [ebp - 0x14]
-		jmp _tamingMob198_28
-		label_j2 :
+			jmp _tamingMob198_28
+			label_j2 :
 		jmp _tamingMob198_Rtn28
 	}
 }

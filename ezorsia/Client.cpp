@@ -43,6 +43,7 @@ int Client::StatDetailBackgrndWidth = 177;
 int Client::StatDetailBackgrndWidthRect = 200;
 int Client::DamageSkin = 0;
 bool Client::RemoteDamageSkin = false;
+bool Client::tamingMobUnlock = false;
 bool Client::tamingMob198Effect = false;
 
 bool Client::s14101004 = true;
@@ -942,6 +943,13 @@ void Client::MoreHook() {
 		Memory::CodeCave(tamingMob198_28, 0x0096CA91, 7);
 		Memory::CodeCave(tamingMob198_29, 0x00413E3C, 5);
 		Memory::CodeCave(tamingMob198_30, 0x005FD1BA, 6);
+	}
+
+	if (Client::tamingMobUnlock) {
+		Memory::FillBytes(0x00413E8C, 0x90, 2);
+		byte unlockBytes[] = { 0xEB ,0x26 };
+		Memory::WriteByteArray(0x008C9F0B, unlockBytes, sizeof(unlockBytes));
+		Memory::FillBytes(0x0093CF0F, 0x90, 2);
 	}
 }
 
