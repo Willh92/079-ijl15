@@ -1922,6 +1922,8 @@ __declspec(naked) void tamingMob198_7()
 		cmp eax, 0xC1
 		jz label_j
 		cmp eax, 0xC6
+		jz label_j
+		cmp eax, 0x12D
 		jmp _tamingMob198_Rtn7
 		label_j :
 		jmp _tamingMob198_7

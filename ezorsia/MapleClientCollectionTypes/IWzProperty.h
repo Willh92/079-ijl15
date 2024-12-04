@@ -1,10 +1,9 @@
-#include "stdafx.h"
-#include <IWzArchive.h>
-#include <IWzSerialize.h>
+#pragma once
 #undef  INTERFACE
 #define INTERFACE   IWzProperty
 
-DECLARE_INTERFACE_(IWzProperty, IWzSerialize) {
+DECLARE_INTERFACE_IID_(IWzProperty, IUnknown, "986515D9-0A0B-4929-8B4F-718682177B92")
+{
 	BEGIN_INTERFACE;
 
 	/*** IUnknown methods ***/

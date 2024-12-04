@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include "Resman.h"
 #include <sys/stat.h>
@@ -5,6 +6,7 @@
 #include "IWzProperty.h"
 #include <sstream>
 #include <CharacterEx.h>
+#include <ChairRelMove.h>
 
 VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
 IWzProperty* damageSkinImg;
@@ -138,23 +140,25 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	VARIANTARG* ret = nullptr;
 
-	//if (strT.find(L"walk1") != std::wstring::npos)
+	//chair_data_t* t = getChair_data_fromId(3837);
+	//if (t != nullptr && strT.find(L"sit") != std::wstring::npos)
 	//{
-	//	if (imgPath.find(This) != imgPath.end()) {
-			//try {
-			//	std::wostringstream oss;
-			//	oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
-			//	oss << "walk1";
-			//	std::wstring path = oss.str();
-			//	VARIANTARG pvarg1 = errorVar;
-			//	VARIANTARG pvarg2 = errorVar;
-			//	ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
-			//	//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
-			//}
-			//catch (...) {
-			//}
-			//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << _ReturnAddress() << " " << imgPath[This]->name << strT << std::endl;
-	//	}
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << sPath << " " << _ReturnAddress() << std::endl;
+		/*if (imgPath.find(This) != imgPath.end() && (int)_ReturnAddress() == 0x00413657) {
+			std::wcout << "IWzProperty__GetItem_Hook :" << std::endl;
+			try {
+				std::wostringstream oss;
+				oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
+				oss << t->m_action;
+				std::wstring path = oss.str();
+				VARIANTARG pvarg1 = errorVar;
+				VARIANTARG pvarg2 = errorVar;
+				ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+				std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << _ReturnAddress() << " " << imgPath[This]->name << strT << "->" << path << std::endl;
+			}
+			catch (...) {
+			}
+		}*/
 	//}
 
 	if (ret == nullptr || pvargDest->vt == VT_EMPTY) {

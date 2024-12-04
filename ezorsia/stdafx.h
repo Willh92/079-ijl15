@@ -7,6 +7,9 @@
 #include <windows.h>
 
 // reference additional headers your program requires here
+#include "include/wil/com.h"
+#include <tuple>
+#include <robin_map.h>
 
 #include <iostream>
 #include "Client.h"
@@ -24,6 +27,11 @@
 #include <thread>
 #include <heapapi.h>
 
+#include "IWzArchive.h"
+#include "IWzSerialize.h"
+#include "IWzProperty.h"
+#include "IWzVector2D.h"
+
 #include "ZXString.h"
 #include "ZAllocBase.h"
 #include "ZAllocAnonSelector.h"
@@ -39,14 +47,15 @@
 #include "ZRef.h"
 #include "ZMap.h"
 #include "ZList.h"
-
 #include "ZInetAddr.h"
 #include "ZSocketBuffer.h"
 #include "ZSocketBase.h"
+
+
+#include "CUser.h"
+#include "CAvatar.h"
 #include "COutPacket.h"
 #include "CClientSocket.h"
 
 #include "TSecType.h"
-
-
 #include "TSingleton.h"

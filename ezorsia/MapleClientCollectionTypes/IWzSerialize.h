@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include <IWzArchive.h>
+#pragma once
 #undef  INTERFACE
 #define INTERFACE   IWzSerialize
 

@@ -309,6 +309,15 @@
     <ClInclude Include="include\wil\wrl.h">
       <Filter>Header Files\include\wil</Filter>
     </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzVector2D.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\CAvatar.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\CUser.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -348,6 +357,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MapleClientCollectionTypes\CInpacket.cpp">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="ChairRelMove.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapleClientCollectionTypes\CAvatar.cpp">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="MapleClientCollectionTypes\CUser.cpp">
       <Filter>Header Files\MapleTypes</Filter>
     </ClCompile>
   </ItemGroup>

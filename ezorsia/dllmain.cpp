@@ -9,7 +9,7 @@
 #include <Resman.h>
 #include <CharacterEx.h>
 #include "psapi.h"
-#include <ChairRelMove.h>
+#include "ChairRelMove.h"
 
 void CreateConsole() {
 	AllocConsole();

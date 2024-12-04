@@ -10,7 +10,13 @@
 
 #pragma once
 
+#ifndef assert_size
 #define assert_size(x, y) static_assert(x == y, "Static size assert failed.");
+#endif
+
+#ifndef member_at
+#define member_at(T, offset, name) auto& name() { return *reinterpret_cast<T*>(reinterpret_cast<uintptr_t>(this) + offset); }
+#endif
 
 #ifndef padding
 #define padding(x) struct { unsigned char __padding##x[(x)]; };
