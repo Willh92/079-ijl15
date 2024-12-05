@@ -938,18 +938,22 @@ void Client::MoreHook() {
 		Memory::CodeCave(tamingMob198_23, 0x0094220F, 5);
 		Memory::CodeCave(tamingMob198_24, 0x0096494E, 5);
 		Memory::CodeCave(tamingMob198_25, 0x0096CA51, 6);
-		Memory::CodeCave(tamingMob198_26, 0x0097452E, 5);
+		/*Memory::CodeCave(tamingMob198_26, 0x0097452E, 5);*/
 		Memory::CodeCave(tamingMob198_27, 0x00A129EC, 7);
 		Memory::CodeCave(tamingMob198_28, 0x0096CA91, 7);
 		Memory::CodeCave(tamingMob198_29, 0x00413E3C, 5);
 		Memory::CodeCave(tamingMob198_30, 0x005FD1BA, 6);
 	}
 
+	if (Client::tamingMobUnlock || Client::tamingMob198Effect) {
+		Memory::CodeCave(tamingMob198_26, 0x0097452E, 5);
+	}
+
 	if (Client::tamingMobUnlock) {
 		Memory::FillBytes(0x00413E8C, 0x90, 2);
 		byte unlockBytes[] = { 0xEB ,0x26 };
 		Memory::WriteByteArray(0x008C9F0B, unlockBytes, sizeof(unlockBytes));
-		Memory::FillBytes(0x0093CF0F, 0x90, 2);
+		Memory::FillBytes(0x0093CF16, 0x90, 2);
 	}
 }
 

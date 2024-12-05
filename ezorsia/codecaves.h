@@ -2204,13 +2204,27 @@ __declspec(naked) void tamingMob198_26()
 		jz label_j2
 		cmp eax, 0xC6
 		jz label_j2
-		jmp _tamingMob198_Rtn26
-		label_j2:
+		jmp label_allow
+		label_j2 :
 		mov eax, 0x003EBA9E    //ÔÊÐí¶þ¶ÎÌø
-		cmp eax,esi
-		jnz label_j
+			cmp eax, esi
+			jz label_allow
+			mov eax, 0x00200F0A    //ÔÊÐíË²ÒÆ
+			cmp eax, esi
+			jz label_allow
+			mov eax, 0x002195AA
+			cmp eax, esi
+			jz label_allow
+			mov eax, 0x00231C49
+			cmp eax, esi
+			jz label_allow
+			mov eax, 0x00B8A58B
+			cmp eax, esi
+			jz label_allow
+			jmp label_reject
+			label_allow :
 		jmp _tamingMob198_Rtn26
-		label_j :
+			label_reject :
 		jmp _tamingMob198_26
 	}
 }
