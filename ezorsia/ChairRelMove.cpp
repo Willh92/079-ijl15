@@ -129,8 +129,8 @@ void __fastcall hook_CUser__SetActivePortableChair(CUser* ecx, uintptr_t, int nI
 				nBodyRelMoveX = std::get<0>(off);
 				nBodyRelMoveY = std::get<1>(off);
 			}
-			std::wcout << "hook_CUser__SetActivePortableChair:" << ecx->m_dwCharacterId() << " isLeft : " << (ecx->IsLeft() ? "true" : "false ")
-				<< " sitAction:" << nSitAction << " " << nBodyRelMoveX << " " << nBodyRelMoveY << std::endl;
+			/*std::wcout << "hook_CUser__SetActivePortableChair:" << ecx->m_dwCharacterId() << " isLeft : " << (ecx->IsLeft() ? "true" : "false ")
+				<< " sitAction:" << nSitAction << " " << nBodyRelMoveX << " " << nBodyRelMoveY << " " << ecx->GetAvatar()->m_nRidingChairID() << std::endl;*/
 		}
 
 		g_pChairData[ecx->m_dwCharacterId()] = chair_data_t(nBodyRelMoveX, nBodyRelMoveY, nSitAction);
@@ -151,14 +151,14 @@ int __fastcall _changeState(CAvatar* ecx, uintptr_t, int state) {
 	{
 		auto action = g_pChairData[ecx->GetCharacterID()].m_action;
 		if (action != L"sit") {
-			if(wcsstr(action, L"walk"))
+			if (wcsstr(action, L"walk"))
 				return ecx->GetUser()->IsLeft() ? 1 : 0;
 			else if (wcsstr(action, L"stand"))
 				return ecx->GetUser()->IsLeft() ? 5 : 4;
 			else if (wcsstr(action, L"prone"))
 				return ecx->GetUser()->IsLeft() ? 11 : 10;
 		}
-		
+
 	}
 	return state;
 }

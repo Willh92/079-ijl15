@@ -115,6 +115,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 			Client::CustomLoginFrame = reader.GetBoolean("general", "CustomLoginFrame", true);
 			Client::WindowedMode = reader.GetBoolean("general", "WindowedMode", true);
 			Client::RemoveLogos = reader.GetBoolean("general", "RemoveLogos", true);
+			Client::RemoveLoginNxIdDialog = reader.GetBoolean("general", "RemoveLoginNxIdDialog", true);
 			Memory::UseVirtuProtect = reader.GetBoolean("general", "UseVirtuProtect", true);
 			Client::setDamageCap = reader.GetReal("optional", "setDamageCap", 199999);
 			Client::setMAtkCap = reader.GetReal("optional", "setMAtkCap", 1999);

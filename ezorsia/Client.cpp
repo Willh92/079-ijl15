@@ -10,6 +10,7 @@ int Client::MsgAmount = 26;
 bool Client::CustomLoginFrame = true;
 bool Client::WindowedMode = true;
 bool Client::RemoveLogos = true;
+bool Client::RemoveLoginNxIdDialog = true;
 int Client::setDamageCap = 199999;
 int Client::setMAtkCap = 1999;
 int Client::setAccCap = 999;
@@ -180,6 +181,9 @@ void Client::UpdateGameStartup() {
 	}
 	if (RemoveLogos) {
 		Memory::FillBytes(0x0065A398, 0x90, 20);	//no Logo @launch
+	}
+	if (RemoveLoginNxIdDialog) {
+		Memory::FillBytes(0x0062C650, 0x90, 5);	//ÆÁ±ÎµÇÂ¼À¶É«µ¯´°
 	}
 	Memory::FillBytes(0x009FB8AD, 0x90, 5);     //ÒÆ³ýÆô¶¯¹ã¸æ(remove start ads )
 	Memory::WriteByte(0x009FC0CB, 0xEB);	//jz 009FC13A ; jmp ÒÆ³ýÍË³ö¹ã¸æ(remove exit ads)

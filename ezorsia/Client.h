@@ -20,6 +20,7 @@ public:
 	static bool CustomLoginFrame;
 	static bool WindowedMode;
 	static bool RemoveLogos;
+	static bool RemoveLoginNxIdDialog;
 	static int setDamageCap;
 	static int setMAtkCap;
 	static int setAccCap;

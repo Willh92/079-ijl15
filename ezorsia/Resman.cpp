@@ -7,6 +7,7 @@
 #include <sstream>
 #include <CharacterEx.h>
 #include <ChairRelMove.h>
+#include <vector>
 
 VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
 IWzProperty* damageSkinImg;
@@ -77,6 +78,20 @@ struct WZPath
 	std::wstring name;
 };
 
+tsl::robin_set<int> hasEffPosition;
+std::vector<int> effectRelName;
+typedef int(__fastcall* _getEffPosition)(DWORD* This, void* notuse, DWORD* a1, DWORD* a2, DWORD* a3);
+_getEffPosition getEffPosition = (_getEffPosition)0x0060D74B;
+
+int __fastcall getEffPosition_Hook(DWORD* This, void* notuse, DWORD* a1, DWORD* a2, DWORD* a3) {
+	int position = getEffPosition(This, notuse, a1, a2, a3);
+	if (position > 0 && position < effectRelName.size()) {
+		//std::wcout << "getEffPosition_Hook :" << position << " " << effectRelName[position] << std::endl;
+		return effectRelName[position];
+	}
+	return position;
+}
+
 tsl::robin_map<IUnknown*, std::shared_ptr<WZPath>> imgPath;
 void* GetUOLProperty(VARIANT* prop, void** result)
 {
@@ -140,6 +155,15 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	VARIANTARG* ret = nullptr;
 
+	//std::wstring findStr = L"ItemEff.img";
+
+	//if (strT.find(findStr) != std::wstring::npos) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
+	//}
+	//if (imgPath.find(This) != imgPath.end() && imgPath[This]->rootPath.find(findStr) != std::wstring::npos) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
+	//}
+
 	//chair_data_t* t = getChair_data_fromId(3837);
 	//if (t != nullptr && strT.find(L"sit") != std::wstring::npos)
 	//{
@@ -159,7 +183,15 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 			catch (...) {
 			}
 		}*/
-	//}
+		//}
+	if ((int)_ReturnAddress() == 0x0060D115 && imgPath.find(This) != imgPath.end()
+		&& imgPath[This]->rootPath.find(L"SetEff.img") != std::wstring::npos) {
+		int number = static_cast<int>(std::wcstol(strT.c_str(), nullptr, 10));
+		if (!hasEffPosition.contains(number)) {
+			hasEffPosition.insert(number);
+			effectRelName.push_back(number);
+		}
+	}
 
 	if (ret == nullptr || pvargDest->vt == VT_EMPTY) {
 		ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
@@ -452,6 +484,7 @@ BOOL Resman::Hook_InitializeResMan() {
 }
 
 VOID Resman::Hook_InitInlinkOutlink() {
+	Memory::SetHook(true, reinterpret_cast<void**>(&getEffPosition), getEffPosition_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzProperty__GetItem), IWzProperty__GetItem_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzResMan__GetObjectA), IWzResMan__GetObjectA_Hook);
 	Memory::SetHook(true, reinterpret_cast<void**>(&IWzCanvas_operator_equal), IWzCanvas_operator_equal_Hook);

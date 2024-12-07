@@ -9,6 +9,7 @@
 // reference additional headers your program requires here
 #include "include/wil/com.h"
 #include <tuple>
+#include <robin_set.h>
 #include <robin_map.h>
 
 #include <iostream>
