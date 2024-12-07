@@ -33,6 +33,7 @@ std::string Client::ServerIP_AddressFromINI = "127.0.0.1";
 int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
 int Client::talkTime = 2000;
+bool Client::longSlots = false;
 bool Client::showItemID = false;
 bool Client::showWeaponSpeed = true;
 bool Client::minimizeMaptitleColor = false;
@@ -743,6 +744,8 @@ void Client::FixMouseWheel() {
 }
 
 void Client::LongQuickSlot() {
+	if (!longSlots)
+		return;
 	// CUIStatusBar::OnCreate
 	Memory::WriteByte(0x008D6547 + 1, 0xF0); // Draw rest of quickslot bar
 	Memory::WriteByte(0x008D6547 + 2, 0x03);

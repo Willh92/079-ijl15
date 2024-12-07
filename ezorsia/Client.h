@@ -44,6 +44,7 @@ public:
 	static int serverIP_Port;
 	static bool talkRepeat;
 	static int talkTime;
+	static bool longSlots;
 	static bool showItemID;
 	static bool showWeaponSpeed;
 	static bool minimizeMaptitleColor;
