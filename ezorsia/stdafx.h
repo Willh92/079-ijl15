@@ -28,10 +28,16 @@
 #include <thread>
 #include <heapapi.h>
 
+#include "CanvasType.h"
 #include "IWzArchive.h"
 #include "IWzSerialize.h"
+#include "IWzUOL.h"
 #include "IWzProperty.h"
 #include "IWzVector2D.h"
+#include "IWzRawCanvas.h"
+#include "IWzFont.h"
+#include "IWzRawCanvasAllocator.h"
+#include "IWzCanvas.h"
 
 #include "ZXString.h"
 #include "ZAllocBase.h"

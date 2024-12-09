@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Header Files\detours">
       <UniqueIdentifier>{78940425-4fe1-4831-b133-0a7dc43b6727}</UniqueIdentifier>
     </Filter>
@@ -45,6 +41,10 @@
     </Filter>
     <Filter Include="Header Files\include\wil">
       <UniqueIdentifier>{a5747e77-f218-4622-bcb8-7e291d8af72a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -318,6 +318,24 @@
     <ClInclude Include="MapleClientCollectionTypes\CUser.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzCanvas.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\CanvasType.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzRawCanvasAllocator.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzRawCanvas.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzFont.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzUOL.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -371,7 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ezorsia.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>Header Files\Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>

@@ -32,7 +32,7 @@ static std::tuple<int, int> get_chair_rel_move(int itemId) {
 	}
 }
 
-IWzProperty* get_item_info(const int nItemID)
+IWzProperty* get_item_info(int nItemID)
 {
 	IWzProperty* pResult;
 	_CItemInfo__GetItemInfo(g_pCItemInfo, &pResult, nItemID);
@@ -129,11 +129,11 @@ void __fastcall hook_CUser__SetActivePortableChair(CUser* ecx, uintptr_t, int nI
 				nBodyRelMoveX = std::get<0>(off);
 				nBodyRelMoveY = std::get<1>(off);
 			}
-			/*std::wcout << "hook_CUser__SetActivePortableChair:" << ecx->m_dwCharacterId() << " isLeft : " << (ecx->IsLeft() ? "true" : "false ")
-				<< " sitAction:" << nSitAction << " " << nBodyRelMoveX << " " << nBodyRelMoveY << " " << ecx->GetAvatar()->m_nRidingChairID() << std::endl;*/
+			std::wcout << "hook_CUser__SetActivePortableChair:" << ecx->m_dwCharacterId() << " isLeft : " << (ecx->IsLeft() ? "true" : "false ")
+				<< " sitAction:" << nSitAction << " " << nBodyRelMoveX << " " << nBodyRelMoveY << " " << ecx->GetAvatar()->m_nRidingChairID() << std::endl;
 		}
-
-		g_pChairData[ecx->m_dwCharacterId()] = chair_data_t(nBodyRelMoveX, nBodyRelMoveY, nSitAction);
+		auto data= chair_data_t(nBodyRelMoveX, nBodyRelMoveY, nSitAction);
+		g_pChairData[ecx->m_dwCharacterId()] = data;
 
 		// looking to the right - adjust view
 		if (g_pChairData.find(ecx->m_dwCharacterId()) != g_pChairData.end())

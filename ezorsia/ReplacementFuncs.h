@@ -1,4 +1,5 @@
 #pragma once
+
 #include "AutoTypes.h"
 #include "Memory.h"
 #include <WinSock2.h>
@@ -286,4 +287,22 @@ bool Hook_CItemInfo__GetItemDesc(bool enable)
 			return ret;
 		};
 	return  Memory::SetHook(enable, reinterpret_cast<void**>(&CItemInfo__GetItemDesc), hook);
+}
+
+int __fastcall _Sub_8C9F01_t(DWORD* pThis, void* edx)
+{
+	//auto ret = Sub_8C9F01(pThis, edx);
+	if (Sub_8C9F38(pThis, edx)) {
+		auto mobId = *(int*)Sub_55A8C1((DWORD*)(*(pThis + 0x2FF)), edx);
+		if (mobId == 1932000 && (int)_ReturnAddress() >= 0x00974307 && (int)_ReturnAddress() <= 0x009762FE)
+			return 0;
+		//std::cout << "_Sub_8C9F01_t:" << " mobId;" << mobId << " " << _ReturnAddress() << std::endl;
+		return 1;
+	}
+	return 0;
+};
+
+bool Hook_Sub_8C9F01(bool enable)
+{
+	return  Memory::SetHook(enable, reinterpret_cast<void**>(&Sub_8C9F01), _Sub_8C9F01_t);
 }

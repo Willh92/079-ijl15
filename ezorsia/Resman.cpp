@@ -8,6 +8,7 @@
 #include <CharacterEx.h>
 #include <ChairRelMove.h>
 #include <vector>
+#include <regex>
 
 VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
 IWzProperty* damageSkinImg;
@@ -130,14 +131,146 @@ std::wstring GetImgFullPath(std::wstring strT)
 	return strT;
 }
 
+IWzCanvas* getIWzCanvas(IWzProperty* property, const wchar_t* wsPath) {
+	if (property == NULL || wsPath == NULL)
+		return NULL;
+	IUnknown* ret = property->get_item<IUnknown*>(wsPath);
+	if (ret) {
+		IWzUOL* uol = NULL;
+		HRESULT hr = ret->QueryInterface<IWzUOL>(&uol);
+		if (SUCCEEDED(hr))
+		{
+			wchar_t* filePath = nullptr;
+			uol->get_className(&filePath);
+			std::wcout << "getIWzCanvas" << filePath << std::endl;
+			return NULL;
+		}
+		return (IWzCanvas*)(ret);
+	}
+	return NULL;
+}
+
+IWzProperty* getIWzPropertyForPath(DWORD* This, std::wstring path) {
+	try {
+		VARIANTARG ret = {};
+		VARIANTARG pvarg1 = errorVar;
+		VARIANTARG pvarg2 = errorVar;
+		IWzResMan__GetObjectA(This, nullptr, &ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+		if (ret.vt == VT_UNKNOWN)
+		{
+			return (IWzProperty*)ret.punkVal;
+		}
+	}
+	catch (...) {
+	}
+	return nullptr;
+}
+
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
 {
 	std::wstring strT = (wchar_t*)*sUOL;
 
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
-	//if (strT.find(L"2503") != std::wstring::npos) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << ret->punkVal << " " << strT << std::endl;
-	//}
+	if ((int)_ReturnAddress() == 0x009482BC && ret->punkVal && strT.find(L"0301.img") != std::wstring::npos) {
+		bool isEffct2 = strT.find(L"effect2") != std::wstring::npos;
+		std::wregex pattern(L".*?0301.img/(.*?)/");
+		std::wsmatch result;
+		int chairId = 0;
+		if (std::regex_search(strT, result, pattern)) {
+			chairId = static_cast<int>(std::wcstol(result[1].str().c_str(), nullptr, 10));
+		}
+		if (chairId != 0) {
+			IWzProperty* chairInfo = get_item_info(chairId);
+			if (chairInfo) {
+				auto pBodyRelMove = chairInfo->get_item<IWzVector2D*>(L"bodyRelMove");
+				if (pBodyRelMove != nullptr && pBodyRelMove->get_y() != 0) {
+					int offsetY = pBodyRelMove->get_y();
+					IWzProperty* effect = (IWzProperty*)ret->punkVal;
+					if (effect) {
+						_variant_t pos(0);
+						effect->get_item(L"pos", &pos);
+						if (pos.vt != 0) {
+							switch (pos.intVal) {
+							case 0:
+							{
+								int i = 0;
+								while (IWzCanvas* currentEffect = getIWzCanvas(effect, std::to_wstring(i).c_str())) {
+									unsigned int height = 0;
+									currentEffect->Getheight(&height);
+									int y = 0;
+									currentEffect->Getcy(&y);
+									if (height - y < -offsetY) {
+										currentEffect->Putcy(y + offsetY);
+									}
+									i++;
+								}
+							}
+							break;
+							case 1:
+							{
+								int i = 0;
+								while (IWzCanvas* currentEffect = getIWzCanvas(effect, std::to_wstring(i).c_str())) {
+									i++;
+									unsigned int height = 0;
+									currentEffect->Getheight(&height);
+									int y = 0;
+									currentEffect->Getcy(&y);
+									if (y > 0 && height <= y) {
+										currentEffect->Putcy(y - 47 + offsetY);
+									}
+								}
+							}
+							break;
+							case 2:
+								break;
+							case 3:
+								break;
+							}
+							std::wcout << "empty" << pos.vt << " " << pos.intVal << std::endl;
+						}
+						//effect->raw_Remove(const_cast<wchar_t*>(L"pos"));
+					}
+					//IWzProperty* effect2 = isEffct2 ? nullptr : getIWzPropertyForPath(This, strT + L"2");
+					//int i = 0;
+					//while (IWzCanvas* currentEffect = getIWzCanvas(effect, std::to_wstring(i).c_str())) {
+						/*unsigned int height = 0;
+						currentEffect->Getheight(&height);
+						int y = 0;
+						currentEffect->Getcy(&y);
+						if (isEffct2 && height == y && y > 0) {
+							currentEffect->Putcy(offsetY);
+							continue;
+						}
+						if (height >= y && y > 0) {
+							if (height - y < -offsetY) {
+								currentEffect->Putcy(y + offsetY);
+							}
+							else {
+								break;
+							}
+						}
+						else if (y > 0) {
+							if (effect2) {
+								IWzCanvas* ffect2Canvas = getIWzCanvas(effect2, std::to_wstring(i).c_str());
+								if (ffect2Canvas) {
+									unsigned int height2 = 0;
+									ffect2Canvas->Getheight(&height2);
+									std::wcout << "IWzResMan__GetObjectA_Hook height:" << height << " hegith2:" << height2 << std::endl;
+									if (height > height2)
+										currentEffect->Putcy(height - height2 - offsetY);
+								}
+							}
+							else {
+								currentEffect->Putcy(y + offsetY);
+							}
+						}
+						std::wcout << "IWzResMan__GetObjectA_Hook :hight = " << height << " y = " << y << " " << offsetY << " " << chairId << " " << strT << " " << _ReturnAddress() << std::endl;*/
+						//i++;
+					//}
+				}
+			}
+		}
+	}
 	if (ret && ret->vt == VT_UNKNOWN)
 	{
 		WZPath wz;
@@ -155,7 +288,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	VARIANTARG* ret = nullptr;
 
-	//std::wstring findStr = L"ItemEff.img";
+	//std::wstring findStr = L"";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
@@ -195,6 +328,23 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	if (ret == nullptr || pvargDest->vt == VT_EMPTY) {
 		ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
+	}
+
+	if (pvargDest->vt == VT_EMPTY && (strT.find(L"ladder") != std::wstring::npos || strT.find(L"rope") != std::wstring::npos)) {
+		if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0193")) {
+			try {
+				std::wostringstream oss;
+				oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
+				oss << "stand1";
+				std::wstring path = oss.str();
+				VARIANTARG pvarg1 = errorVar;
+				VARIANTARG pvarg2 = errorVar;
+				ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+				//std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << "->" << path << " " << pvargDest->vt << imgPath[This]->name << std::endl;
+			}
+			catch (...) {
+			}
+		}
 	}
 
 	if (Client::tamingMob198Effect) {

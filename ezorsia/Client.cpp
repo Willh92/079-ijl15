@@ -861,6 +861,8 @@ void Client::NoPassword() {
 	}
 }
 
+bool Hook_Sub_8C9F01(bool enable);
+
 void Client::MoreHook() {
 
 	if (!Client::showWeaponSpeed)
@@ -958,8 +960,9 @@ void Client::MoreHook() {
 
 	if (Client::tamingMobUnlock) {
 		Memory::FillBytes(0x00413E8C, 0x90, 2);
-		byte unlockBytes[] = { 0xEB ,0x26 };
-		Memory::WriteByteArray(0x008C9F0B, unlockBytes, sizeof(unlockBytes));
+		//byte unlockBytes[] = { 0xEB ,0x26 };
+		//Memory::WriteByteArray(0x008C9F0B, unlockBytes, sizeof(unlockBytes));
+		Hook_Sub_8C9F01(true);
 		Memory::FillBytes(0x0093CF16, 0x90, 2);
 	}
 }

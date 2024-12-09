@@ -1,0 +1,36 @@
+enum CANVAS_DITHERTYPE : __int32
+{
+    CD_NONE = 0x0,
+    CD_FS0 = 0x1,
+    CD_FS1 = 0x2,
+    CD_FS = 0x3,
+    CD_FD0 = 0x11,
+    CD_FD1 = 0x12,
+    CD_FD = 0x13,
+};
+
+enum CANVAS_LEVELMAP : __int32
+{
+    CL_ALL16 = 0x1,
+    CL_ALL32 = 0x2,
+    CL_ALL56 = 0x201,
+    CL_USE32OVER1 = 0x10002,
+    CL_USE32OVER2 = 0x20002,
+    CL_USE56OVER1 = 0x10201,
+    CL_USE56OVER2 = 0x20201,
+};
+
+enum CANVAS_PIXFORMAT : __int32
+{
+    CP_UNKNOWN = 0x0,
+    CP_A4R4G4B4 = 0x1,
+    CP_A8R8G8B8 = 0x2,
+    CP_R5G6B5 = 0x201,
+    CP_DXT3 = 0x402,
+};
+
+enum CANVAS_ALPHATYPE : uint32_t
+{
+    CA_OVERWRITE = 0xFFFFFFFF,
+    CA_REMOVEALPHA = 0xFFFFFFFE,
+};

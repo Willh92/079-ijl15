@@ -14,6 +14,8 @@ struct chair_data_t
 	const wchar_t* m_action = L"sit";
 };
 
+IWzProperty* get_item_info(const int nItemID);
+
 chair_data_t* getChair_data_fromId(int userId);
 
 void Hook_SetActiveChairRelMove(bool bEnable);

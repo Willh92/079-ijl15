@@ -295,6 +295,7 @@
     <ClInclude Include="include\wil\wistd_type_traits.h" />
     <ClInclude Include="include\wil\wrl.h" />
     <ClInclude Include="MapleClientCollectionTypes\asserts.h" />
+    <ClInclude Include="MapleClientCollectionTypes\CanvasType.h" />
     <ClInclude Include="MapleClientCollectionTypes\CAvatar.h" />
     <ClInclude Include="MapleClientCollectionTypes\CClientSocket.h" />
     <ClInclude Include="MapleClientCollectionTypes\CInPacket.h" />
@@ -302,8 +303,13 @@
     <ClInclude Include="MapleClientCollectionTypes\CUser.h" />
     <ClInclude Include="MapleClientCollectionTypes\framework.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzArchive.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzCanvas.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzFont.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzProperty.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzRawCanvas.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzRawCanvasAllocator.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzSerialize.h" />
+    <ClInclude Include="MapleClientCollectionTypes\IWzUOL.h" />
     <ClInclude Include="MapleClientCollectionTypes\IWzVector2D.h" />
     <ClInclude Include="MapleClientCollectionTypes\TSecType.h" />
     <ClInclude Include="MapleClientCollectionTypes\TSingleton.h" />
