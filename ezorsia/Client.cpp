@@ -3,6 +3,7 @@
 #include "codecaves.h"
 #include <cstringt.h>
 #include "FixBuddy.h"
+#include <Resman.h>
 
 int Client::m_nGameHeight = 720;
 int Client::m_nGameWidth = 1280;
@@ -242,37 +243,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwTempStatCoolTimeVPos + 2, (m_nGameHeight / 2) - 23);	//sub ebx,277 ; Skill icon cooltime y-pos
 	Memory::WriteInt(dwTempStatCoolTimeHPos + 3, (m_nGameWidth / 2) - 3);	//lea eax,[eax+esi+397] ; Skill icon cooltime x-pos
 
-	slotXPos = m_nGameWidth - 540;
-	if (m_nGameWidth < 1366) {
-		slotXPos = m_nGameWidth > 1024 ? 815 : 805;
-	}
-	Memory::WriteInt(dwQuickSlotInitVPos + 1, m_nGameHeight + 1);//add eax,533
-	Memory::WriteInt(dwQuickSlotInitHPos + 1, slotXPos); //push 647 //hd800
-	Memory::WriteInt(dwQuickSlotVPos + 2, m_nGameHeight + 1);//add esi,533
-	Memory::WriteInt(dwQuickSlotHPos + 1, slotXPos); //push 647 //hd800
-	Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]6
-	Memory::WriteInt(dwQuickSlotCWndHPos + 2, -slotXPos); //lea ebx,[eax-647]
-	Memory::WriteInt(0x008D6547 + 1, 540); //快捷面板宽度
-	//4个快捷按钮位置
-	Memory::WriteInt(0x008E4443 + 1, 506);  //装备按鈕高度
-	Memory::WriteInt(0x008E4448 + 1, slotXPos + 7);  //装备按鈕寬度
-	Memory::WriteInt(0x008E53F6 + 1, 506);  //装备闪烁高度
-	Memory::WriteInt(0x008E53FB + 1, slotXPos + 7);  //装备闪烁寬度
-
-	Memory::WriteInt(0x008E44C0 + 1, 506);  //背包按鈕高度
-	Memory::WriteInt(0x008E44C5 + 1, slotXPos + 41);  //背包按鈕寬度
-	Memory::WriteInt(0x008E5499 + 1, 506);  //背包闪烁高度
-	Memory::WriteInt(0x008E549E + 1, slotXPos + 41);  //背包闪烁寬度
-
-	Memory::WriteInt(0x008E453D + 1, 540);  //能力值按鈕高度
-	Memory::WriteInt(0x008E4542 + 1, slotXPos + 7);  //能力值按鈕寬度
-	Memory::WriteInt(0x008E5353 + 1, 540);  //能力值闪烁图标高度
-	Memory::WriteInt(0x008E5358 + 1, slotXPos + 7);  //能力值闪烁图标宽度
-
-	Memory::WriteInt(0x008E45BA + 1, 540);  //技能按鈕高度
-	Memory::WriteInt(0x008E45BF + 1, slotXPos + 41);  //技能按鈕寬度
-	Memory::WriteInt(0x008E5152 + 1, 540);  //技能按鈕高度
-	Memory::WriteInt(0x008E5157 + 1, slotXPos + 41);  //技能按鈕寬度
+	//Client::UpdateSlotPosition(540);
 
 	//Memory::WriteInt(dwByteAvatarMegaHPos + 1, m_nGameHeight + 100); //push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2D::RelMove ##BAK
 	Memory::WriteInt(dwByteAvatarMegaHPos + 1, m_nGameWidth); //push 800 ; CAvatarMegaphone::ByeAvatarMegaphone ; IWzVector2D::RelMove
@@ -726,7 +697,45 @@ void Client::UpdateResolution() {
 	Memory::CodeCave(darkMap3cc, 0x00576735, 13);
 }
 
+void Client::UpdateSlotPosition(int width) {
+	//std::cout << "UpdateSlotPosition width = " << width << std::endl;
+	if (m_nGameWidth > 800) {
+		slotXPos = m_nGameWidth - width;
+		if (m_nGameWidth < 1366 && width >= 540) {
+			slotXPos = m_nGameWidth > 1024 ? 815 : 805;
+		}
+		Memory::WriteInt(dwQuickSlotInitVPos + 1, m_nGameHeight + 1);//add eax,533
+		Memory::WriteInt(dwQuickSlotInitHPos + 1, slotXPos); //push 647 //hd800
+		Memory::WriteInt(dwQuickSlotVPos + 2, m_nGameHeight + 1);//add esi,533
+		Memory::WriteInt(dwQuickSlotHPos + 1, slotXPos); //push 647 //hd800
+		Memory::WriteInt(dwQuickSlotCWndVPos + 2, -500); //lea edi,[eax-427]6
+		Memory::WriteInt(dwQuickSlotCWndHPos + 2, -slotXPos); //lea ebx,[eax-647]
+		Memory::WriteInt(0x008D6547 + 1, 540); //快捷面板宽度
+		//4个快捷按钮位置
+		Memory::WriteInt(0x008E4443 + 1, 506);  //装备按鈕高度
+		Memory::WriteInt(0x008E4448 + 1, slotXPos + 7);  //装备按鈕寬度
+		Memory::WriteInt(0x008E53F6 + 1, 506);  //装备闪烁高度
+		Memory::WriteInt(0x008E53FB + 1, slotXPos + 7);  //装备闪烁寬度
+
+		Memory::WriteInt(0x008E44C0 + 1, 506);  //背包按鈕高度
+		Memory::WriteInt(0x008E44C5 + 1, slotXPos + 41);  //背包按鈕寬度
+		Memory::WriteInt(0x008E5499 + 1, 506);  //背包闪烁高度
+		Memory::WriteInt(0x008E549E + 1, slotXPos + 41);  //背包闪烁寬度
+
+		Memory::WriteInt(0x008E453D + 1, 540);  //能力值按鈕高度
+		Memory::WriteInt(0x008E4542 + 1, slotXPos + 7);  //能力值按鈕寬度
+		Memory::WriteInt(0x008E5353 + 1, 540);  //能力值闪烁图标高度
+		Memory::WriteInt(0x008E5358 + 1, slotXPos + 7);  //能力值闪烁图标宽度
+
+		Memory::WriteInt(0x008E45BA + 1, 540);  //技能按鈕高度
+		Memory::WriteInt(0x008E45BF + 1, slotXPos + 41);  //技能按鈕寬度
+		Memory::WriteInt(0x008E5152 + 1, 540);  //技能按鈕高度
+		Memory::WriteInt(0x008E5157 + 1, slotXPos + 41);  //技能按鈕寬度
+	}
+}
+
 void Client::UpdateBarWidth(int width) {
+	/*std::cout << "UpdateBarWidth width = " << width << std::endl;*/
 	if (width >= m_nGameWidth) {
 		nBarBackgrndWidth = m_nGameWidth;
 		nBarBackgrndOpenWidth = slotXPos + 2;

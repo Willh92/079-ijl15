@@ -86,7 +86,7 @@ void Injected() {
 	CharacterEx::InitHypontizeFix(Client::s5221009);
 	Client::UpdateGameStartup();
 	Client::UpdateResolution();
-	Client::LongQuickSlot();
+	//Client::LongQuickSlot();
 	Client::FixMouseWheel();
 	Client::JumpCap();
 	Client::NoPassword();

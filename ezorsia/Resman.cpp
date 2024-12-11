@@ -189,6 +189,16 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 	std::wstring strT = (wchar_t*)*sUOL;
 
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
+
+	//std::wstring findStr = L"CNQuickSlot";
+
+	//if (strT.find(findStr) != std::wstring::npos) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << _ReturnAddress() << std::endl;
+	//}
+	//if (imgPath.find((IUnknown*)This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[(IUnknown*)This]->rootPath.find(findStr) != std::wstring::npos)) {
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << ret << " " << imgPath[(IUnknown*)This]->rootPath << " " << _ReturnAddress() << std::endl;
+	//}
+
 	if ((int)_ReturnAddress() == 0x009482BC && ret->punkVal && strT.find(L"0301.img") != std::wstring::npos) {
 		bool isEffct2 = strT.find(L"effect2") != std::wstring::npos;
 		std::wregex pattern(L".*?0301.img/(.*?)/");
@@ -346,7 +356,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		Client::UpdateBarWidth(width);
 	}
 
-	//std::wstring findStr = L"backgrnd";
+	//std::wstring findStr = L"CNQuickSlot";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
@@ -581,6 +591,20 @@ VOID loadDamageFile() {
 	catch (...) {}
 }
 
+VOID initResolution() {
+	unsigned int slotWidth;
+	auto base = getIWzPropertyForPath(L"UI/StatusBar.img/key");
+	unsigned int count;
+	base->get_count(&count);
+	if (count < 26) {
+		Client::longSlots = false;
+	}
+	Client::LongQuickSlot();
+	base = getIWzPropertyForPath(L"UI/StatusBar.img/base");
+	base->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
+	Client::UpdateSlotPosition(slotWidth);
+}
+
 BOOL Resman::Hook_InitializeResMan() {
 	autoFlushCacheTime(10000);
 
@@ -652,7 +676,7 @@ BOOL Resman::Hook_InitializeResMan() {
 		}
 		//¼ÓÔØÆ¤·ôÎÄ¼þ
 		loadDamageFile();
-
+		initResolution();
 		};
 
 	return Memory::SetHook(true, reinterpret_cast<void**>(&CWvsApp__InitializeResMan), Hook);

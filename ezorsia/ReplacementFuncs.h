@@ -130,8 +130,8 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			//if (strstr(str, "经验") != nullptr) {
-			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << std::endl;
+			//if (strstr(str, "Slot") != nullptr) {
+			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)
 			//{
@@ -191,8 +191,8 @@ bool Hook_StringPool__GetStringW(bool bEnable)	//hook stringpool modification //
 		{
 			auto ret = _StringPool__GetStringW(pThis, edx, result, nIdx, formal);
 			const wchar_t* str = static_cast<const wchar_t*>(*ret);
-			//if (wcsstr(str, L"经验") != nullptr) {
-			//	std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << std::endl;
+			//if (wcsstr(str, L"Slot") != nullptr) {
+			//	std::wcout << "StringPool__GetStringW id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)
 			//{
