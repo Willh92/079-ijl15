@@ -382,7 +382,7 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(0x008DEC14 + 1, m_nGameHeight - 19);	//push 581 临时经验条
 	Memory::WriteInt(0x008D6D3B + 1, m_nGameHeight - 22);
 
-	Memory::WriteInt(0x008D6D40 + 1, m_nGameWidth);
+	//Memory::WriteInt(0x008D6D40 + 1, m_nGameWidth);//Bar底图
 	Memory::WriteInt(0x008D6FE3 + 1, m_nGameHeight - 22);
 	Memory::WriteInt(0x008D6FE8 + 1, m_nGameWidth);    // CUIStatusBar
 	Memory::WriteInt(0x0065B4C6 + 1, m_nGameHeight);
@@ -736,7 +736,10 @@ void Client::UpdateSlotPosition(int width) {
 
 void Client::UpdateBarWidth(int width) {
 	/*std::cout << "UpdateBarWidth width = " << width << std::endl;*/
-	if (width >= m_nGameWidth) {
+	Memory::WriteInt(0x008D6D40 + 1, width);//Bar底图
+	nBarBackgrndWidth = m_nGameWidth;
+	nBarBackgrndOpenWidth = slotXPos + 2;
+	/*if (width >= m_nGameWidth) {
 		nBarBackgrndWidth = m_nGameWidth;
 		nBarBackgrndOpenWidth = slotXPos + 2;
 	}
@@ -744,7 +747,7 @@ void Client::UpdateBarWidth(int width) {
 		float r = (float)width / m_nGameWidth;
 		nBarBackgrndWidth = m_nGameWidth / r;
 		nBarBackgrndOpenWidth = (slotXPos + 2) / r;
-	}
+	}*/
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is
