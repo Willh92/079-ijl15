@@ -245,6 +245,8 @@ void Client::UpdateResolution() {
 	if (m_nGameWidth < 1366) {
 		slotXPos = m_nGameWidth > 1024 ? 815 : 805;
 	}
+	nBarBackgrndWidth = m_nGameWidth;
+	nBarBackgrndOpenWidth = slotXPos + 2;
 	Memory::WriteInt(dwQuickSlotInitVPos + 1, m_nGameHeight + 1);//add eax,533
 	Memory::WriteInt(dwQuickSlotInitHPos + 1, slotXPos); //push 647 //hd800
 	Memory::WriteInt(dwQuickSlotVPos + 2, m_nGameHeight + 1);//add esi,533
@@ -505,10 +507,20 @@ void Client::UpdateResolution() {
 
 	int msgAmntOffset, msgAmnt; msgAmnt = MsgAmount; msgAmntOffset = msgAmnt * 14;
 
-	Memory::WriteInt(0x008AC830 + 1, m_nGameHeight - 6 - msgAmntOffset);//inventory/exp gain y axis //####hd100 //90
+	//Memory::WriteInt(0x008AC830 + 1, m_nGameHeight - 6 - msgAmntOffset);//inventory/exp gain y axis //####hd100 //90  注释改用固定位置经验条位置
 	Memory::WriteInt(0x008AC8EE + 1, m_nGameWidth - 405);//inventory/exp gain x axis //310 //####hd415 //405
-	Memory::WriteInt(0x008AC98D + 1, m_nGameHeight - 6 - msgAmntOffset); //related to quickslots area presence
+	//Memory::WriteInt(0x008AC98D + 1, m_nGameHeight - 6 - msgAmntOffset); //related to quickslots area presence  注释改用固定位置经验条位置
 	Memory::WriteInt(0x008ACBFA + 1, m_nGameWidth - 405);
+	//固定位置经验条位置（适配动态bar背景，不需要的话启用上面两条注释，注释下面的）
+	Memory::WriteByte(0x008AC82D + 2, 0);
+	Memory::WriteInt(0x008AC830 + 1, m_nGameHeight - 6 - msgAmntOffset - 78);
+	Memory::WriteByte(0x008AC98A + 2, 0);
+	Memory::WriteInt(0x008AC98D + 1, m_nGameHeight - 6 - msgAmntOffset - 78);
+
+	//动态Bar背景宽度
+	Memory::CodeCave(updateBarBackgrndWidth, 0x008E3547, 6);
+	Memory::CodeCave(updateBarBackgrndaAnimationTime, 0x008E355F, 5);
+	Memory::CodeCave(updateBarBackgrndaInit, 0x008D50CD, 5);  //CUIStatusBar::OnCreate
 
 	Memory::WriteInt(0x008AC12A + 1, 400);//length of pick up and exp gain message canvas //found with help from Davi
 	Memory::WriteInt(0x008AC4BD + 1, 400);//address to move the message in the canvas adjusted above to the center of the new canvas  //thanks chris

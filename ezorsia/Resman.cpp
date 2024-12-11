@@ -150,20 +150,38 @@ IWzCanvas* getIWzCanvas(IWzProperty* property, const wchar_t* wsPath) {
 	return NULL;
 }
 
-IWzProperty* getIWzPropertyForPath(DWORD* This, std::wstring path) {
+VARIANTARG* getGetObjectAForPath(DWORD* This, std::wstring path) {
 	try {
 		VARIANTARG ret = {};
 		VARIANTARG pvarg1 = errorVar;
 		VARIANTARG pvarg2 = errorVar;
 		IWzResMan__GetObjectA(This, nullptr, &ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
-		if (ret.vt == VT_UNKNOWN)
+		return &ret;
+	}
+	catch (...) {
+	}
+	return nullptr;
+}
+
+VARIANTARG* getGetObjectAForPath(std::wstring path) {
+	return getGetObjectAForPath(GetResManInstance(), path);
+}
+
+IWzProperty* getIWzPropertyForPath(DWORD* This, std::wstring path) {
+	try {
+		auto ret = getGetObjectAForPath(This, path);
+		if (ret && ret->vt == VT_UNKNOWN)
 		{
-			return (IWzProperty*)ret.punkVal;
+			return (IWzProperty*)ret->punkVal;
 		}
 	}
 	catch (...) {
 	}
 	return nullptr;
+}
+
+IWzProperty* getIWzPropertyForPath(std::wstring path) {
+	return getIWzPropertyForPath(GetResManInstance(), path);
 }
 
 VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VARIANTARG* pvargDest, int* sUOL, int vParam, int vAux)
@@ -288,15 +306,6 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 
 	VARIANTARG* ret = nullptr;
 
-	//std::wstring findStr = L"";
-
-	//if (strT.find(findStr) != std::wstring::npos) {
-	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
-	//}
-	//if (imgPath.find(This) != imgPath.end() && imgPath[This]->rootPath.find(findStr) != std::wstring::npos) {
-	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
-	//}
-
 	//chair_data_t* t = getChair_data_fromId(3837);
 	//if (t != nullptr && strT.find(L"sit") != std::wstring::npos)
 	//{
@@ -329,6 +338,15 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	if (ret == nullptr || pvargDest->vt == VT_EMPTY) {
 		ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
 	}
+
+	/*std::wstring findStr = L"backgrnd";
+
+	if (strT.find(findStr) != std::wstring::npos) {
+		std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
+	}
+	if (imgPath.find(This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[This]->rootPath.find(findStr) != std::wstring::npos)) {
+		std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
+	}*/
 
 	if (pvargDest->vt == VT_EMPTY && (strT.find(L"ladder") != std::wstring::npos || strT.find(L"rope") != std::wstring::npos)) {
 		if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0193")) {

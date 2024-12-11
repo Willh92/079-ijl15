@@ -6,6 +6,9 @@ public:
 	static VOID Hook_InitInlinkOutlink();
 };
 
+IWzProperty* getIWzPropertyForPath(std::wstring path);
+VARIANTARG* getGetObjectAForPath(std::wstring path);
+
 static void autoFlushCacheTime(int time) {
 	Memory::WriteInt(0x004122A8 + 2, time);   //sweep cache delay default 60000
 	int SWEEPCACHE_DELAY_2[] = { 0x004122ED, 0x0041243C, 0x0041258E, 0x004126E0, 0x00412813, 0x00412919 };

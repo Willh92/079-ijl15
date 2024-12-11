@@ -1761,6 +1761,73 @@ __declspec(naked) void darkMap3cc() {
 	}
 }
 
+int nBarBackgrndWidth = 1008;
+int nBarBackgrndOpenWidth = 1008;
+int isInit = 1;
+DWORD updateBarBackgrndWidthRet = 0x008E354F;
+DWORD updateBarBackgrndWidthRet2 = 0x008E357D;  //未更新地址
+
+__declspec(naked) void _updateBarBackgrndWidth()
+{
+	__asm {
+		cmp[esi + 0xCBC], 0x1    //开关
+		mov ebx, nBarBackgrndOpenWidth;
+		jz label_jz
+			mov ebx, nBarBackgrndWidth
+			label_jz :
+		mov eax, [0x00BDD6F0]
+			mov eax, [eax]
+			mov eax, [eax + 0xC70]
+			mov eax, [eax + 0x40]
+			mov eax, [eax + 0x24]
+			mov[eax + 0x20], ebx
+			ret
+	}
+}
+
+__declspec(naked) void updateBarBackgrndWidth()
+{
+	__asm {
+		cmp[esi + 0xD98], ebx
+		je label_unUpdate
+		pushfd
+		call _updateBarBackgrndWidth
+		popfd
+		jmp updateBarBackgrndWidthRet
+		label_unUpdate :
+		mov eax, isInit
+			cmp eax, 0x1
+			jnz label_ret1
+			call _updateBarBackgrndWidth
+			mov isInit, 0x0
+			label_ret1 :
+			jmp updateBarBackgrndWidthRet2
+	}
+}
+
+DWORD updateBarBackgrndaAnimationTimeRet = 0x008E3564;
+__declspec(naked) void updateBarBackgrndaAnimationTime() {
+	__asm {
+		cmp[esi + 0xCBC], 0x1   //开关
+		jz label_ret1
+		cmp eax, 0x0
+		jmp updateBarBackgrndaAnimationTimeRet
+		label_ret1 :
+		cmp eax, 0x190
+		jmp updateBarBackgrndaAnimationTimeRet
+	}
+}
+
+DWORD updateBarBackgrndaInitCall = 0x00A6FC7C;
+DWORD updateBarBackgrndaInitRet = 0x008D50D2;
+__declspec(naked) void updateBarBackgrndaInit() {
+	__asm {
+		mov isInit,0x1
+		call updateBarBackgrndaInitCall
+		jmp updateBarBackgrndaInitRet
+	}
+}
+
 VOID __fastcall sentOutPacket(COutPacket* c) {
 	try {
 		CClientSocket::GetInstance()->SendPacket(c);
