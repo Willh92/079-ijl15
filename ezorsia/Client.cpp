@@ -52,6 +52,7 @@ bool Client::s14101004 = true;
 bool Client::s4221001 = false;
 bool Client::s4221007 = false;
 bool Client::s5221009 = false;
+int slotXPos = 0;
 
 void Client::UpdateGameStartup() {
 	//Memory::CodeCave(cc0x0044E550, dw0x0044E550, dw0x0044E550Nops); //run from packed client //skip //sub_44E546
@@ -241,12 +242,10 @@ void Client::UpdateResolution() {
 	Memory::WriteInt(dwTempStatCoolTimeVPos + 2, (m_nGameHeight / 2) - 23);	//sub ebx,277 ; Skill icon cooltime y-pos
 	Memory::WriteInt(dwTempStatCoolTimeHPos + 3, (m_nGameWidth / 2) - 3);	//lea eax,[eax+esi+397] ; Skill icon cooltime x-pos
 
-	int slotXPos = m_nGameWidth - 540;
+	slotXPos = m_nGameWidth - 540;
 	if (m_nGameWidth < 1366) {
 		slotXPos = m_nGameWidth > 1024 ? 815 : 805;
 	}
-	nBarBackgrndWidth = m_nGameWidth;
-	nBarBackgrndOpenWidth = slotXPos + 2;
 	Memory::WriteInt(dwQuickSlotInitVPos + 1, m_nGameHeight + 1);//add eax,533
 	Memory::WriteInt(dwQuickSlotInitHPos + 1, slotXPos); //push 647 //hd800
 	Memory::WriteInt(dwQuickSlotVPos + 2, m_nGameHeight + 1);//add esi,533
@@ -725,6 +724,18 @@ void Client::UpdateResolution() {
 	Memory::CodeCave(darkMap1cc, 0x00576456, 9);
 	Memory::CodeCave(darkMap2cc, 0x005765EF, 12);
 	Memory::CodeCave(darkMap3cc, 0x00576735, 13);
+}
+
+void Client::UpdateBarWidth(int width) {
+	if (width >= m_nGameWidth) {
+		nBarBackgrndWidth = m_nGameWidth;
+		nBarBackgrndOpenWidth = slotXPos + 2;
+	}
+	else {
+		float r = (float)width / m_nGameWidth;
+		nBarBackgrndWidth = m_nGameWidth / r;
+		nBarBackgrndOpenWidth = (slotXPos + 2) / r;
+	}
 }
 
 void Client::EnableNewIGCipher() {//??not called //no idea what cipher is

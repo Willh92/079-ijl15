@@ -339,14 +339,21 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		ret = IWzProperty__GetItem(This, nullptr, pvargDest, sPath);
 	}
 
-	/*std::wstring findStr = L"backgrnd";
-
-	if (strT.find(findStr) != std::wstring::npos) {
-		std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
+	if ((int)_ReturnAddress() == 0x008D8A67 && ret && pvargDest->vt != VT_EMPTY) {
+		unsigned int width = 0;
+		((IWzCanvas*)pvargDest->ppunkVal)->Getwidth(&width);
+		//std::wcout << "IWzProperty__GetItem_Hook :" << width << std::endl;
+		Client::UpdateBarWidth(width);
 	}
-	if (imgPath.find(This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[This]->rootPath.find(findStr) != std::wstring::npos)) {
-		std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
-	}*/
+
+	//std::wstring findStr = L"backgrnd";
+
+	//if (strT.find(findStr) != std::wstring::npos) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
+	//}
+	//if (imgPath.find(This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[This]->rootPath.find(findStr) != std::wstring::npos)) {
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
+	//}
 
 	if (pvargDest->vt == VT_EMPTY && (strT.find(L"ladder") != std::wstring::npos || strT.find(L"rope") != std::wstring::npos)) {
 		if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0193")) {
