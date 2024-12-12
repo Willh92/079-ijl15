@@ -425,17 +425,11 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	return ret;
 };
 
-
-int attackObject = 0;
-const DWORD attackObjectAddr = 0x0019DD94 + 8;
-__declspec(naked) void getattackObjectId() {
-
+__declspec(naked) int getattackObjectId() {
 	__asm {
-		push eax
-		mov eax, [attackObjectAddr]
-		mov eax, dword ptr[eax]
-		mov attackObject, eax
-		pop eax
+		mov eax, [0x0019DD94]
+		add eax, 8
+		mov eax, [eax]
 		ret
 	}
 }
@@ -447,7 +441,7 @@ VARIANTARG* __fastcall IWzProperty__GetSkinItem_Hook(IWzProperty* This, void* no
 
 	if ((Client::DamageSkin > 0 || Client::RemoteDamageSkin) && damageSkinImg) {
 		try {
-			getattackObjectId();
+			int attackObject = getattackObjectId();
 			int skinId = (Client::DamageSkin > 0 && attackObject == CharacterEx::m_loginUserId) ? Client::DamageSkin : 0;
 			if (Client::RemoteDamageSkin) {
 				auto it = CharacterEx::h_userSkin.find(attackObject);
@@ -577,16 +571,8 @@ RET:
 #pragma optimize("", off)
 
 VOID loadDamageFile() {
-	VARIANTARG pvargDest = {};
-	VARIANTARG pvarg1 = errorVar;
-	VARIANTARG pvarg2 = errorVar;
-	std::wstring path = L"Effect/DamageSkin.img/";
 	try {
-		auto ret = IWzResMan__GetObjectA(GetResManInstance(), nullptr, &pvargDest, (int*)&path, (int)&pvarg1, (int)&pvarg2);
-		if (ret && ret->vt == VT_UNKNOWN)
-		{
-			damageSkinImg = (IWzProperty*)Ztl_variant_t__GetUnknown(ret, nullptr, 0, 0);
-		}
+		damageSkinImg = getIWzPropertyForPath(L"Effect/DamageSkin.img/");
 	}
 	catch (...) {}
 }
