@@ -130,7 +130,7 @@ bool Hook_StringPool__GetString(bool bEnable)	//hook stringpool modification //t
 		{
 			auto ret = _StringPool__GetString(pThis, edx, result, nIdx, formal);
 			auto str = static_cast<const char*>(*ret);
-			//if (strstr(str, "Slot") != nullptr) {
+			//if (strstr(str, "Slot") != nullptr || nIdx == 3324) {
 			//	std::cout << "StringPool__GetString id = " << nIdx << " " << str << " " << _ReturnAddress() << std::endl;
 			//}
 			//if (nIdx == 1163)

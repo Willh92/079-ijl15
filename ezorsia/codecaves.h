@@ -1579,6 +1579,7 @@ __declspec(naked) void chatTextPos()
 }
 
 int curSpeed = 100;
+double climbSpeedSave = 0;
 void calcClimbSpeed() {
 	int speed = curSpeed;
 	speed = speed < 80 ? 80 : speed;
@@ -1587,10 +1588,10 @@ void calcClimbSpeed() {
 	double climbingSpeed = Client::climbSpeed;
 	climbingSpeed = climbingSpeed <= 1.0 ? 1.0 : climbingSpeed;
 	double curClimbSpeed = 3.0 * speed * climbingSpeed / 100;
-	Memory::WriteDouble(0x00C1CF80, curClimbSpeed);
+	Memory::WriteDouble((DWORD)&climbSpeedSave, curClimbSpeed);
 }
 
-DWORD calcSpeedHookRtn = 0x009541B9;
+DWORD calcSpeedHookRtn = 0x00954558;
 __declspec(naked) void calcSpeedHook()
 {
 	__asm {
@@ -1814,7 +1815,7 @@ __declspec(naked) void updateBarBackgrndaAnimationTime() {
 		jmp updateBarBackgrndaAnimationTimeRet
 		label_ret1 :
 		cmp eax, 0x190
-		jmp updateBarBackgrndaAnimationTimeRet
+			jmp updateBarBackgrndaAnimationTimeRet
 	}
 }
 
@@ -1822,7 +1823,7 @@ DWORD updateBarBackgrndaInitCall = 0x00A6FC7C;
 DWORD updateBarBackgrndaInitRet = 0x008D50D2;
 __declspec(naked) void updateBarBackgrndaInit() {
 	__asm {
-		mov isInit,0x1
+		mov isInit, 0x1
 		call updateBarBackgrndaInitCall
 		jmp updateBarBackgrndaInitRet
 	}

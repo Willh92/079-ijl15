@@ -866,7 +866,7 @@ void Client::LongQuickSlot() {
 }
 
 DWORD Client::jumpCap = 123;
-static float climbSpeedSave = 0;
+
 void Client::JumpCap() {
 	Memory::CodeCave(customJumpCapHook1, 0x007888E2, 10);
 	Memory::CodeCave(customJumpCapHook2, 0x008C9B37, 10);
@@ -875,7 +875,7 @@ void Client::JumpCap() {
 	Memory::WriteInt(0x009D8158 + 2, (DWORD)&climbSpeedSave);
 	if (climbSpeedAuto)
 	{
-		Memory::CodeCave(calcSpeedHook, 0x009541B3, 6);
+		Memory::CodeCave(calcSpeedHook, 0x00954552, 6);
 	}
 	else {
 		Memory::WriteDouble((DWORD)&climbSpeedSave, climbSpeed * 3.0);
@@ -1000,6 +1000,8 @@ void Client::MoreHook() {
 		Hook_Sub_8C9F01(true);
 		Memory::FillBytes(0x0093CF16, 0x90, 2);
 	}
+
+	Memory::WriteByte(0x00942A01, 0xEB);
 }
 
 void Client::Skill() {

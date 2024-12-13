@@ -190,14 +190,31 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 
 	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
 
-	//std::wstring findStr = L"CNQuickSlot";
+	//std::wstring findStr = L"0501.img";
 
-	//if (strT.find(findStr) != std::wstring::npos) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << _ReturnAddress() << std::endl;
-	//}
-	//if (imgPath.find((IUnknown*)This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[(IUnknown*)This]->rootPath.find(findStr) != std::wstring::npos)) {
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << ret << " " << imgPath[(IUnknown*)This]->rootPath << " " << _ReturnAddress() << std::endl;
-	//}
+	/*if (strT.find(findStr) != std::wstring::npos) {
+		std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
+	}
+	if (imgPath.find((IUnknown*)This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[(IUnknown*)This]->rootPath.find(findStr) != std::wstring::npos)) {
+		std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << ret << " " << imgPath[(IUnknown*)This]->rootPath << " " << _ReturnAddress() << std::endl;
+	}*/
+
+	if ((int)_ReturnAddress() == 0x00941E73 || ((int)_ReturnAddress() == 0x009482BC) && ret->vt == VT_EMPTY) {
+		std::wregex pattern(L".*?0501.img/(\\d*)/(.*)?");
+		std::wsmatch result;
+		if (std::regex_search(strT, result, pattern)) {
+			std::wostringstream oss;
+			oss << L"Effect/ItemEff.img/";
+			oss << static_cast<int>(std::wcstol(result[1].str().c_str(), nullptr, 10));
+			oss << "/";
+			oss << result[2].str().c_str();
+			std::wstring path = oss.str();
+			VARIANTARG pvarg1 = errorVar;
+			VARIANTARG pvarg2 = errorVar;
+			ret = IWzResMan__GetObjectA(This, nullptr, ret, (int*)&path, (int)&pvarg1, (int)&pvarg2);
+			//std::wcout << "IWzResMan__GetObjectA_Hook :" << path << " " << ret->vt << " " << _ReturnAddress() << std::endl;
+		}
+	}
 
 	if ((int)_ReturnAddress() == 0x009482BC && ret->punkVal && strT.find(L"0301.img") != std::wstring::npos) {
 		bool isEffct2 = strT.find(L"effect2") != std::wstring::npos;
@@ -356,7 +373,7 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		Client::UpdateBarWidth(width);
 	}
 
-	//std::wstring findStr = L"CNQuickSlot";
+	//std::wstring findStr = L"0501.img";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
