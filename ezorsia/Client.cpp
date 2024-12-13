@@ -175,7 +175,7 @@ void Client::UpdateGameStartup() {
 
 	Memory::WriteInt(0x0078888E + 3, speedMovementCap); //set speed cap //ty ronan
 	Memory::WriteInt(0x008C9B1A + 1, speedMovementCap); //set speed cap //ty ronan
-	Memory::WriteInt(0x008C9900 + 1, speedMovementCap); //set speed cap //ty ronan
+	Memory::WriteInt(0x00954534 + 1, speedMovementCap); //set speed cap //ty ronan
 
 	Memory::WriteInt(0x0075F142 + 1, serverIP_Port);
 	if (WindowedMode) {
@@ -870,12 +870,14 @@ DWORD Client::jumpCap = 123;
 void Client::JumpCap() {
 	Memory::CodeCave(customJumpCapHook1, 0x007888E2, 10);
 	Memory::CodeCave(customJumpCapHook2, 0x008C9B37, 10);
-	Memory::CodeCave(customJumpCapHook3, 0x009541B9, 5);
+	Memory::CodeCave(customJumpCapHook3, 0x00954558, 5);
 
-	Memory::WriteInt(0x009D8158 + 2, (DWORD)&climbSpeedSave);
+	Memory::WriteInt(0x009D48AC + 2, (DWORD)&climbSpeedSave);
+	Memory::WriteInt(0x009D8158 + 2, (DWORD)&climbSpeedSave);  //ЩЬГЁЩўзг
 	if (climbSpeedAuto)
 	{
 		Memory::CodeCave(calcSpeedHook, 0x00954552, 6);
+		Memory::CodeCave(calcSpeedHook2, 0x00954416, 6);
 	}
 	else {
 		Memory::WriteDouble((DWORD)&climbSpeedSave, climbSpeed * 3.0);

@@ -1542,7 +1542,7 @@ __declspec(naked) void customJumpCapHook2()
 	}
 }
 
-const DWORD back4 = 0x009541BE;
+const DWORD back4 = 0x0095455D;
 __declspec(naked) void customJumpCapHook3()
 {
 	__asm {
@@ -1582,13 +1582,14 @@ int curSpeed = 100;
 double climbSpeedSave = 0;
 void calcClimbSpeed() {
 	int speed = curSpeed;
-	speed = speed < 80 ? 80 : speed;
-	speed = speed > Client::speedMovementCap ? Client::speedMovementCap : speed;
+	//speed = speed < 80 ? 80 : speed;
+	//speed = speed > Client::speedMovementCap ? Client::speedMovementCap : speed;
 
 	double climbingSpeed = Client::climbSpeed;
 	climbingSpeed = climbingSpeed <= 1.0 ? 1.0 : climbingSpeed;
 	double curClimbSpeed = 3.0 * speed * climbingSpeed / 100;
 	Memory::WriteDouble((DWORD)&climbSpeedSave, curClimbSpeed);
+	//std::cout << "curClimbSpeed = " << speed << " " << curClimbSpeed << std::endl;
 }
 
 DWORD calcSpeedHookRtn = 0x00954558;
@@ -1606,6 +1607,25 @@ __declspec(naked) void calcSpeedHook()
 
 		label_return :
 		jmp calcSpeedHookRtn
+	}
+}
+
+DWORD calcSpeedHookRtn2 = 0x0095441C;
+__declspec(naked) void calcSpeedHook2()
+{
+	__asm {
+		push eax
+		push ecx
+		mov curSpeed, ebx
+		call calcClimbSpeed
+		pop ecx
+		pop eax
+		cmp     eax, edi
+		jg label_return
+		mov     eax, edi
+
+		label_return :
+		jmp calcSpeedHookRtn2
 	}
 }
 
