@@ -857,7 +857,7 @@ void Client::LongQuickSlot() {
 
 
 	//// CODECAVES CLIENT EDITS ---- 
-	Memory::CodeCave(CompareValidateFuncKeyMappedInfo_cave, 0x8E2448, 5);
+	Memory::CodeCave(CompareValidateFuncKeyMappedInfo_cave, 0x008E2448, 5);
 	//Memory::CodeCave(sub_9FA0CB_cave, 0x9FA0DB, 5);                          //??
 	//Memory::CodeCave(sDefaultQuickslotKeyMap_cave, 0x72B7BC, 5);             //??
 	//Memory::CodeCave(DefaultQuickslotKeyMap_cave, 0x72B8E6, 5);              //??

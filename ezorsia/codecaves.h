@@ -1380,6 +1380,7 @@ _declspec(naked) void Restore_Array_Expanded() //Thank you Max  0x006282FC
 	}
 }
 
+DWORD keyMapDefaultRtn = 0x005BA216;   //start 0x005BA1C6
 DWORD keyMap79Rtn = 0x005BA219;   //start 0x005BA1C6
 unsigned int Array_keyMap_offset[] = {
 	0xD6,
@@ -1413,15 +1414,17 @@ __declspec(naked) void DefaultQuickslotKeyMap79_cave()
 {
 	__asm {
 		mov eax, [esp + 04]
-		cmp eax, 26
+		cmp eax, 25
+		ja label_default
 		push ebx
-		ja label_return
 		lea ebx, Array_keyMap_offset
 		mov eax, [eax * 4 + ebx]
 		lea eax, [ecx + eax]
 		label_return :
 		pop ebx
 			jmp keyMap79Rtn
+			label_default :
+		jmp keyMapDefaultRtn
 	}
 }
 // ³¤¼üÅÌ½áÊø
