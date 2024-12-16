@@ -1381,7 +1381,7 @@ _declspec(naked) void Restore_Array_Expanded() //Thank you Max  0x006282FC
 }
 
 DWORD keyMapDefaultRtn = 0x005BA216;   //start 0x005BA1C6
-DWORD keyMap79Rtn = 0x005BA219;   //start 0x005BA1C6
+DWORD keyMap79Rtn = 0x005BA219;
 unsigned int Array_keyMap_offset[] = {
 	0xD6,
 	0x19E,
@@ -1889,23 +1889,23 @@ __declspec(naked) void doubleJump()
 	}
 }
 
-DWORD skill4221001Rtn = 0x00975478;
-__declspec(naked) void skill4221001()   //0x00975369
-{
-	__asm {
-		pushfd
-		cmp eax, 0x1
-		jne label_ret
-		push eax
-		mov eax, 0x0097642E
-		mov byte ptr[eax], 0xEB
-		pop eax
-		label_ret :
-		popfd
-			jmp skill4221001Rtn
-
-	}
-}
+//DWORD skill4221001Rtn = 0x00975478;
+//__declspec(naked) void skill4221001()   //0x00975369
+//{
+//	__asm {
+//		pushfd
+//		cmp eax, 0x1
+//		jne label_ret
+//		push eax
+//		mov eax, 0x0097642E
+//		mov byte ptr[eax], 0xEB
+//		pop eax
+//		label_ret :
+//		popfd
+//			jmp skill4221001Rtn
+//
+//	}
+//}
 
 DWORD _tamingMob198 = 0x00407A53;
 DWORD _tamingMob198_Rtn = 0x00407A51;

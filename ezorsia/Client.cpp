@@ -1013,7 +1013,9 @@ void Client::Skill() {
 	}
 	//°µÉ±
 	if (Client::s4221001) {
-		Memory::CodeCave(skill4221001, 0x00975369, 5);
+		Memory::FillBytes(0x007964CB, 0x90, 5);
+		Memory::FillBytes(0x00796502, 0x90, 5);
+		Memory::WriteByte(0x0097642E, 0xEB);
 	}
 	//Ò»³öË«»÷
 	if (Client::s4221001) {
