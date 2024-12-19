@@ -45,5 +45,11 @@ DECLARE_INTERFACE_IID_(IWzProperty, IUnknown, "986515D9-0A0B-4929-8B4F-718682177
 		return pItem.pvarVal;
 	}
 
+	VARIANTARG* get_item(const wchar_t* wsPath, VARIANTARG * dest)
+	{
+		this->get_item(wsPath, (_variant_t *)dest);
+		return dest;
+	}
+
 	END_INTERFACE;
 };

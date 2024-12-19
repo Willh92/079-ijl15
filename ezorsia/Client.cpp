@@ -35,6 +35,7 @@ int Client::serverIP_Port = 8484;
 bool Client::talkRepeat = false;
 int Client::talkTime = 2000;
 bool Client::longSlots = false;
+int Client::longSlotsKey = 1;
 bool Client::showItemID = false;
 bool Client::showWeaponSpeed = true;
 bool Client::minimizeMaptitleColor = false;
@@ -862,6 +863,18 @@ void Client::LongQuickSlot() {
 	//Memory::CodeCave(sDefaultQuickslotKeyMap_cave, 0x72B7BC, 5);             //??
 	//Memory::CodeCave(DefaultQuickslotKeyMap_cave, 0x72B8E6, 5);              //??
 	Memory::CodeCave(Restore_Array_Expanded, 0x006282FC, 6); //restores the skill array to 0s
+	// KeyMap
+	switch (Client::longSlotsKey) {
+	case 2:
+		slotKeyMap = (DWORD)Array_keyMap_offset2;
+		break;
+	case 3:
+		slotKeyMap = (DWORD)Array_keyMap_offset3;
+		break;
+	default:
+		slotKeyMap = (DWORD)Array_keyMap_offset;
+		break;
+	}
 	Memory::CodeCave(DefaultQuickslotKeyMap79_cave, 0x005BA1C6, 7);
 }
 

@@ -12,6 +12,7 @@
 
 VARIANTARG errorVar = { VT_ERROR, 0, 0, 0x80020004 };
 IWzProperty* damageSkinImg;
+IWzProperty* quickSlot;
 
 enum RESMAN_PARAM {
 	RC_AUTO_SERIALIZE = 0x1,
@@ -188,9 +189,16 @@ VARIANTARG* __fastcall IWzResMan__GetObjectA_Hook(DWORD* This, void* notuse, VAR
 {
 	std::wstring strT = (wchar_t*)*sUOL;
 
-	auto ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
+	VARIANTARG* ret = nullptr;
 
-	//std::wstring findStr = L"ItemEff";
+	if ((int)_ReturnAddress() == 0x008E29B4 && quickSlot) {
+		ret = quickSlot->get_item(L"CNQuickSlot", pvargDest);
+	}
+
+	if (ret == nullptr)
+		ret = IWzResMan__GetObjectA(This, nullptr, pvargDest, sUOL, vParam, vAux);
+
+	//std::wstring findStr = L"key";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << _ReturnAddress() << std::endl;
@@ -364,8 +372,24 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 	//	std::wstring p = L"";
 	//	if (imgPath.find((IUnknown*)This) != imgPath.end())
 	//		p = imgPath[(IUnknown*)This]->rootPath;
-	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << p << " " << _ReturnAddress();
+	//	std::wcout << "IWzResMan__GetObjectA_Hook :" << This << " " << strT << " " << p << " " << _ReturnAddress() << std::endl;
 	//}
+
+	if ((int)_ReturnAddress() == 0x008E2B87 && quickSlot) {
+		IWzProperty* key;
+		switch (Client::longSlotsKey) {
+		case 2:
+			key = quickSlot->get_item<IWzProperty*>(L"key2");
+			break;
+		case 3:
+			key = quickSlot->get_item<IWzProperty*>(L"key3");
+			break;
+		default:
+			key = quickSlot->get_item<IWzProperty*>(L"key");
+			break;
+		}
+		ret = key->get_item(strT.c_str(), pvargDest);
+	}
 
 	if ((int)_ReturnAddress() == 0x0060D115 && imgPath.find(This) != imgPath.end()
 		&& imgPath[This]->rootPath.find(L"SetEff.img") != std::wstring::npos) {
@@ -387,17 +411,17 @@ VARIANTARG* __fastcall IWzProperty__GetItem_Hook(IWzProperty* This, void* notuse
 		Client::UpdateBarWidth(width);
 	}
 
-	//std::wstring findStr = L"ItemEff";
+	//std::wstring findStr = L"key";
 
 	//if (strT.find(findStr) != std::wstring::npos) {
 	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret->punkVal << " " << _ReturnAddress() << std::endl;
 	//}
 	//if (imgPath.find(This) != imgPath.end() && (strT.find(findStr) != std::wstring::npos || imgPath[This]->rootPath.find(findStr) != std::wstring::npos)) {
-	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
+	//	std::wcout << "IWzProperty__GetItem_Hook :" << This << " " << strT << " " << ret << " " << imgPath[This]->name << " " << imgPath[This]->rootPath << " " << _ReturnAddress() << std::endl;
 	//}
 
 	if (pvargDest->vt == VT_EMPTY && (strT.find(L"ladder") != std::wstring::npos || strT.find(L"rope") != std::wstring::npos)) {
-		if (imgPath.find(This) != imgPath.end() && imgPath[This]->name.find(L"TamingMob/0193") != std::wstring::npos) {
+		if (imgPath.find(This) != imgPath.end() && (imgPath[This]->name.find(L"TamingMob/0193") != std::wstring::npos || imgPath[This]->name.find(L"TamingMob/0198") != std::wstring::npos)) {
 			try {
 				std::wostringstream oss;
 				oss << GetImgFullPath(imgPath[This]->rootPath.c_str());
@@ -608,18 +632,49 @@ VOID loadDamageFile() {
 	catch (...) {}
 }
 
+VOID loadQuickSlotFile() {
+	try {
+		quickSlot = getIWzPropertyForPath(L"UI/QuickSlot.img/");
+	}
+	catch (...) {}
+}
+
 VOID initResolution() {
 	unsigned int slotWidth;
-	auto base = getIWzPropertyForPath(L"UI/StatusBar.img/key");
 	unsigned int count;
-	base->get_count(&count);
-	if (count < 26) {
-		Client::longSlots = false;
+	if (quickSlot) {
+		IWzProperty* key;
+		switch (Client::longSlotsKey) {
+		case 2:
+			key = quickSlot->get_item<IWzProperty*>(L"key2");
+			break;
+		case 3:
+			key = quickSlot->get_item<IWzProperty*>(L"key3");
+			break;
+		default:
+			key = quickSlot->get_item<IWzProperty*>(L"key");
+			break;
+		}
+		key->get_count(&count);
+		if (count < 26) {
+			Client::longSlots = false;
+		}
+		Client::LongQuickSlot();
+		quickSlot->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
+		Client::UpdateSlotPosition(slotWidth);
 	}
-	Client::LongQuickSlot();
-	base = getIWzPropertyForPath(L"UI/StatusBar.img/base");
-	base->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
-	Client::UpdateSlotPosition(slotWidth);
+	else {
+		auto base = getIWzPropertyForPath(L"UI/StatusBar.img/key");
+		base->get_count(&count);
+		if (count < 26) {
+			Client::longSlots = false;
+		}
+		Client::LongQuickSlot();
+		base = getIWzPropertyForPath(L"UI/StatusBar.img/base");
+		base->get_item<IWzCanvas*>(L"CNQuickSlot")->Getwidth(&slotWidth);
+		Client::UpdateSlotPosition(slotWidth);
+	}
+
 }
 
 BOOL Resman::Hook_InitializeResMan() {
@@ -692,6 +747,7 @@ BOOL Resman::Hook_InitializeResMan() {
 			auto mDataFS = IWZNameSpace__Mount(*g_root, pData, sPath, pFileSystem, nPriority);
 		}
 		//¼ÓÔØÆ¤·ôÎÄ¼þ
+		loadQuickSlotFile();
 		loadDamageFile();
 		initResolution();
 		};

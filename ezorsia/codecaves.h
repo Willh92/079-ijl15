@@ -1400,6 +1400,34 @@ unsigned int Array_keyMap_offset[] = {
 	0x1A3,
 	0x18F, //16
 	0x199,
+	0x54,
+	0x59,
+	0x5E, //20 
+	0x63,
+	0x68,
+	0x6D,
+	0x72, //24
+	0x77,
+	0x7C
+};
+unsigned int Array_keyMap_offset2[] = {
+	0xD6,
+	0x19E,
+	0x167,
+	0x171, //4
+	0x54,
+	0x59,
+	0x5E,
+	0x63, //8
+	0x68,
+	0x6D,
+	0x72,
+	0x77, //12
+	0x7C,
+	0x95, //----------------
+	0x1A3,
+	0x18F, //16
+	0x199,
 	0x9A,
 	0x9F,
 	0xA4, //20 
@@ -1410,6 +1438,35 @@ unsigned int Array_keyMap_offset[] = {
 	0xBD,
 	0xC2
 };
+unsigned int Array_keyMap_offset3[] = {
+	0xD6,
+	0x19E,
+	0x167,
+	0x171, //4
+	0xE,
+	0x13,
+	0x18,
+	0x1D,//8
+	0x22,
+	0x27,
+	0x2c,
+	0x31, //12
+	0x36,
+	0x95, //----------------
+	0x1A3,
+	0x18F, //16
+	0x199,
+	0x9A,
+	0x9F,
+	0xA4, //20 
+	0xA9,
+	0xAE,
+	0xB3,
+	0xB8, //24
+	0xBD,
+	0xC2
+};
+DWORD slotKeyMap = (DWORD)Array_keyMap_offset;
 __declspec(naked) void DefaultQuickslotKeyMap79_cave()
 {
 	__asm {
@@ -1417,11 +1474,11 @@ __declspec(naked) void DefaultQuickslotKeyMap79_cave()
 		cmp eax, 25
 		ja label_default
 		push ebx
-		lea ebx, Array_keyMap_offset
+		mov ebx, slotKeyMap
 		mov eax, [eax * 4 + ebx]
-		lea eax, [ecx + eax]
-		label_return :
-		pop ebx
+			lea eax, [ecx + eax]
+			label_return :
+			pop ebx
 			jmp keyMap79Rtn
 			label_default :
 		jmp keyMapDefaultRtn

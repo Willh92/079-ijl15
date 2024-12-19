@@ -47,6 +47,7 @@ public:
 	static bool talkRepeat;
 	static int talkTime;
 	static bool longSlots;
+	static int longSlotsKey;
 	static bool showItemID;
 	static bool showWeaponSpeed;
 	static bool minimizeMaptitleColor;
