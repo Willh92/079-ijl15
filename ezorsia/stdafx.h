@@ -29,7 +29,13 @@
 #include <heapapi.h>
 
 #include "CanvasType.h"
+#include "IWzNameSpaceProperty.h"
+#include "IWzNameSpace.h"
+#include "IWzWritableNameSpace.h"
 #include "IWzArchive.h"
+#include "IWzSeekableArchive.h"
+#include "IWzPackage.h"
+#include "IWzFileSystem.h"
 #include "IWzSerialize.h"
 #include "IWzUOL.h"
 #include "IWzProperty.h"

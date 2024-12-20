@@ -23,11 +23,12 @@
 
 ## 主要额外添加的特殊功能
 
+- 支持WZ与IMG模式，WZ模式下支持[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)放置游戏根目录下加载长键盘与伤害皮肤
 - 双击跳跃键使用二段跳
 - 屏蔽了聊天室按钮弹窗仅发数据包（可用作解卡）
 - 角色等级突破Short类型，角色经验突破为Long类型
 - 伤害皮肤
-- 长键盘
+- 长键盘(支持加载外置长键盘文件[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)或[UI/QuickSlot.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/QuickSlot.img)，支持多种键位配置)
 - 解除坐骑模型限制，可爬绳，可二段跳，快速移动
 - 支持198开头的的TamingMob
 - 支持新版发型脸型
@@ -40,7 +41,9 @@
 
 ### 伤害皮肤说明:
 
-伤害皮肤的[DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)文件放在Effect下
+`WZ模式`下伤害皮肤[Custom.wz](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/Custom.wz)放置游戏根目录下
+
+`IMG模式`下伤害皮肤[DamageSkin.img](https://github.com/Willh92/079-ijl15/releases/download/1.0.0/DamageSkin.img)文件放在Effect下
 
 格式为：{皮肤ID}/NoRed0   皮肤ID=0为默认皮肤 具体参考下载文件
 

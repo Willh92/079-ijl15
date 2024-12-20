@@ -336,6 +336,24 @@
     <ClInclude Include="MapleClientCollectionTypes\IWzUOL.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzSeekableArchive.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzNameSpaceProperty.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzNameSpace.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzPackage.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzFileSystem.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzWritableNameSpace.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
