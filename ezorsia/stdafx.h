@@ -44,6 +44,7 @@
 #include "IWzFont.h"
 #include "IWzRawCanvasAllocator.h"
 #include "IWzCanvas.h"
+#include "IWzResMan.h"
 
 #include "ZXString.h"
 #include "ZAllocBase.h"
@@ -63,6 +64,7 @@
 #include "ZInetAddr.h"
 #include "ZSocketBuffer.h"
 #include "ZSocketBase.h"
+#include "ZtlVariantT .h"
 
 
 #include "CUser.h"

@@ -4,6 +4,7 @@ class Resman
 public:
 	static BOOL Hook_InitializeResMan();
 	static VOID Hook_InitInlinkOutlink();
+	static IWzResMan* getIWzResMan();
 };
 
 IWzProperty* getIWzPropertyForPath(std::wstring path);

@@ -354,6 +354,12 @@
     <ClInclude Include="MapleClientCollectionTypes\IWzWritableNameSpace.h">
       <Filter>Header Files\MapleTypes</Filter>
     </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\ZtlVariantT .h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="MapleClientCollectionTypes\IWzResMan.h">
+      <Filter>Header Files\MapleTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

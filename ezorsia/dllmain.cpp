@@ -54,9 +54,13 @@ void EmptyMemory()
 		Sleep(1000);
 		int memory = GetCurrentMemoryUsage();
 		if (memory >= 512) {
-			autoFlushCacheTime(0);
-			callFlushcache();
-			autoFlushCacheTime(10000);
+			if (Resman::getIWzResMan())
+			{
+				Resman::getIWzResMan()->raw_FlushCachedObjects(0);
+			}
+			//autoFlushCacheTime(0);
+			//callFlushcache();
+			//autoFlushCacheTime(10000);
 			std::cout << "flushcache:" << memory << std::endl;
 		}
 		if (memory >= 1024)
